@@ -15,12 +15,18 @@ author = 'noim'
 
 extensions = [
     "sphinx.ext.githubpages",
+    "myst_parser",
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
 
 language = 'ja'
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
