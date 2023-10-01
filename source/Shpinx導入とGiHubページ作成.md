@@ -173,7 +173,8 @@ git push origin main
 ![Alt text](image-2.png)
 
 ## 記事の執筆
-
+1. sourceフォルダ配下にmdファイル、もしくはrstファイルで記事を執筆する。
+2. conf.pyに追加したファイルを追加する。
 
 
 ## Spinxのビルド & GitHub Pagesの確認
