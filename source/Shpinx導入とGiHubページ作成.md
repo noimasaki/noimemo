@@ -214,4 +214,8 @@ The HTML pages are in build\html.
 
 [https://noimasaki.github.io/noimemo/](https://noimasaki.github.io/noimemo/#)
 
+## GitHub Actionでビルドを自動化する
+1. GitHub Actionでは`.github/workflows`配下にYAMLファイルで定義する必要がある。以下のように作成する。
+
+
 
