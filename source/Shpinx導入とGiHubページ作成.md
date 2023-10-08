@@ -221,4 +221,7 @@ The HTML pages are in build\html.
 yamlファイル
 ```
 
+1. パーソナルアクセストークンの作成
+今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
+![secret](_static/Shpinx導入とGiHubページ作成/secret.png)
 
