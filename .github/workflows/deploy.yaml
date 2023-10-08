@@ -1,10 +1,5 @@
 name: Build html and Deploy to GitHub Pages
 
-# onセクション：Actionトリガーを記載
-on:
-  push:   # GitHubへプッシュが行われたとき
-  workflow_dispatch:  # GitHubAction上で手動実行されたとき
-
 # jobsセクション：実際のジョブを記載
 jobs:
   # "my_first_job"というジョブIDでジョブを定義
