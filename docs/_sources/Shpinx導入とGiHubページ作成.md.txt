@@ -173,7 +173,8 @@ git push origin main
 ![Alt text](image-2.png)
 
 ## 記事の執筆
-
+1. sourceフォルダ配下にmdファイル、もしくはrstファイルで記事を執筆する。
+2. conf.pyに追加したファイルを追加する。
 
 
 ## Spinxのビルド & GitHub Pagesの確認
@@ -213,4 +214,13 @@ The HTML pages are in build\html.
 
 [https://noimasaki.github.io/noimemo/](https://noimasaki.github.io/noimemo/#)
 
+## GitHub Actionでビルドを自動化する
+1. GitHub Actionでは`.github/workflows`配下にYAMLファイルで定義する必要がある。以下のように作成する。
 
+```
+yamlファイル
+```
+
+1. パーソナルアクセストークンの作成
+今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
+![secret](_static/test/secret.png)

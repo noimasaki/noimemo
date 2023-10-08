@@ -49,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#github-page">GitHub Pageの作成</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id1">記事の執筆</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spinx-github-pages">Spinxのビルド &amp; GitHub Pagesの確認</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#github-action">GitHub Actionでビルドを自動化する</a></li>
 </ul>
 </li>
 </ul>
@@ -263,6 +264,10 @@ C:.
 </section>
 <section id="id1">
 <h2>記事の執筆<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>sourceフォルダ配下にmdファイル、もしくはrstファイルで記事を執筆する。</p></li>
+<li><p>conf.pyに追加したファイルを追加する。</p></li>
+</ol>
 </section>
 <section id="spinx-github-pages">
 <h2>Spinxのビルド &amp; GitHub Pagesの確認<a class="headerlink" href="#spinx-github-pages" title="Link to this heading"></a></h2>
@@ -301,6 +306,20 @@ C:.
 </ol>
 <p>今回の場合は以下のURLとなる</p>
 <p><a class="reference external" href="https://noimasaki.github.io/noimemo/#">https://noimasaki.github.io/noimemo/</a></p>
+</section>
+<section id="github-action">
+<h2>GitHub Actionでビルドを自動化する<a class="headerlink" href="#github-action" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>GitHub Actionでは<code class="docutils literal notranslate"><span class="pre">.github/workflows</span></code>配下にYAMLファイルで定義する必要がある。以下のように作成する。</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">yamlファイル</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>パーソナルアクセストークンの作成
+今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
+<img alt="secret" src="_images/secret.png" /></p></li>
+</ol>
 </section>
 </section>
 
