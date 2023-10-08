@@ -31,7 +31,7 @@ jobs:
         python-version: "3.10"
         architecture: x64
     
-    - name: Install sphinx & requirements.txt
+    - name: Install requirements.txt
       run: |
         pip install -U -r .github/workflows/requirements.txt
     
