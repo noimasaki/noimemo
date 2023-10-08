@@ -1,0 +1,3 @@
+sphinx              #Sphinx本体
+sphinx_rtd_theme    #拡張テーマ
+myst_parser         #Markdown用プラグイン
