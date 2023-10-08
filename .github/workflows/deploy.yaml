@@ -38,3 +38,10 @@ jobs:
     - name: Build html
       run: |
         make html
+    
+    - name: Commit and push html
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git add -A
+        git commit -m "Converted MD files to HTML" || echo "No changes to commit"
+        git push
