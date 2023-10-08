@@ -34,3 +34,7 @@ jobs:
     - name: Install sphinx
       run: |
         pip install -U sphinx
+    
+    - name: Build html
+      run: |
+        make html
