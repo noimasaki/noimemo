@@ -33,7 +33,7 @@ jobs:
     
     - name: Install sphinx & requirements.txt
       run: |
-        pip install -U -r requirements.txt
+        pip install -U -r .github/workflows/requirements.txt
     
     - name: Build html
       run: |
