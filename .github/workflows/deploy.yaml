@@ -18,7 +18,7 @@ on:
 jobs:
 # jobセクション配下に1つ以上のjobIDを定義し、各jobIDは並列に処理される
   deploy_html: #jobID
-    name: My first job
+    - name: deploy_html
     runs-on: ubuntu-latest
 
     steps:
