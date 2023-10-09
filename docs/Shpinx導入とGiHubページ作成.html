@@ -20,6 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="GitHub Appsトークンの発行・実装方法" href="GiHubAppsToken.html" />
     <link rel="prev" title="技術メモ" href="index.html" /> 
 </head>
 
@@ -52,6 +53,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#github-action">GitHub Actionでビルドを自動化する</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html#id6">参考</a></li>
 </ul>
 
         </div>
@@ -317,9 +320,15 @@ C:.
 </div>
 <ol class="arabic simple">
 <li><p>パーソナルアクセストークンの作成
-今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
-<img alt="secret" src="_images/secret.png" /></p></li>
+今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。</p></li>
 </ol>
+<p><code class="docutils literal notranslate"><span class="pre">Settings</span> <span class="pre">&gt;</span> <span class="pre">Secrets</span> <span class="pre">and</span> <span class="pre">variables</span> <span class="pre">&gt;</span> <span class="pre">Actions</span> <span class="pre">&gt;</span> <span class="pre">New</span> <span class="pre">repository</span> <span class="pre">secret</span></code></p>
+<p>から、新しいシークレットを作成する。
+<img alt="secret" src="_images/secret.png" /></p>
+<ul class="simple">
+<li><p>Name: 任意の名前（MY_GITHUBACTIONS_SECRET）</p></li>
+<li><p>Secret: パスフレーズ</p></li>
+</ul>
 </section>
 </section>
 
@@ -328,6 +337,7 @@ C:.
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="技術メモ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GiHubAppsToken.html" class="btn btn-neutral float-right" title="GitHub Appsトークンの発行・実装方法" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
