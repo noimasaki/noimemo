@@ -50,7 +50,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
       run: |
-        git config user.name "GitHub Actions Bot"
         git add -A
         git commit -m "Converted MD files to HTML" || echo "No changes to commit"
         git push
