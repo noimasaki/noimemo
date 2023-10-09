@@ -19,6 +19,10 @@ jobs:
 # jobセクション配下に1つ以上のjobIDを定義し、各jobIDは並列に処理される
   deploy_html: #jobID
     name: deploy_html
+    permissions:
+      actions: write
+      checks: write
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -50,6 +54,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
       run: |
+        git config user.name "GitHub Actions Bot"
         git add -A
         git commit -m "Converted MD files to HTML" || echo "No changes to commit"
         git push
