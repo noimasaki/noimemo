@@ -223,4 +223,12 @@ yamlファイル
 
 1. パーソナルアクセストークンの作成
 今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
+
+`Settings > Secrets and variables > Actions > New repository secret`
+
+から、新しいシークレットを作成する。
 ![secret](_static/test/secret.png)
+- Name: 任意の名前（MY_GITHUBACTIONS_SECRET）
+- Secret: パスフレーズ
+
+
