@@ -75,7 +75,7 @@ App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登�
 
 ## GitHub ActionsでGitHub Appsトークンを利用する方法
 
-
+a
 
 # 参考
 [https://zenn.dev/tmknom/articles/github-apps-token](https://zenn.dev/tmknom/articles/github-apps-token)
