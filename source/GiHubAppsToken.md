@@ -35,6 +35,7 @@ Permissionsには権限を設定する。
 プライベート運用のため、「Only on this account」へチェックが入っていることを確認して「Greate GitHub App」をクリックすれば完了。
 
 管理画面が表示される。
+ここで確認できる「APP ID」は後程利用するのでメモする。
 
 ![General](_static/GitHubAppsToken/setting4.png)
 
@@ -63,9 +64,12 @@ GitHub Appsは作成しただけでは使えず、アカウントにインスト
 App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登録する。
 
 対象リポジトリを開き、`Settings > Secrets and variables > Actions > New repository secret`を選択
-- Name(*): PRIVATE_KEY_【APPID】 ※任意
-- Secret(*): ダウンロードした署名用秘密鍵
-※「-----BEGIN RSA PRIVATE KEY-----」から「-----END RSA PRIVATE KEY-----」まで
+次の２つのシークレットを登録する
+- Name(*): PRIVATE_KEY
+- Secret(*): ダウンロードした署名用秘密鍵 ※「-----BEGIN RSA PRIVATE KEY-----」から「-----END RSA PRIVATE KEY-----」まで
+
+- Name(*): APP_ID
+- Secret(*): GitHub Apps作成時に生成されたIDを記載
 
 ![RegiPrivateKey](_static/GitHubAppsToken/setting8.png)
 
