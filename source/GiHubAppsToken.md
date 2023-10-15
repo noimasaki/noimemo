@@ -74,8 +74,25 @@ App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登�
 ![RegiPrivateKey](_static/GitHubAppsToken/setting8.png)
 
 ## GitHub ActionsでGitHub Appsトークンを利用する方法
-
-a
+例として下記のように記載する。（動作確認していないので
+```yaml
+    # トークンを作成
+    - name: Generate GitHub Apps token
+      id: generate-token
+      uses: tibdex/github-app-token@v1
+      with:
+        app_id: ${{ secrets.APP_ID }}
+        private_key: ${{ secrets.PRIVATE_KEY }}
+    
+    - name: Commit and push html
+      env:  # 
+        GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git add -A
+        git commit -m "Converted MD files to HTML" || echo "No changes to commit"
+        git push
+```
 
 # 参考
 [https://zenn.dev/tmknom/articles/github-apps-token](https://zenn.dev/tmknom/articles/github-apps-token)

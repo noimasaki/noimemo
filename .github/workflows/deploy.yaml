@@ -4,15 +4,6 @@ name: "Build html and Deploy to GitHub Pages"
 # onセクション：jobsの実行トリガーを記載
 on:
   push:
-# ----------------------------
-# よく使われるのは以下
-# push : リモートリポジトリのpush時
-# pull_request : プルリクエスト作成時
-# deployment : デプロイ時
-# release : リリース時
-# issues : GitHub Issues関連の処理発生時
-# schedule : cronによる定期実行
-# ----------------------------
 
 # jobsセクション：実際のジョブを記載
 jobs:
