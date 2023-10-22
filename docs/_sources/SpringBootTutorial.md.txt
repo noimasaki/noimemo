@@ -6,4 +6,4 @@ SpringBootを利用した簡単なREST APIを作成する。
 Visual Studio Codeを利用してSpringBootを開始する。
 
 ## データベース（MySQL）を利用する
-![DatabBase](Database.png)
+![DatabBase](_static/SpringBootTutorial/DataBase.png)
