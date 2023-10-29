@@ -94,5 +94,5 @@ App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登�
         git push
 ```
 
-# 参考
+## 参考
 [https://zenn.dev/tmknom/articles/github-apps-token](https://zenn.dev/tmknom/articles/github-apps-token)
