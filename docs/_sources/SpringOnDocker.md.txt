@@ -23,11 +23,29 @@ Spring Bootで作成したHello WorldをJarファイルにビルドして、Dock
 完了するとプロジェクトが作成される
 ![VS Code](_static/SpringOnDocker/2_init.png)
 
-2. Controllerの作成
+2. Controller、htmlの作成
 Controller.javaを新規作成する
 ![VS Code](_static/SpringOnDocker/3_controller.png)
 
 Controller.java
+```
+package com.example.hello;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HelloController {
+    @GetMapping("/hello")       # localhost:8080/hello でアクセス来たらhelloworld()を実行
+    public String helloworld() {
+        return("hello");        # ~src/main/resources/templates/hello.html をreturn
+    }
+}
+```
+
+hello.htmlを新規作成する
+![VS Code](_static/SpringOnDocker/4_html.png)
+
 ```
 
 ```

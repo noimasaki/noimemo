@@ -97,11 +97,27 @@
 <p>完了するとプロジェクトが作成される
 <img alt="VS Code" src="_images/2_init.png" /></p>
 <ol class="arabic simple" start="2">
-<li><p>Controllerの作成
+<li><p>Controller、htmlの作成
 Controller.javaを新規作成する
 <img alt="VS Code" src="_images/3_controller.png" /></p></li>
 </ol>
 <p>Controller.java</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">hello</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+
+<span class="nd">@Controller</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">HelloController</span> <span class="p">{</span>
+    <span class="nd">@GetMapping</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">)</span>       <span class="c1"># localhost:8080/hello でアクセス来たらhelloworld()を実行</span>
+    <span class="n">public</span> <span class="n">String</span> <span class="n">helloworld</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>        <span class="c1"># ~src/main/resources/templates/hello.html をreturn</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>hello.htmlを新規作成する
+<img alt="VS Code" src="_images/4_html.png" /></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
