@@ -91,17 +91,17 @@
 <li><p>Artifact Id: hello</p></li>
 <li><p>packaging type: Jar</p></li>
 <li><p>Java version: 17  ※Dockerイメージ作成するときに合わせる必要があるので注意</p></li>
-<li><p>dependencies: Spring Web
+<li><p>dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools
 上記は例なので適宜変更すること</p></li>
 </ul>
 <p>完了するとプロジェクトが作成される
 <img alt="VS Code" src="_images/2_init.png" /></p>
 <ol class="arabic simple" start="2">
 <li><p>Controller、htmlの作成
-Controller.javaを新規作成する
+HelloController.javaを新規作成する
 <img alt="VS Code" src="_images/3_controller.png" /></p></li>
 </ol>
-<p>Controller.java</p>
+<p>HelloController.java</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">hello</span><span class="p">;</span>
 
 <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
@@ -111,14 +111,15 @@ Controller.javaを新規作成する
 <span class="n">public</span> <span class="k">class</span> <span class="nc">HelloController</span> <span class="p">{</span>
     <span class="nd">@GetMapping</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">)</span>       <span class="c1"># localhost:8080/hello でアクセス来たらhelloworld()を実行</span>
     <span class="n">public</span> <span class="n">String</span> <span class="n">helloworld</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>        <span class="c1"># ~src/main/resources/templates/hello.html をreturn</span>
+        <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>        <span class="c1"># ~src/main/resources/templates/Hello.html をreturn</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>hello.htmlを新規作成する
+<p>Hello.htmlを新規作成する
 <img alt="VS Code" src="_images/4_html.png" /></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
     &lt;title&gt;Sample&lt;/title&gt;
@@ -133,6 +134,12 @@ Controller.javaを新規作成する
 <li><p>動作確認
 HelloApprication.javaを実行
 <img alt="VS Code" src="_images/5_test.png" /></p></li>
+</ol>
+<p>ブラウザからアクセスして確認
+<img alt="test" src="_images/6_test.png" /></p>
+<ol class="arabic simple" start="4">
+<li><p>ビルド
+動作確認して問題ないこと確認したらビルドする</p></li>
 </ol>
 </section>
 </section>
