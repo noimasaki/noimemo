@@ -66,5 +66,12 @@ HelloApprication.javaを実行
 ブラウザからアクセスして確認
 ![test](_static/SpringOnDocker/6_test.png)
 
-4. ビルド
-動作確認して問題ないこと確認したらビルドする
+4. Mavenでビルド
+SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行
+```
+# Windowsの場合はこれ
+
+
+# Macの場合はこれ
+mvn package spring-boot:repackage
+```
