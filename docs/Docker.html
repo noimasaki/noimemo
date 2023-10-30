@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>サーバレスでいい感じにスケールしてくれる構成 &mdash; noimemo  ドキュメント</title>
+  <title>Docker &mdash; noimemo  ドキュメント</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -61,9 +61,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">サーバレスでいい感じにスケールしてくれる構成</li>
+      <li class="breadcrumb-item active">Docker</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/ServerlessWebAp.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Docker.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -71,11 +71,57 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="id1">
-<h1>サーバレスでいい感じにスケールしてくれる構成<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<p><a class="reference external" href="https://logmi.jp/tech/articles/329422">ここ</a>を参考に、急なアクセス増でもいい感じにスケールしてくれるサーバレス構成を作成する。</p>
-<section id="lambdafargatedocker">
-<h2>ポイント１：LambdaとFargateで同じDockerイメージを利用する<a class="headerlink" href="#lambdafargatedocker" title="Link to this heading"></a></h2>
+  <section id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h1>
+<p>javaコンテナを作ってHello World</p>
+<section id="id1">
+<h2>フォルダ構成<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── docker
+│   └── java
+│       └── Dockerfile
+├── docker-compose.yml
+└── server
+    └── src
+        ├── Main.class
+        └── Main.java
+
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>手順<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>docker-compose.yml作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3.6&#39;</span>
+<span class="n">services</span><span class="p">:</span>
+  <span class="n">java</span><span class="p">:</span>
+    <span class="n">build</span><span class="p">:</span> <span class="o">./</span><span class="n">docker</span><span class="o">/</span><span class="n">java</span>
+    <span class="n">ports</span><span class="p">:</span>
+      <span class="o">-</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">8080</span>
+    <span class="n">tty</span><span class="p">:</span> <span class="n">true</span>
+    <span class="n">volumes</span><span class="p">:</span>
+      <span class="o">-</span> <span class="o">./</span><span class="n">server</span><span class="o">/</span><span class="n">src</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">src</span><span class="p">:</span><span class="n">cached</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Dockerfile作成</p></li>
+<li><p>Main.java作成 &amp; コンパイル</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Main</span> <span class="p">{</span>
+
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Hello, World&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Main.javaのある階層でコンパイル &amp; 実行テスト</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">javac</span> <span class="n">Main</span><span class="o">.</span><span class="n">java</span>
+<span class="o">&gt;</span> <span class="n">java</span> <span class="n">Main</span>
+<span class="n">Hello</span><span class="p">,</span> <span class="n">World</span>
+</pre></div>
+</div>
 </section>
 </section>
 
