@@ -75,37 +75,21 @@
 <h1>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h1>
 <p>javaコンテナを作ってHello World</p>
 <section id="id1">
-<h2>フォルダ構成<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── docker
-│   └── java
-│       └── Dockerfile
+<h2>基本コマンド<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+</section>
+<section id="id2">
+<h2>フォルダ構成<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── Dockerfile
 ├── docker-compose.yml
-└── server
-    └── src
-        ├── Main.class
-        └── Main.java
-
+└── src
+    ├── Main.class
+    └── Main.java
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h2>手順<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h2>手順<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>docker-compose.yml作成</p></li>
-</ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3.6&#39;</span>
-<span class="n">services</span><span class="p">:</span>
-  <span class="n">java</span><span class="p">:</span>
-    <span class="n">build</span><span class="p">:</span> <span class="o">./</span><span class="n">docker</span><span class="o">/</span><span class="n">java</span>
-    <span class="n">ports</span><span class="p">:</span>
-      <span class="o">-</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">8080</span>
-    <span class="n">tty</span><span class="p">:</span> <span class="n">true</span>
-    <span class="n">volumes</span><span class="p">:</span>
-      <span class="o">-</span> <span class="o">./</span><span class="n">server</span><span class="o">/</span><span class="n">src</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">src</span><span class="p">:</span><span class="n">cached</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="2">
-<li><p>Dockerfile作成</p></li>
 <li><p>Main.java作成 &amp; コンパイル</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Main</span> <span class="p">{</span>
@@ -120,6 +104,87 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">javac</span> <span class="n">Main</span><span class="o">.</span><span class="n">java</span>
 <span class="o">&gt;</span> <span class="n">java</span> <span class="n">Main</span>
 <span class="n">Hello</span><span class="p">,</span> <span class="n">World</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>docker-compose.yml作成
+シンプルにjavaコンテナだけを記載したもの</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3.6&#39;</span>
+<span class="n">services</span><span class="p">:</span>
+  <span class="n">java</span><span class="p">:</span>
+    <span class="n">build</span><span class="p">:</span> <span class="o">.</span>
+    <span class="n">tty</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Dockerfile作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">centos</span><span class="p">:</span><span class="mi">7</span>
+<span class="n">COPY</span> <span class="o">./</span><span class="n">src</span><span class="o">/</span><span class="n">Main</span><span class="o">.</span><span class="k">class</span> <span class="nc">Main</span><span class="o">.</span><span class="k">class</span>
+<span class="nc">RUN</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">java</span>
+<span class="n">RUN</span> <span class="n">java</span> <span class="n">Main</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>FROM: 利用するベースイメージを指定</p></li>
+<li><p>COPY: build時にコンテナイメージへコピーするものを指定</p></li>
+<li><p>RUN: build時に実行するコマンド</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p>ビルド &amp; 起動
+docker-compose.ymlを作成しているので</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>もし、docker-compose.ymlを作成していないのであれば、ビルドして起動</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker build .
+docker run -d 【buildしたコンテナイメージ名】
+</pre></div>
+</div>
+<p>コンテナ内に入るには</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker exec -it 【docker psからコンテナ名を探す】 bash
+</pre></div>
+</div>
+</section>
+<section id="maven">
+<h2>Mavenでビルド<a class="headerlink" href="#maven" title="Link to this heading"></a></h2>
+<p>SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">package</span> <span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">repackage</span>
+</pre></div>
+</div>
+<p>targetフォルダ配下にビルドされたjarファイルが生成される</p>
+</section>
+<section id="id4">
+<h2>Dockerビルド<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>Dockerfileを作成</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">centos</span><span class="p">:</span><span class="mi">7</span>
+<span class="n">COPY</span> <span class="o">./</span><span class="n">hello</span><span class="o">/</span><span class="n">target</span><span class="o">/*.</span><span class="n">jar</span> <span class="n">app</span><span class="o">.</span><span class="n">jar</span>
+<span class="n">EXPOSE</span> <span class="mi">8080</span>
+<span class="n">RUN</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">java</span><span class="o">-</span><span class="mi">17</span><span class="o">-</span><span class="n">openjdk</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span><span class="s2">&quot;-jar&quot;</span><span class="p">,</span><span class="s2">&quot;app.jar&quot;</span><span class="p">]</span> <span class="c1">#コンテナが起動する際に実行されるコマンド。「java -jar app.jar」が実行される</span>
+</pre></div>
+</div>
+<p>docker-composeを作成</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3.6&#39;</span>
+<span class="n">services</span><span class="p">:</span>
+  <span class="n">java</span><span class="p">:</span>
+    <span class="n">build</span><span class="p">:</span> <span class="o">.</span>
+    <span class="n">tty</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>ビルドの実行</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> \
+    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span> \
+    <span class="o">--</span><span class="n">tag</span> <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>コンテナ起動</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> \
+    <span class="o">--</span><span class="n">publish</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">8080</span> \
+    <span class="o">--</span><span class="n">name</span> <span class="n">app</span><span class="o">-</span><span class="n">local</span> \
+    <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>
 </pre></div>
 </div>
 </section>
