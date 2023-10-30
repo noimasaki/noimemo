@@ -47,5 +47,18 @@ hello.htmlを新規作成する
 ![VS Code](_static/SpringOnDocker/4_html.png)
 
 ```
-
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sample</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+</body>
+</html>
 ```
+
+3. 動作確認
+HelloApprication.javaを実行
+![VS Code](_static/SpringOnDocker/5_test.png)
+
