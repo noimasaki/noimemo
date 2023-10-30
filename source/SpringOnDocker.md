@@ -17,17 +17,17 @@ Spring Bootで作成したHello WorldをJarファイルにビルドして、Dock
 - Artifact Id: hello
 - packaging type: Jar
 - Java version: 17  ※Dockerイメージ作成するときに合わせる必要があるので注意
-- dependencies: Spring Web
+- dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools
 上記は例なので適宜変更すること
 
 完了するとプロジェクトが作成される
 ![VS Code](_static/SpringOnDocker/2_init.png)
 
 2. Controller、htmlの作成
-Controller.javaを新規作成する
+HelloController.javaを新規作成する
 ![VS Code](_static/SpringOnDocker/3_controller.png)
 
-Controller.java
+HelloController.java
 ```
 package com.example.hello;
 
@@ -38,16 +38,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HelloController {
     @GetMapping("/hello")       # localhost:8080/hello でアクセス来たらhelloworld()を実行
     public String helloworld() {
-        return("hello");        # ~src/main/resources/templates/hello.html をreturn
+        return("Hello");        # ~src/main/resources/templates/Hello.html をreturn
     }
 }
 ```
 
-hello.htmlを新規作成する
+Hello.htmlを新規作成する
 ![VS Code](_static/SpringOnDocker/4_html.png)
 
 ```
 <!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Sample</title>
@@ -62,3 +63,8 @@ hello.htmlを新規作成する
 HelloApprication.javaを実行
 ![VS Code](_static/SpringOnDocker/5_test.png)
 
+ブラウザからアクセスして確認
+![test](_static/SpringOnDocker/6_test.png)
+
+4. ビルド
+動作確認して問題ないこと確認したらビルドする
