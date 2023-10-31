@@ -69,9 +69,20 @@ HelloApprication.javaを実行
 4. Mavenでビルド
 SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行
 ```
-# Windowsの場合はこれ
-
-
-# Macの場合はこれ
 mvn package spring-boot:repackage
 ```
+
+targetフォルダはいかに`.jar`ファイルが生成される
+![jar](_static/SpringOnDocker/7_jar.png)
+
+
+
+
+## 参考
+### Apache Maven インストール（Windows）
+1. [Apache Maven サイト](https://maven.apache.org/)から、`Binary zip archive`をダウンロード&展開して、C:\直下に配置
+![MavenInstall](_static/SpringOnDocker/99_MavenInstall.png)
+
+2. システム環境変数Pathに`C:\apache-maven-3.9.5\bin`を追加
+
+3. `mvn -v`コマンドを実行してインストールされていることを確認
