@@ -96,9 +96,10 @@
 <li><p>Artifact Id: hello</p></li>
 <li><p>packaging type: Jar</p></li>
 <li><p>Java version: 17  ※Dockerイメージ作成するときに合わせる必要があるので注意</p></li>
-<li><p>dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools
-上記は例なので適宜変更すること</p></li>
+<li><p>dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools</p></li>
 </ul>
+<p>上記は例なので適宜変更すること</p>
+<p>【補足：dependenciesについて】</p>
 <p>完了するとプロジェクトが作成される
 <img alt="VS Code" src="_images/2_init.png" /></p>
 <ol class="arabic simple" start="2">
@@ -143,9 +144,16 @@ HelloApprication.javaを実行
 <p>ブラウザからアクセスして確認
 <img alt="test" src="_images/6_test.png" /></p>
 <ol class="arabic simple" start="4">
-<li><p>ビルド
-動作確認して問題ないこと確認したらビルドする</p></li>
+<li><p>Mavenでビルド
+SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行</p></li>
 </ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windowsの場合はこれ</span>
+
+
+<span class="c1"># Macの場合はこれ</span>
+<span class="n">mvn</span> <span class="n">package</span> <span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">repackage</span>
+</pre></div>
+</div>
 </section>
 </section>
 
