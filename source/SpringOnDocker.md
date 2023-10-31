@@ -18,7 +18,11 @@ Spring Bootで作成したHello WorldをJarファイルにビルドして、Dock
 - packaging type: Jar
 - Java version: 17  ※Dockerイメージ作成するときに合わせる必要があるので注意
 - dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools
+
 上記は例なので適宜変更すること
+
+【補足：dependenciesについて】
+
 
 完了するとプロジェクトが作成される
 ![VS Code](_static/SpringOnDocker/2_init.png)
