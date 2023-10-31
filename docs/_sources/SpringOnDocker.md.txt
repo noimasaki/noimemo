@@ -80,6 +80,39 @@ targetフォルダはいかに`.jar`ファイルが生成される
 ![jar](_static/SpringOnDocker/7_jar.png)
 
 
+## コンテナイメージ作成
+Dockerfileを作成
+```
+FROM centos:7
+COPY ./hello/target/*.jar app.jar
+EXPOSE 8080
+RUN yum install -y java-17-openjdk
+ENTRYPOINT ["java","-jar","app.jar"] #コンテナが起動する際に実行されるコマンド。「java -jar app.jar」が実行される
+```
+
+docker-composeを作成
+```
+version: '3.6'
+services:
+  java:
+    build: .
+    tty: true
+```
+
+ビルドの実行
+```
+docker build \
+    --no-cache \
+    --tag app-hello-spring-boot:latest .
+```
+
+コンテナ起動
+```
+docker run --rm \
+    --publish 8080:8080 \
+    --name app-local \
+    app-hello-spring-boot
+```
 
 
 ## 参考
