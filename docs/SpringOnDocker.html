@@ -48,6 +48,10 @@
 <li class="toctree-l1"><a class="reference internal" href="SpringBootTutorial.html">SpringBoot入門</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Spring BootをDocker上で動かす</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#spring-boot">Spring Bootアプリの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#apache-maven-windows">Apache Maven インストール（Windows）</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -147,13 +151,23 @@ HelloApprication.javaを実行
 <li><p>Mavenでビルド
 SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windowsの場合はこれ</span>
-
-
-<span class="c1"># Macの場合はこれ</span>
-<span class="n">mvn</span> <span class="n">package</span> <span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">repackage</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">package</span> <span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">repackage</span>
 </pre></div>
 </div>
+<p>targetフォルダはいかに<code class="docutils literal notranslate"><span class="pre">.jar</span></code>ファイルが生成される
+<img alt="jar" src="_images/7_jar.png" /></p>
+</section>
+<section id="id1">
+<h2>参考<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="apache-maven-windows">
+<h3>Apache Maven インストール（Windows）<a class="headerlink" href="#apache-maven-windows" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://maven.apache.org/">Apache Maven サイト</a>から、<code class="docutils literal notranslate"><span class="pre">Binary</span> <span class="pre">zip</span> <span class="pre">archive</span></code>をダウンロード&amp;展開して、C:\直下に配置
+<img alt="MavenInstall" src="_images/99_MavenInstall.png" /></p></li>
+<li><p>システム環境変数Pathに<code class="docutils literal notranslate"><span class="pre">C:\apache-maven-3.9.5\bin</span></code>を追加</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">-v</span></code>コマンドを実行してインストールされていることを確認</p></li>
+</ol>
+</section>
 </section>
 </section>
 
