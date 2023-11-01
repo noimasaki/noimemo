@@ -91,7 +91,7 @@ SpringBootのソースディレクトリ（pom.xmlがあるところ）でビル
 mvn package spring-boot:repackage
 ```
 
-targetフォルダはいかに`.jar`ファイルが生成される
+targetフォルダに`.jar`ファイルが生成される
 
 ![jar](_static/SpringOnDocker/7_jar.png)
 
