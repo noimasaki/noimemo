@@ -38,7 +38,8 @@ SpringDocker
 
 ![VS Code](_static/SpringOnDocker/2_init.png)
 
-1. Controller、htmlの作成
+2. Controller、htmlの作成
+
 HelloController.javaを新規作成する
 
 ![VS Code](_static/SpringOnDocker/3_controller.png)
@@ -77,6 +78,7 @@ Hello.htmlを新規作成する
 ```
 
 3. 動作確認
+
 HelloApprication.javaを実行
 
 ![VS Code](_static/SpringOnDocker/5_test.png)
@@ -135,6 +137,7 @@ exec形式とすることで、コマンドがシェルによって解釈され�
 
 
 2. ビルドの実行
+
 次のビルドコマンドは`.(カレントディレクトリ)`を指定しているため、
 作成したDockerfileと同ディレクトリで実行すること
 ```
