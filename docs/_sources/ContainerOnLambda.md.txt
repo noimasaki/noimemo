@@ -22,4 +22,4 @@
 ![ECR](_static/ContainerOnLmbda/2_ECR.png)
 
 
-## 
+## Lambdaへデプロイ
