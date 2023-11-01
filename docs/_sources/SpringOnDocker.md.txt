@@ -35,10 +35,12 @@ SpringDocker
 上記は例なので適宜変更すること
 
 完了するとプロジェクトが作成される
+
 ![VS Code](_static/SpringOnDocker/2_init.png)
 
 1. Controller、htmlの作成
 HelloController.javaを新規作成する
+
 ![VS Code](_static/SpringOnDocker/3_controller.png)
 
 HelloController.java
@@ -58,6 +60,7 @@ public class HelloController {
 ```
 
 Hello.htmlを新規作成する
+
 ![VS Code](_static/SpringOnDocker/4_html.png)
 
 ```
@@ -75,9 +78,11 @@ Hello.htmlを新規作成する
 
 3. 動作確認
 HelloApprication.javaを実行
+
 ![VS Code](_static/SpringOnDocker/5_test.png)
 
 ブラウザからアクセスして確認
+
 ![test](_static/SpringOnDocker/6_test.png)
 
 4. Mavenでビルド
@@ -87,6 +92,7 @@ mvn package spring-boot:repackage
 ```
 
 targetフォルダはいかに`.jar`ファイルが生成される
+
 ![jar](_static/SpringOnDocker/7_jar.png)
 
 
@@ -161,7 +167,7 @@ docker run --rm \
 
 ## 参考
 ### Apache Maven インストール（Windows）
-1. [Apache Maven サイト](https://maven.apache.org/)から、`Binary zip archive`をダウンロード&展開して、C:\直下に配置
+1. [Apache Maven サイト](https://maven.apache.org/)から、`Binary zip archive`をダウンロード&展開し、C:\直下に配置
 ![MavenInstall](_static/SpringOnDocker/99_MavenInstall.png)
 
 2. システム環境変数Pathに`C:\apache-maven-3.9.5\bin`を追加
