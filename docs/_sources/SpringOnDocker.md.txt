@@ -1,10 +1,23 @@
 # Spring BootをDocker上で動かす
 
-Spring Bootで作成したHello WorldをJarファイルにビルドして、Docker上で動かす。
+Spring Bootで作成したHello WorldをJarファイルにビルドして、コンテナイメージ化する。
 
-↓ディレクトリ構成
+↓ディレクトリ構成（省略）
 ```
-
+SpringDocker
+├── Dockerfile
+└── hello           // Spring Boot プロジェクディレクトリ
+    ├── pom.xml
+    ├── src
+    │   ├── main    // Javaファイル、htmlファイルはここに作成
+    │   │   ├── java/com/example/hello
+    │   │   │   ├── HelloApplication.java
+    │   │   │   └── HelloController.java
+    │   │   └── resources/templates
+    │   │       └── Hello.html
+    │   └── test
+    └── target      // ビルドしたjarファイルはここに格納される
+        └── hello-0.0.1-SNAPSHOT.jar
 ```
 
 ## Spring Bootアプリの作成
@@ -116,19 +129,34 @@ exec形式とすることで、コマンドがシェルによって解釈され�
 
 
 2. ビルドの実行
+次のビルドコマンドは`.(カレントディレクトリ)`を指定しているため、
+作成したDockerfileと同ディレクトリで実行すること
 ```
+# ビルド
 docker build \
     --no-cache \
     --tag app-hello-spring-boot:latest .
+
+# イメージの確認
+docker images
+-----------------
+REPOSITORY              TAG       IMAGE ID       CREATED              SIZE
+app-hello-spring-boot   latest    96f90e7c2bfe   About a minute ago   408MB
 ```
 
-3. コンテナ起動
+3. コンテナ起動確認
 ```
 docker run --rm \
     --publish 8080:8080 \
     --name app-local \
     app-hello-spring-boot
 ```
+- `--rm`オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）
+- `-d`オプション：バックグラウンドで実行してくれる
+
+ブラウザで[http://localhost:8080/hello](http://localhost:8080/hello)にアクセスしてhello worldが表示できることを確認
+
+`-d`オプションを指定しなかった場合は`Ctrl+C`で終了
 
 
 ## 参考

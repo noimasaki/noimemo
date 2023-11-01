@@ -83,9 +83,22 @@
              
   <section id="spring-bootdocker">
 <h1>Spring BootをDocker上で動かす<a class="headerlink" href="#spring-bootdocker" title="Link to this heading"></a></h1>
-<p>Spring Bootで作成したHello WorldをJarファイルにビルドして、Docker上で動かす。</p>
-<p>↓ディレクトリ構成</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<p>Spring Bootで作成したHello WorldをJarファイルにビルドして、コンテナイメージ化する。</p>
+<p>↓ディレクトリ構成（省略）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SpringDocker
+├── Dockerfile
+└── hello           // Spring Boot プロジェクディレクトリ
+    ├── pom.xml
+    ├── src
+    │   ├── main    // Javaファイル、htmlファイルはここに作成
+    │   │   ├── java/com/example/hello
+    │   │   │   ├── HelloApplication.java
+    │   │   │   └── HelloController.java
+    │   │   └── resources/templates
+    │   │       └── Hello.html
+    │   └── test
+    └── target      // ビルドしたjarファイルはここに格納される
+        └── hello-0.0.1-SNAPSHOT.jar
 </pre></div>
 </div>
 <section id="spring-boot">
@@ -196,15 +209,24 @@ SpringBootのソースディレクトリ（pom.xmlがあるところ）でビル
 <p>exec形式とすることで、コマンドがシェルによって解釈される事なく直接実行されるため、
 コマンドがシェルの環境変数やエイリアスに影響されずに実行可能</p>
 <ol class="arabic simple" start="2">
-<li><p>ビルドの実行</p></li>
+<li><p>ビルドの実行
+次のビルドコマンドは<code class="docutils literal notranslate"><span class="pre">.(カレントディレクトリ)</span></code>を指定しているため、
+作成したDockerfileと同ディレクトリで実行すること</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ビルド</span>
+<span class="n">docker</span> <span class="n">build</span> \
     <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span> \
     <span class="o">--</span><span class="n">tag</span> <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+
+<span class="c1"># イメージの確認</span>
+<span class="n">docker</span> <span class="n">images</span>
+<span class="o">-----------------</span>
+<span class="n">REPOSITORY</span>              <span class="n">TAG</span>       <span class="n">IMAGE</span> <span class="n">ID</span>       <span class="n">CREATED</span>              <span class="n">SIZE</span>
+<span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>   <span class="n">latest</span>    <span class="mi">96</span><span class="n">f90e7c2bfe</span>   <span class="n">About</span> <span class="n">a</span> <span class="n">minute</span> <span class="n">ago</span>   <span class="mi">408</span><span class="n">MB</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li><p>コンテナ起動</p></li>
+<li><p>コンテナ起動確認</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> \
     <span class="o">--</span><span class="n">publish</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">8080</span> \
@@ -212,6 +234,12 @@ SpringBootのソースディレクトリ（pom.xmlがあるところ）でビル
     <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--rm</span></code>オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span></code>オプション：バックグラウンドで実行してくれる</p></li>
+</ul>
+<p>ブラウザで<a class="reference external" href="http://localhost:8080/hello">http://localhost:8080/hello</a>にアクセスしてhello worldが表示できることを確認</p>
+<p><code class="docutils literal notranslate"><span class="pre">-d</span></code>オプションを指定しなかった場合は<code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code>で終了</p>
 </section>
 <section id="id2">
 <h2>参考<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
