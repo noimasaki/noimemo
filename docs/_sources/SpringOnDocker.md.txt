@@ -21,13 +21,10 @@ Spring Bootで作成したHello WorldをJarファイルにビルドして、Dock
 
 上記は例なので適宜変更すること
 
-【補足：dependenciesについて】
-
-
 完了するとプロジェクトが作成される
 ![VS Code](_static/SpringOnDocker/2_init.png)
 
-2. Controller、htmlの作成
+1. Controller、htmlの作成
 HelloController.javaを新規作成する
 ![VS Code](_static/SpringOnDocker/3_controller.png)
 
@@ -81,32 +78,51 @@ targetフォルダはいかに`.jar`ファイルが生成される
 
 
 ## コンテナイメージ作成
-Dockerfileを作成
+1. Dockerfileを作成
 ```
-FROM centos:7
+# FROM：ベースイメージの指定
+#  Spring InitializrでJava17を指定したので合わせる
+FROM openjdk:17-jdk-slim
+
+# RUN：イメージ作成時に実行されるコマンド
+#  AP格納ディレクトリを作成
+RUN mkdir hello
+
+# WRKDIR：この命令以降は、指定したディレクトリで操作される
+WORKDIR /hello
+
+# COPY：コンテナ内にファイルコピー
+#  ビルドした.jarをapp.jarというファイルでコピー
 COPY ./hello/target/*.jar app.jar
+
+# EXPOSE：コンテナが特定ポートをlistenしている事をDockerに通知
 EXPOSE 8080
-RUN yum install -y java-17-openjdk
-ENTRYPOINT ["java","-jar","app.jar"] #コンテナが起動する際に実行されるコマンド。「java -jar app.jar」が実行される
+
+# ENTRYPOINT：コンテナ実行時に実行するコマンド
+#  ※複数行書いても一番最後の行しか実行されない
+ENTRYPOINT ["java","-jar","app.jar"]
 ```
 
-docker-composeを作成
+`ENTRYPOINT`は2種類の記載方法があり、exec形式が推奨されている
 ```
-version: '3.6'
-services:
-  java:
-    build: .
-    tty: true
-```
+# シェル形式
+ENTRYPOINT command param1 param2
 
-ビルドの実行
+# exec形式
+ENTRYPOINT ["executable", "param1", "param2"]
+```
+exec形式とすることで、コマンドがシェルによって解釈される事なく直接実行されるため、
+コマンドがシェルの環境変数やエイリアスに影響されずに実行可能
+
+
+2. ビルドの実行
 ```
 docker build \
     --no-cache \
     --tag app-hello-spring-boot:latest .
 ```
 
-コンテナ起動
+3. コンテナ起動
 ```
 docker run --rm \
     --publish 8080:8080 \
