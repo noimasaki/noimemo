@@ -2,7 +2,7 @@
 
 Spring Bootで作成したHello WorldをJarファイルにビルドして、コンテナイメージ化する。
 
-↓ディレクトリ構成（省略）
+↓ディレクトリ構成（一部省略）
 ```
 SpringDocker
 ├── Dockerfile
