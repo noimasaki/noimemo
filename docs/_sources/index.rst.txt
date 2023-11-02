@@ -12,4 +12,3 @@
    Shpinx導入とGiHubページ作成.md
    GiHubAppsToken.md
    SpringOnDocker.md
-   ContainerOnLambda.md
