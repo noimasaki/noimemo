@@ -181,7 +181,7 @@ public class ItemController {
 ## 3. 
 
 ## データベース（MySQL）を利用する
-![DatabBase](_static/SpringBoot_REST_API/DataBase.png)
+![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
 
 ### データベース作成
 MySQL Workbenchからデータベースを作成
