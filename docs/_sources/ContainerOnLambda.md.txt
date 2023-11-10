@@ -26,6 +26,7 @@ AWS Lambdaでコンテナを実行する場合、
 Login Succeeded
 
 % docker tag app-hello-spring-boot:latest XXXX.dkr.ecr.ap-northeast-1.amazonaws.com/noirepo:latest
+docker tag app-hello-spring-boot:latest 891393919774.dkr.ecr.ap-northeast-1.amazonaws.com/noirepo:latest
 
 % docker images
 REPOSITORY                                          TAG       IMAGE ID       CREATED       SIZE
