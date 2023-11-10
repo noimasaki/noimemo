@@ -54,7 +54,7 @@ item           // Spring Boot プロジェクディレクトリ
 
 Item.java
 ```
-package com.example.item;
+package com.example.item.Model;
 
 public class Item {
     private String itemId;          //商品ID
@@ -89,30 +89,77 @@ public class Item {
 }
 ```
 
-### 1-3. コントローラ作成
-1. ItemController.javaを作成
+### 1-3. サービス作成
+1. コントローラから呼ばれるビジネスロジックであるItemService.javaを作成
 ```
-package com.example.item;
+package com.example.item.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-public class ItemController {
-    
-    @GetMapping("/items")
-    public List<Item> getAllItems() {
-        List<Item> allItems = Arrays.asList(
+import com.example.item.Model.Item;
+
+@Service
+public class ItemService {
+        private List<Item> allItems = Arrays.asList(
             new Item("10001", "ネックレス", "ジュエリ"),
             new Item("10002", "パーカー", "ファッション"),
             new Item("10003", "フェイスクリーム", "ビューティ"),
             new Item("10004", "サプリメント", "ヘルス"),
             new Item("10005", "ブルーベリー", "フード")
         );
-        return allItems;
+
+        // 全てのItemリストを返すメソッド
+        public List<Item> getAllItems() {
+            return allItems;
+        }
+
+        // 個別のItemを返すメソッド
+        public Item getItem(String itemId) {
+            for (int i=0; i<allItems.size(); i++){
+                if (allItems.get(i).getItemId().equals(itemId)) {
+                    return allItems.get(i);
+                }
+            }
+            return null;    // itemIdが見つからなかったらnullを返す
+        }
+}
+```
+
+### 1-4. コントローラ作成
+1. ItemController.javaを作成
+```
+package com.example.item.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.item.Model.Item;
+import com.example.item.Service.ItemService;
+
+@RestController
+public class ItemController {
+    
+    // @Autowiredでインスタンス化は自動化
+    @Autowired
+    private ItemService itemService;
+
+    // @GetMappingで"/items"へアクセスしたときにgetAllItems()を実行
+    @GetMapping("/items")
+    public List<Item> getAllItems() {
+        return itemService.getAllItems();
+    }
+
+    // 全てのitemではなく、itemIdで個別の情報を返す
+    @GetMapping("/items/{id}")
+    public Item getItem(@PathVariable("id") String id){
+        return itemService.getItem(id);
     }
 }
 ```
@@ -126,9 +173,12 @@ public class ItemController {
 2. ブラウザで[http://localhost:8080/items](http://localhost:8080/items)にアクセスして、JSON形式で表示されればOK
 ![Run SpringBoot](_static/SpringBoot_REST_API/GET_1.png)
 
+3. 個別のitem情報も取得できるか確認[http://localhost:8080/items/10001](http://localhost:8080/items/10001)
+![Run SpringBoot](_static/SpringBoot_REST_API/GET_2.png)
+
 確認できたらSpringBootは停止する
 
-
+## 3. 
 
 ## データベース（MySQL）を利用する
 ![DatabBase](_static/SpringBoot_REST_API/DataBase.png)
