@@ -164,21 +164,42 @@ public class ItemController {
 }
 ```
 
-## 2. GET（参照）の実装
+
+## 2. GET（参照）
 `1. 環境構築`が完了していれば、GETは実装できたことになる。
 
 1. SpringBootを起動する
 ![Run SpringBoot](_static/SpringBoot_REST_API/VScode3.png)
 
+
 2. ブラウザで[http://localhost:8080/items](http://localhost:8080/items)にアクセスして、JSON形式で表示されればOK
 ![Run SpringBoot](_static/SpringBoot_REST_API/GET_1.png)
+
 
 3. 個別のitem情報も取得できるか確認[http://localhost:8080/items/10001](http://localhost:8080/items/10001)
 ![Run SpringBoot](_static/SpringBoot_REST_API/GET_2.png)
 
+
 確認できたらSpringBootは停止する
 
-## 3. 
+
+## 3. POST（登録）
+
+ポイント
+- サービスクラスに記述しているArrayにaddしようとするとエラーが発生するので、ArrayList<>でnewしてあげる必要がある
+```
+public class ItemService {
+        private List<Item> allItems = new ArrayList<> (Arrays.asList(
+            new Item("10001", "ネックレス", "ジュエリ"),
+            new Item("10002", "パーカー", "ファッション"),
+            new Item("10003", "フェイスクリーム", "ビューティ"),
+            new Item("10004", "サプリメント", "ヘルス"),
+            new Item("10005", "ブルーベリー", "フード")
+        ));
+```
+
+PostmanでPOSTして確認してみる
+![Postman](_static/SpringBoot_REST_API/POST_1.png)
 
 ## データベース（MySQL）を利用する
 ![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
