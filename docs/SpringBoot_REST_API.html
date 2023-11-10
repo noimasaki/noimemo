@@ -54,11 +54,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#id5">1-4. コントローラ作成</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#get">2. GET（参照）の実装</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">3.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get">2. GET（参照）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post">3. POST（登録）</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mysql">データベース（MySQL）を利用する</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id7">データベース作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">プロジェクト作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">データベース作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">プロジェクト作成</a></li>
 </ul>
 </li>
 </ul>
@@ -267,7 +267,7 @@ public class ItemController {
 </section>
 </section>
 <section id="get">
-<h2>2. GET（参照）の実装<a class="headerlink" href="#get" title="Link to this heading"></a></h2>
+<h2>2. GET（参照）<a class="headerlink" href="#get" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">1.</span> <span class="pre">環境構築</span></code>が完了していれば、GETは実装できたことになる。</p>
 <ol class="arabic simple">
 <li><p>SpringBootを起動する
@@ -279,20 +279,36 @@ public class ItemController {
 </ol>
 <p>確認できたらSpringBootは停止する</p>
 </section>
-<section id="id6">
-<h2>3.<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<section id="post">
+<h2>3. POST（登録）<a class="headerlink" href="#post" title="Link to this heading"></a></h2>
+<p>ポイント</p>
+<ul class="simple">
+<li><p>サービスクラスに記述しているArrayにaddしようとするとエラーが発生するので、ArrayList&lt;&gt;でnewしてあげる必要がある</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">ItemService</span> <span class="p">{</span>
+        <span class="n">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">allItems</span> <span class="o">=</span> <span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span> <span class="p">(</span><span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10001&quot;</span><span class="p">,</span> <span class="s2">&quot;ネックレス&quot;</span><span class="p">,</span> <span class="s2">&quot;ジュエリ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10002&quot;</span><span class="p">,</span> <span class="s2">&quot;パーカー&quot;</span><span class="p">,</span> <span class="s2">&quot;ファッション&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10003&quot;</span><span class="p">,</span> <span class="s2">&quot;フェイスクリーム&quot;</span><span class="p">,</span> <span class="s2">&quot;ビューティ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10004&quot;</span><span class="p">,</span> <span class="s2">&quot;サプリメント&quot;</span><span class="p">,</span> <span class="s2">&quot;ヘルス&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10005&quot;</span><span class="p">,</span> <span class="s2">&quot;ブルーベリー&quot;</span><span class="p">,</span> <span class="s2">&quot;フード&quot;</span><span class="p">)</span>
+        <span class="p">));</span>
+</pre></div>
+</div>
+<p>PostmanでPOSTして確認してみる
+<img alt="Postman" src="_images/POST_1.png" /></p>
 </section>
 <section id="mysql">
 <h2>データベース（MySQL）を利用する<a class="headerlink" href="#mysql" title="Link to this heading"></a></h2>
 <p><img alt="DatabBase" src="_images/figure.drawio.png" /></p>
-<section id="id7">
-<h3>データベース作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id6">
+<h3>データベース作成<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>MySQL Workbenchからデータベースを作成
 <img alt="Opne MySQL Workbench" src="_images/DB_1.png" />
 <img alt="Create DB" src="_images/DB_2.png" /></p>
 </section>
-<section id="id8">
-<h3>プロジェクト作成<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<section id="id7">
+<h3>プロジェクト作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
 <li><p>VS Codeのコマンドから新しくプロジェクトを作成
 <img alt="Create Project" src="_images/CreatePJ.png" /></p></li>
