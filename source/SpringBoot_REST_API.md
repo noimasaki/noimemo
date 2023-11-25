@@ -203,6 +203,10 @@ PostmanでPOSTして確認してみる
 ![Postman](_static/SpringBoot_REST_API/POST_1.png)
 
 ## 4. PUT(更新)
+![PUT](_static/SpringBoot_REST_API/PUT.drawio.svg)
+
+## 5. DELETE (削除)
+
 
 ## データベース（MySQL）を利用する
 ![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
