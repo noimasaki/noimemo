@@ -184,6 +184,7 @@ public class ItemController {
 
 
 ## 3. POST（登録）
+![POST](_static/SpringBoot_REST_API/POST.drawio.svg)
 
 ポイント
 - サービスクラスに記述しているArrayにaddしようとするとエラーが発生するので、ArrayList<>でnewしてあげる必要がある
@@ -200,6 +201,8 @@ public class ItemService {
 
 PostmanでPOSTして確認してみる
 ![Postman](_static/SpringBoot_REST_API/POST_1.png)
+
+## 4. PUT(更新)
 
 ## データベース（MySQL）を利用する
 ![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
