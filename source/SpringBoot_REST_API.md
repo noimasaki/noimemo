@@ -206,7 +206,7 @@ PostmanでPOSTして確認してみる
 ![PUT](_static/SpringBoot_REST_API/PUT.drawio.svg)
 
 ## 5. DELETE (削除)
-
+![DELETE](_static/SpringBoot_REST_API/DELETE.drawio.svg)
 
 ## データベース（MySQL）を利用する
 ![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
