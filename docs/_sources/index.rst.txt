@@ -11,6 +11,6 @@
 
    Shpinx導入とGiHubページ作成.md
    GiHubAppsToken.md
-   SpringBootTutorial.md
    SpringOnDocker.md
-   
+   SpringBoot_REST_API.md
+   MySQL.md
