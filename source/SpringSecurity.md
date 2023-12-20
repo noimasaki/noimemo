@@ -43,7 +43,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 <body>
     <h1>Microservice WebApp Login</h1>
 
-    <!-- URLパラメータに「error」が含まれていたら、メッセージ出力 -->
+    <!-- URLパラメータに「error」が含まれていたら、メッセージ出力 ※1 -->
     <div th:if="${param.error}">
         <p>ユーザー名もしくはパスワードが違います</p>
     </div>
@@ -70,6 +70,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 </html>
 ```
 
+
 ログイン後のページ`resources/templates/home.html`
 ```
 <!DOCTYPE html>
@@ -87,6 +88,65 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 `login.html`と`home.html`を表示させるコントローラを作成する
 
 ```
+package com.example.frontendwebapp;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class frontController {
+
+    @GetMapping(value = "/login")
+    public String login(){
+        // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
+        return "login";
+    }
+
+}
+```
+
+### 3-4. `SecurityConfig.java`作成
+SpringSecurityの挙動をカスタムする
+
+```
+package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/login/*").permitAll()    // "/login"は認証不要
+            .anyRequest().authenticated()               // その他のリクエストは認証が必要
+            )
+            .formLogin((form) -> form   // 認証方式はformログイン
+            .loginPage("/login")    // 認証ページは"/login"
+            .permitAll()
+            )
+            .logout((logout) -> logout.permitAll());    // ログアウト機能を有効化し、すべてのユーザがログアウト可能
+        
+            return http.build();
+    }
+
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new Pbkdf2PasswordEncoder();
+    // }
+
+    // userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。
+    // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
+    // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
+}
 
 ```
 
