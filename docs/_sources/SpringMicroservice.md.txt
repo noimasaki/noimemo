@@ -27,7 +27,50 @@ SpringSecurity設定クラスを作成する。
 ------------------------
 
 # 1. `login.html`を作成
-`resources/templates`にログインページを作成
+`resources/templates/login.html`にログインページを作成
+```
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ログインページ | 課題管理アプリケーション</title>
+</head>
+<body>
+    <h1>課題管理アプリケーション</h1>
+    <div th:if="${param.error}">
+        <p>ユーザー名もしくはパスワードが違います</p>
+    </div>
+    <form action="#" th:action="@{/login}" method="post">
+        <div>
+            <label for="usernameInput" class="form-label">ユーザ名</label>
+            <input type="text" id="usernameInput" name="username" class="form-control">
+        </div>
+        <div>
+            <label for="passwordInput" class="form-label">パスワード</label>
+            <input type="password" id="passwordInput" name="password" class="form-control">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">ログイン</button>
+        </div>
+    </form>
+</body>
+</html>
+```
+
+- `<html xmlns:th="http://www.thymeleaf.org">`：Thymeleafを有効化する記述
+- `<form action="#" th:action="@{/login}" method="post">`：form内のsubmitボタンを押下した時のactionとmethodを定義。"#"はThymeleafによる書き換え対象で、書き換える内容は`th`で始まる箇所で、`/login`というURLパス(`@`はThymeleafのリンク記法)にpostメソッドを飛ばす。
+- `name="username"`と`name="password"`はIDとPW情報をサーバに送信するときに、フィールド名を指定している。ここではSpringBootのデフォルト値、`username`と`password`を利用している。なお、変更も可能で`SecurityConfig.java`で以下のように指定することで変更可能。
+```
+http
+    .formLogin((form) -> form    // 認証方式はformログイン
+    .usernameParameter("USERNAME")  // デフォルト値`username`から変更
+    .passwordParameter("USER_PW")   // デフォルト値`password`から変更
+    .loginPage("/login")    // 認証ページは"/login"
+    .permitAll()
+    )
+```
+
+- `<div th:if="${param.error}">`：ログインに失敗すると、SpringBootのデフォルトではURLパラメータに`/login?error`がつくため、Tymeleafの条件分岐機能を利用して、パラメータに`error`があった場合は「ユーザー名もしくはパスワードが違います」といったメッセージを表示させる。
+
 
 # 2. `SecurityConfig.java`を作成
 ```

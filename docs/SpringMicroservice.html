@@ -119,7 +119,51 @@
 <hr class="docutils" />
 <section id="login-html">
 <h1>1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成<a class="headerlink" href="#login-html" title="Link to this heading"></a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">resources/templates</span></code>にログインページを作成</p>
+<p><code class="docutils literal notranslate"><span class="pre">resources/templates/login.html</span></code>にログインページを作成</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;ログインページ | 課題管理アプリケーション&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;課題管理アプリケーション&lt;/h1&gt;
+    &lt;div th:if=&quot;${param.error}&quot;&gt;
+        &lt;p&gt;ユーザー名もしくはパスワードが違います&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;form action=&quot;#&quot; th:action=&quot;@{/login}&quot; method=&quot;post&quot;&gt;
+        &lt;div&gt;
+            &lt;label for=&quot;usernameInput&quot; class=&quot;form-label&quot;&gt;ユーザ名&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;usernameInput&quot; name=&quot;username&quot; class=&quot;form-control&quot;&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;label for=&quot;passwordInput&quot; class=&quot;form-label&quot;&gt;パスワード&lt;/label&gt;
+            &lt;input type=&quot;password&quot; id=&quot;passwordInput&quot; name=&quot;password&quot; class=&quot;form-control&quot;&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;ログイン&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;html</span> <span class="pre">xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;</span></code>：Thymeleafを有効化する記述</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;form</span> <span class="pre">action=&quot;#&quot;</span> <span class="pre">th:action=&quot;&#64;{/login}&quot;</span> <span class="pre">method=&quot;post&quot;&gt;</span></code>：form内のsubmitボタンを押下した時のactionとmethodを定義。&quot;#&quot;はThymeleafによる書き換え対象で、書き換える内容は<code class="docutils literal notranslate"><span class="pre">th</span></code>で始まる箇所で、<code class="docutils literal notranslate"><span class="pre">/login</span></code>というURLパス(<code class="docutils literal notranslate"><span class="pre">&#64;</span></code>はThymeleafのリンク記法)にpostメソッドを飛ばす。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name=&quot;username&quot;</span></code>と<code class="docutils literal notranslate"><span class="pre">name=&quot;password&quot;</span></code>はIDとPW情報をサーバに送信するときに、フィールド名を指定している。ここではSpringBootのデフォルト値、<code class="docutils literal notranslate"><span class="pre">username</span></code>と<code class="docutils literal notranslate"><span class="pre">password</span></code>を利用している。なお、変更も可能で<code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>で以下のように指定することで変更可能。</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http
+    .formLogin((form) -&gt; form    // 認証方式はformログイン
+    .usernameParameter(&quot;USERNAME&quot;)  // デフォルト値`username`から変更
+    .passwordParameter(&quot;USER_PW&quot;)   // デフォルト値`password`から変更
+    .loginPage(&quot;/login&quot;)    // 認証ページは&quot;/login&quot;
+    .permitAll()
+    )
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;div</span> <span class="pre">th:if=&quot;${param.error}&quot;&gt;</span></code>：ログインに失敗すると、SpringBootのデフォルトではURLパラメータに<code class="docutils literal notranslate"><span class="pre">/login?error</span></code>がつくため、Tymeleafの条件分岐機能を利用して、パラメータに<code class="docutils literal notranslate"><span class="pre">error</span></code>があった場合は「ユーザー名もしくはパスワードが違います」といったメッセージを表示させる。</p></li>
+</ul>
 </section>
 <section id="id2">
 <h1>2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
