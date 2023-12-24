@@ -14,6 +14,9 @@ dependencies
 ## 2. ディレクトリ構成変更
 configディレクトリを作成し、起動クラスと設定クラスをまとめて格納する。設定クラスが散らばることがないので良い。
 
+以下のようなフォルダ構成でファイルを作成していく
+
+![3_dir](./_static/SpringSecurity/3_dir.png)
 
 ## 3. ログイン機能の実装
 ### 3-1. ログインページを表示してみる
@@ -84,7 +87,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 </html>
 ```
 
-### 3-3. `Controller.java`作成
+### 3-3. `frontController.java`作成
 `login.html`と`home.html`を表示させるコントローラを作成する
 
 ```

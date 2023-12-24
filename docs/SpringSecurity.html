@@ -59,7 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#id3">3. ログイン機能の実装</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id4">3-1. ログインページを表示してみる</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#html">3-2. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#controller-java">3-3. <code class="docutils literal notranslate"><span class="pre">Controller.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">3-3. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">3-4. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
 </ul>
 </li>
@@ -111,6 +111,8 @@
 <section id="id2">
 <h2>2. ディレクトリ構成変更<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>configディレクトリを作成し、起動クラスと設定クラスをまとめて格納する。設定クラスが散らばることがないので良い。</p>
+<p>以下のようなフォルダ構成でファイルを作成していく</p>
+<p><img alt="3_dir" src="_images/3_dir.png" /></p>
 </section>
 <section id="id3">
 <h2>3. ログイン機能の実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
@@ -181,8 +183,8 @@
 </pre></div>
 </div>
 </section>
-<section id="controller-java">
-<h3>3-3. <code class="docutils literal notranslate"><span class="pre">Controller.java</span></code>作成<a class="headerlink" href="#controller-java" title="Link to this heading"></a></h3>
+<section id="frontcontroller-java">
+<h3>3-3. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">login.html</span></code>と<code class="docutils literal notranslate"><span class="pre">home.html</span></code>を表示させるコントローラを作成する</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package com.example.frontendwebapp;
 
