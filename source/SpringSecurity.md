@@ -46,7 +46,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 <body>
     <h1>Microservice WebApp Login</h1>
 
-    <!-- URLパラメータに「error」が含まれていたら、メッセージ出力 ※1 -->
+    <!-- URLパラメータに「error」が含まれていたら、メッセージ出力 -->
     <div th:if="${param.error}">
         <p>ユーザー名もしくはパスワードが違います</p>
     </div>
@@ -56,13 +56,13 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
     <!-- `action="#" はThymleafが有効化されていれば上書きされる -->
     <form action="#" th:action="@{/login}" method="post">
         <div>
-            <label>ユーザ名</label>
-            <input type="text" name="username">
+            <label for="usernameInput">ユーザ名</label>
+            <input type="text" id="usernameInput" name="username">
             <!-- name="username"はSecurityConfig.javaにてフィールド名指定を合わせる必要がある -->
         </div>
         <div>
-            <label>パスワード</label>
-            <input type="password" name="password">
+            <label for="passwordInput">パスワード</label>
+            <input type="password" id="passwordInput" name="password">
             <!-- name="password"はSecurityConfig.javaにてフィールド名指定を合わせる必要がある -->
         </div>
         <div>
@@ -77,34 +77,65 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 ログイン後のページ`resources/templates/home.html`
 ```
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Welcomeページ</title>
 </head>
 <body>
     <div>Successful Login!</div>
-    <div>Session Id : <span th:text="${sessionId}"></span></div>
+
+    <ul>
+        <li><a href="./logout.html" th:href="@{/logout}">ログアウト</a></li>
+    </ul>
+</body>
+</html>
+```
+
+
+ログアウトページ`resources/templates/logout.html`。ログアウトボタンを押下するとログアウトして、`login.html`に飛ばされる。
+```
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ログアウトページ</title>
+</head>
+<body>
+    <h1>Microservice WebApp Logout</h1>
+    <form action="#" th:action="@{/logout}" method="post">
+        <div>
+            <button type="submit">ログアウト</button>
+        </div>
+    </form>
 </body>
 </html>
 ```
 
 ### 3-3. `frontController.java`作成
-`login.html`と`home.html`を表示させるコントローラを作成する
+`login.html`と`home.html`と`logout.html`を表示させるコントローラを作成する
 
 ```
-package com.example.frontendwebapp;
+package com.example.frontendwebapp.config;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class frontController {
+    @GetMapping
+    public String home(){
+        return "home";
+    }
 
-    @GetMapping(value = "/login")
-    public String login(){
+    @GetMapping("/login")
+    public String showLogin(){
         // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String showLogout(){
+        return "logout";
+    }
 }
 ```
 
