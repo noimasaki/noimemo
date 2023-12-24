@@ -18,7 +18,7 @@ configディレクトリを作成し、起動クラスと設定クラスをま�
 
 ![3_dir](./_static/SpringSecurity/3_dir.png)
 
-## 3. ログイン機能の実装
+## 3. ログイン・ログアウト機能の実装
 ### 3-1. ログインページを表示してみる
 dependenciesにて`spring-boot-starter-security`を指定していれば、そのまま起動するだけでログイン・ログアウト機能が使える。
 
@@ -33,7 +33,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 ![Whitelabel Error Page](./_static/SpringSecurity/2_error.png)
 
 ### 3-2. `.html`作成
-ログインページ、ログイン後のページを作成する。
+ログインページ、ログイン後のページ、ログアウトページを作成する。
 
 ログインページ`resources/templates/login.html`
 ```
@@ -181,6 +181,16 @@ public class SecurityConfig {
     // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
     // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
 }
-
 ```
 
+### 3-5. 動作確認
+ここまでで、ログイン・ログアウト機能が実装できたことになるので、動作確認をしてみる。
+
+## 4. ユーザ情報の管理
+これまでは、デフォルトユーザ`user`とデフォルトパスワード（Spring起動時に自動で生成されるランダムパスワード）を使ってログインしていたが、通常は外部データベース等でユーザ情報は永続化される。
+
+SpringSecurityが提供するインターフェースとして利用するのが以下の2つ
+- UserDetails：ユーザ名/パスワード/権限 などの情報を保持する
+- UserDetailsService：UserDetailsを取得するメソッドを持つ（loadUserByUsername）
+
+### 4-1. UserDetailsServiceの実装
