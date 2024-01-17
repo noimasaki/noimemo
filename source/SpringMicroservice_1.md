@@ -422,5 +422,7 @@ public class MvcConfig implements WebMvcConfigurer{
 ```
 
 ### 2-6.動作確認
+バックエンドのSpringを起動して（Visual Stadioの場合はバックエンドのフォルダを開き直す必要がある）、指定のURLにアクセスして商品情報がjson形式で取れることを確認する。
 
+![items](_static/SpringMicroservice_1/items.png)
 
