@@ -16,6 +16,7 @@ author = 'noim'
 extensions = [
     "sphinx.ext.githubpages",
     "myst_parser",
+    "sphinx_markdown_tables",
 ]
 
 templates_path = ['_templates']
