@@ -56,11 +56,16 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">認証機能の実装</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#spring-initializr">1. Spring Initializr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id2">2. ディレクトリ構成変更</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">3. ログイン機能の実装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id3">3. ログイン・ログアウト機能の実装</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id4">3-1. ログインページを表示してみる</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#html">3-2. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">3-3. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">3-4. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3-5. 動作確認</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">4. ユーザ情報の管理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#userdetailsservice">4-1. UserDetailsServiceの実装</a></li>
 </ul>
 </li>
 </ul>
@@ -115,7 +120,7 @@
 <p><img alt="3_dir" src="_images/3_dir.png" /></p>
 </section>
 <section id="id3">
-<h2>3. ログイン機能の実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<h2>3. ログイン・ログアウト機能の実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <section id="id4">
 <h3>3-1. ログインページを表示してみる<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>dependenciesにて<code class="docutils literal notranslate"><span class="pre">spring-boot-starter-security</span></code>を指定していれば、そのまま起動するだけでログイン・ログアウト機能が使える。</p>
@@ -132,7 +137,7 @@
 </section>
 <section id="html">
 <h3>3-2. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
-<p>ログインページ、ログイン後のページを作成する。</p>
+<p>ログインページ、ログイン後のページ、ログアウトページを作成する。</p>
 <p>ログインページ<code class="docutils literal notranslate"><span class="pre">resources/templates/login.html</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
 &lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;
@@ -143,7 +148,7 @@
 &lt;body&gt;
     &lt;h1&gt;Microservice WebApp Login&lt;/h1&gt;
 
-    &lt;!-- URLパラメータに「error」が含まれていたら、メッセージ出力 ※1 --&gt;
+    &lt;!-- URLパラメータに「error」が含まれていたら、メッセージ出力 --&gt;
     &lt;div th:if=&quot;${param.error}&quot;&gt;
         &lt;p&gt;ユーザー名もしくはパスワードが違います&lt;/p&gt;
     &lt;/div&gt;
@@ -153,13 +158,13 @@
     &lt;!-- `action=&quot;#&quot; はThymleafが有効化されていれば上書きされる --&gt;
     &lt;form action=&quot;#&quot; th:action=&quot;@{/login}&quot; method=&quot;post&quot;&gt;
         &lt;div&gt;
-            &lt;label&gt;ユーザ名&lt;/label&gt;
-            &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+            &lt;label for=&quot;usernameInput&quot;&gt;ユーザ名&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;usernameInput&quot; name=&quot;username&quot;&gt;
             &lt;!-- name=&quot;username&quot;はSecurityConfig.javaにてフィールド名指定を合わせる必要がある --&gt;
         &lt;/div&gt;
         &lt;div&gt;
-            &lt;label&gt;パスワード&lt;/label&gt;
-            &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+            &lt;label for=&quot;passwordInput&quot;&gt;パスワード&lt;/label&gt;
+            &lt;input type=&quot;password&quot; id=&quot;passwordInput&quot; name=&quot;password&quot;&gt;
             &lt;!-- name=&quot;password&quot;はSecurityConfig.javaにてフィールド名指定を合わせる必要がある --&gt;
         &lt;/div&gt;
         &lt;div&gt;
@@ -172,12 +177,33 @@
 </div>
 <p>ログイン後のページ<code class="docutils literal notranslate"><span class="pre">resources/templates/home.html</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
 &lt;head&gt;
     &lt;title&gt;Welcomeページ&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div&gt;Successful Login!&lt;/div&gt;
-    &lt;div&gt;Session Id : &lt;span th:text=&quot;${sessionId}&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;./logout.html&quot; th:href=&quot;@{/logout}&quot;&gt;ログアウト&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>ログアウトページ<code class="docutils literal notranslate"><span class="pre">resources/templates/logout.html</span></code>。ログアウトボタンを押下するとログアウトして、<code class="docutils literal notranslate"><span class="pre">login.html</span></code>に飛ばされる。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;ログアウトページ&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Microservice WebApp Logout&lt;/h1&gt;
+    &lt;form action=&quot;#&quot; th:action=&quot;@{/logout}&quot; method=&quot;post&quot;&gt;
+        &lt;div&gt;
+            &lt;button type=&quot;submit&quot;&gt;ログアウト&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </pre></div>
@@ -185,21 +211,29 @@
 </section>
 <section id="frontcontroller-java">
 <h3>3-3. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">login.html</span></code>と<code class="docutils literal notranslate"><span class="pre">home.html</span></code>を表示させるコントローラを作成する</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package com.example.frontendwebapp;
+<p><code class="docutils literal notranslate"><span class="pre">login.html</span></code>と<code class="docutils literal notranslate"><span class="pre">home.html</span></code>と<code class="docutils literal notranslate"><span class="pre">logout.html</span></code>を表示させるコントローラを作成する</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package com.example.frontendwebapp.config;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class frontController {
+    @GetMapping
+    public String home(){
+        return &quot;home&quot;;
+    }
 
-    @GetMapping(value = &quot;/login&quot;)
-    public String login(){
+    @GetMapping(&quot;/login&quot;)
+    public String showLogin(){
         // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
         return &quot;login&quot;;
     }
 
+    @GetMapping(&quot;/logout&quot;)
+    public String showLogout(){
+        return &quot;logout&quot;;
+    }
 }
 </pre></div>
 </div>
@@ -245,9 +279,24 @@ public class SecurityConfig {
     // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
     // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
 }
-
 </pre></div>
 </div>
+</section>
+<section id="id5">
+<h3>3-5. 動作確認<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>ここまでで、ログイン・ログアウト機能が実装できたことになるので、動作確認をしてみる。</p>
+</section>
+</section>
+<section id="id6">
+<h2>4. ユーザ情報の管理<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>これまでは、デフォルトユーザ<code class="docutils literal notranslate"><span class="pre">user</span></code>とデフォルトパスワード（Spring起動時に自動で生成されるランダムパスワード）を使ってログインしていたが、通常は外部データベース等でユーザ情報は永続化される。</p>
+<p>SpringSecurityが提供するインターフェースとして利用するのが以下の2つ</p>
+<ul class="simple">
+<li><p>UserDetails：ユーザ名/パスワード/権限 などの情報を保持する</p></li>
+<li><p>UserDetailsService：UserDetailsを取得するメソッドを持つ（loadUserByUsername）</p></li>
+</ul>
+<section id="userdetailsservice">
+<h3>4-1. UserDetailsServiceの実装<a class="headerlink" href="#userdetailsservice" title="Link to this heading"></a></h3>
 </section>
 </section>
 </section>
