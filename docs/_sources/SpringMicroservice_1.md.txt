@@ -18,4 +18,20 @@
 - dependencies: spring-boot-starter-security
 - dependencies: spring-boot-starter-thymeleaf
 
-1. 
+1. ディレクトリ構成変更
+可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。
+```
+SpringMicroservice/frontend-webapp/src/main
+├── java
+│   └── com
+│       └── example
+│           └── frontendwebapp
+│               ├── app
+│               ├── config
+│               │   └── FrontendWebappApplication.java
+│               └── domain
+└── resources
+    ├── application.properties
+    ├── static
+    └── templates
+```
