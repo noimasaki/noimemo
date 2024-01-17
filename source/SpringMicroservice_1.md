@@ -226,23 +226,28 @@ public class SecurityConfig {
 ![Spring起動](_static/SpringMicroservice_1/1.png)
 
 ログイン画面
+
 ![login](_static/SpringMicroservice_1/2.png)
 
 ログイン成功→ホームページが表示
+
 ![home](_static/SpringMicroservice_1/3.png)
 
 ログアウトリンク押下→ログアウト画面
+
 ![logout](_static/SpringMicroservice_1/4.png)
 
 ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
+
 ![error](_static/SpringMicroservice_1/5.png)
 
 Springプロジェクトは以下のような構成となっているはず。
+
 ![SpringBoot frontend-webapp directory](_static/SpringMicroservice_1/frontend-webapp.png)
 
 
 ## 2. バックエンドの作成
-ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。
+ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。ただし、まずは商品情報参照機能のみを提供し、その他の機能は別途追加する。
 
 ### 2-1. プロジェクト作成（Spring Initializr）
 - Java: 17
@@ -253,3 +258,153 @@ Springプロジェクトは以下のような構成となっているはず。
 BFFと同様とする。
 
 ### 2-3. モデル作成
+商品情報のモデルを作成する。
+
+Getter・Setterおよびコンストラクタは、VS codeの補完機能を使うと自動で作成が可能。右クリックから`ソースアクション > Generate Getters and Setters...`と`ソースアクション > Generate Constructors...`を選択。
+
+```{code-block} java
+:caption: domain/model/Item.java
+
+package com.example.backenditem.domain.model;
+
+public class Item {
+    private String itemId;          //商品ID
+    private String itemName;        //商品名
+    private String itemCategory;    //商品カテゴリー
+
+    // コンストラクタ
+    public Item(String itemId, String itemName, String itemCategory) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemCategory = itemCategory;
+    }
+
+    // GetterおよびSetter
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
+    }
+}
+```
+
+### 2-4. サービス作成
+コントローラから呼ばれるビジネスロジックであるサービスクラスを作成する。
+なお、ここでは前述の通り、参照機能のみをまずは実装する。
+
+```{code-block} java
+:caption: domain/service/ItemService.java
+
+package com.example.backenditem.domain.service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.backenditem.domain.model.Item;
+
+@Service
+public class ItemService {
+    private List<Item> allItems = Arrays.asList(
+        new Item("10001", "ネックレス", "ジュエリ"),
+        new Item("10002", "パーカー", "ファッション"),
+        new Item("10003", "フェイスクリーム", "ビューティ"),
+        new Item("10004", "サプリメント", "ヘルス"),
+        new Item("10005", "ブルーベリー", "フード")
+    );
+
+    // 全てのItemリストを返すメソッド
+    public List<Item> getAllItems() {
+        return allItems;
+    }
+
+    // 個別のItemを返すメソッド
+    public Item getItem(String itemId) {
+        for (int i=0; i<allItems.size(); i++){
+            if (allItems.get(i).getItemId().equals(itemId)) {
+                return allItems.get(i);
+            }
+        }
+        return null;    // itemIdが見つからなかったらnullを返す
+    }
+}
+```
+
+### 2-5. コントローラ作成
+```{code-block} java
+:caption: app/web/ItemController.java
+
+package com.example.backenditem.app.web;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.backenditem.domain.model.Item;
+import com.example.backenditem.domain.service.ItemService;
+
+@RestController
+public class ItemController {
+    @Autowired
+    private ItemService itemService;
+
+    // @GetMappingで"/items"へアクセスしたときにgetAllItems()を実行
+    @GetMapping("/items")
+    public List<Item> getAllItems() {
+        return itemService.getAllItems();
+    }
+    // @GetMapping("/items")
+    // public String getAllItems() {
+    //     return "ALL items !!";
+    // }
+
+    // 全てのitemではなく、itemIdで個別の情報を返す
+    @GetMapping("/items/{id}")
+    public Item getItem(@PathVariable("id") String id){
+        return itemService.getItem(id);
+    }
+}
+```
+
+BFFと同様に、コントローラクラスがSpringの起動クラスとは別ディレクトリにあるため、ComponentScanを実施する必要がある。
+```{code-block} java
+:caption: config/MvcConfigure.java
+
+package com.example.backenditem.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@ComponentScan("com.example.backenditem.app.web")   //Controllerクラスは別ディレクトリなので読み込んであげる
+public class MvcConfig implements WebMvcConfigurer{
+    
+}
+```
+
+### 2-6.動作確認
+
+
