@@ -46,7 +46,7 @@ SpringMicroservice/frontend-webapp/src/main
 ログインページ `resources/templates/login.html`
 
 ```{code-block} html
-:caption: `resources/templates/login.html`
+:caption: resources/templates/login.html
 
 <!DOCTYPE html>
 <!-- Thymeleafを有効化 => th:XXXX という属性を各タグに追加することで利用可能 -->
