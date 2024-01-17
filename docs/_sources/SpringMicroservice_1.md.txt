@@ -45,7 +45,7 @@ SpringMicroservice/frontend-webapp/src/main
 ### 1-3. `.html`作成
 ログインページ `resources/templates/login.html`
 
-```html
+```{code-block} html
 :caption: `resources/templates/login.html`
 
 <!DOCTYPE html>
