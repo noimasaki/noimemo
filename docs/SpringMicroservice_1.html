@@ -57,15 +57,22 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">実施すること</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">作成の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bff">1. BFFの作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spring-initializr">1-1. プロジェクト作成（Spring Initializr）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1-2. ディレクトリ構成変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mvcconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1-6. 動作確認</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#bff">1. BFFの作成</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#spring-initializr">1-1. プロジェクト作成（Spring Initializr）</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">1-2. ディレクトリ構成変更</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mvcconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#securityconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">2. バックエンドの作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2-1. プロジェクト作成（Spring Initializr）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2-2. ディレクトリ構成変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">2-3. モデル作成</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -110,11 +117,10 @@
 <li><p>BFF改修：バックエンドから受け取ったjsonを画面に表示する</p></li>
 </ol>
 </section>
-</section>
 <section id="bff">
-<h1>1. BFFの作成<a class="headerlink" href="#bff" title="Link to this heading"></a></h1>
+<h2>1. BFFの作成<a class="headerlink" href="#bff" title="Link to this heading"></a></h2>
 <section id="spring-initializr">
-<h2>1-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h2>
+<h3>1-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Java: 17</p></li>
 <li><p>SpringBoot: 3.2.1</p></li>
@@ -124,7 +130,7 @@
 </ul>
 </section>
 <section id="id4">
-<h2>1-2. ディレクトリ構成変更<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<h3>1-2. ディレクトリ構成変更<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>可読性向上の為、<code class="docutils literal notranslate"><span class="pre">.java</span></code>が含まれるディレクトリを以下のように変更する。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SpringMicroservice/frontend-webapp/src/main
 ├──<span class="w"> </span>java
@@ -165,9 +171,10 @@
 </table>
 </section>
 <section id="html">
-<h2>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h2>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">ログインページ： resources/templates/login.html</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
+<p>ログインページ</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
@@ -206,8 +213,8 @@
 </div>
 </div>
 <p>ログイン後に表示されるホームページ</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -228,8 +235,8 @@
 </div>
 </div>
 <p>ログアウトページ</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -249,9 +256,9 @@
 </div>
 </section>
 <section id="frontcontroller-java">
-<h2>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h2>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
@@ -280,11 +287,11 @@
 </div>
 </section>
 <section id="mvcconfig-java">
-<h2>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h2>
+<h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
 <p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
 <p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -301,10 +308,10 @@
 </div>
 </section>
 <section id="securityconfig-java">
-<h2>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h2>
+<h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
@@ -346,6 +353,41 @@
 </pre></div>
 </div>
 </div>
+</section>
+<section id="id5">
+<h3>1-6. 動作確認<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>ここまで作成することで、認証認可機能を持ったBFFが動作する。</p>
+<p><img alt="Spring起動" src="_images/1.png" /></p>
+<p>ログイン画面
+<img alt="login" src="_images/2.png" /></p>
+<p>ログイン成功→ホームページが表示
+<img alt="home" src="_images/3.png" /></p>
+<p>ログアウトリンク押下→ログアウト画面
+<img alt="logout" src="_images/4.png" /></p>
+<p>ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
+<img alt="error" src="_images/5.png" /></p>
+<p>Springプロジェクトは以下のような構成となっているはず。
+<img alt="SpringBoot frontend-webapp directory" src="_images/frontend-webapp.png" /></p>
+</section>
+</section>
+<section id="id6">
+<h2>2. バックエンドの作成<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。</p>
+<section id="id7">
+<h3>2-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Java: 17</p></li>
+<li><p>SpringBoot: 3.2.1</p></li>
+<li><p>dependencies: spring-boot-starter-web</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>2-2. ディレクトリ構成変更<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>BFFと同様とする。</p>
+</section>
+<section id="id9">
+<h3>2-3. モデル作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+</section>
 </section>
 </section>
 

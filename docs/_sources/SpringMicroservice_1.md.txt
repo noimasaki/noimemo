@@ -10,7 +10,7 @@
 3. BFF改修：BFF -> バックエンドへアクセス可能とする
 4. BFF改修：バックエンドから受け取ったjsonを画面に表示する
 
-# 1. BFFの作成
+## 1. BFFの作成
 ### 1-1. プロジェクト作成（Spring Initializr）
 - Java: 17
 - SpringBoot: 3.2.1
@@ -43,9 +43,9 @@ SpringMicroservice/frontend-webapp/src/main
 | domain | ServiceクラスやRepositoryクラスなど |
 
 ### 1-3. `.html`作成
-
+ログインページ
 ```{code-block} html
-:caption: ログインページ： resources/templates/login.html
+:caption: resources/templates/login.html
 
 <!DOCTYPE html>
 <!-- Thymeleafを有効化 => th:XXXX という属性を各タグに追加することで利用可能 -->
@@ -219,3 +219,37 @@ public class SecurityConfig {
     // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
 }
 ```
+
+### 1-6. 動作確認
+ここまで作成することで、認証認可機能を持ったBFFが動作する。
+
+![Spring起動](_static/SpringMicroservice_1/1.png)
+
+ログイン画面
+![login](_static/SpringMicroservice_1/2.png)
+
+ログイン成功→ホームページが表示
+![home](_static/SpringMicroservice_1/3.png)
+
+ログアウトリンク押下→ログアウト画面
+![logout](_static/SpringMicroservice_1/4.png)
+
+ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
+![error](_static/SpringMicroservice_1/5.png)
+
+Springプロジェクトは以下のような構成となっているはず。
+![SpringBoot frontend-webapp directory](_static/SpringMicroservice_1/frontend-webapp.png)
+
+
+## 2. バックエンドの作成
+ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。
+
+### 2-1. プロジェクト作成（Spring Initializr）
+- Java: 17
+- SpringBoot: 3.2.1
+- dependencies: spring-boot-starter-web
+
+### 2-2. ディレクトリ構成変更
+BFFと同様とする。
+
+### 2-3. モデル作成
