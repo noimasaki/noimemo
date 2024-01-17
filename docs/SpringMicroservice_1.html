@@ -71,6 +71,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#id7">2-1. プロジェクト作成（Spring Initializr）</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id8">2-2. ディレクトリ構成変更</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id9">2-3. モデル作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">2-4. サービス作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">2-5. コントローラ作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">2-6.動作確認</a></li>
 </ul>
 </li>
 </ul>
@@ -173,8 +176,8 @@
 <section id="html">
 <h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
 <p>ログインページ</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
@@ -213,8 +216,8 @@
 </div>
 </div>
 <p>ログイン後に表示されるホームページ</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -235,8 +238,8 @@
 </div>
 </div>
 <p>ログアウトページ</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -257,8 +260,8 @@
 </section>
 <section id="frontcontroller-java">
 <h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
@@ -290,8 +293,8 @@
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
 <p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
 <p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -310,8 +313,8 @@
 <section id="securityconfig-java">
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
@@ -358,21 +361,21 @@
 <h3>1-6. 動作確認<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>ここまで作成することで、認証認可機能を持ったBFFが動作する。</p>
 <p><img alt="Spring起動" src="_images/1.png" /></p>
-<p>ログイン画面
-<img alt="login" src="_images/2.png" /></p>
-<p>ログイン成功→ホームページが表示
-<img alt="home" src="_images/3.png" /></p>
-<p>ログアウトリンク押下→ログアウト画面
-<img alt="logout" src="_images/4.png" /></p>
-<p>ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
-<img alt="error" src="_images/5.png" /></p>
-<p>Springプロジェクトは以下のような構成となっているはず。
-<img alt="SpringBoot frontend-webapp directory" src="_images/frontend-webapp.png" /></p>
+<p>ログイン画面</p>
+<p><img alt="login" src="_images/2.png" /></p>
+<p>ログイン成功→ホームページが表示</p>
+<p><img alt="home" src="_images/3.png" /></p>
+<p>ログアウトリンク押下→ログアウト画面</p>
+<p><img alt="logout" src="_images/4.png" /></p>
+<p>ID/PWが異なる場合にはログイン出来ずにメッセージ出力される</p>
+<p><img alt="error" src="_images/5.png" /></p>
+<p>Springプロジェクトは以下のような構成となっているはず。</p>
+<p><img alt="SpringBoot frontend-webapp directory" src="_images/frontend-webapp.png" /></p>
 </section>
 </section>
 <section id="id6">
 <h2>2. バックエンドの作成<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
-<p>ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。</p>
+<p>ここからは、BFFから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。ただし、まずは商品情報参照機能のみを提供し、その他の機能は別途追加する。</p>
 <section id="id7">
 <h3>2-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -387,6 +390,157 @@
 </section>
 <section id="id9">
 <h3>2-3. モデル作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>商品情報のモデルを作成する。</p>
+<p>Getter・Setterおよびコンストラクタは、VS codeの補完機能を使うと自動で作成が可能。右クリックから<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Getters</span> <span class="pre">and</span> <span class="pre">Setters...</span></code>と<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Constructors...</span></code>を選択。</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">domain/model/Item.java</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.model</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Item</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">itemId</span><span class="p">;</span><span class="w">          </span><span class="c1">//商品ID</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">itemName</span><span class="p">;</span><span class="w">        </span><span class="c1">//商品名</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">;</span><span class="w">    </span><span class="c1">//商品カテゴリー</span>
+
+<span class="w">    </span><span class="c1">// コンストラクタ</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Item</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">itemId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">itemName</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemId</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemName</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemCategory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// GetterおよびSetter</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getItemId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemId</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setItemId</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">itemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemId</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getItemName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemName</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setItemName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">itemName</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemName</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getItemCategory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setItemCategory</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">itemCategory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itemCategory</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id10">
+<h3>2-4. サービス作成<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>コントローラから呼ばれるビジネスロジックであるサービスクラスを作成する。
+なお、ここでは前述の通り、参照機能のみをまずは実装する。</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">domain/service/ItemService.java</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.service</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.model.Item</span><span class="p">;</span>
+
+<span class="nd">@Service</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ItemService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span><span class="w"> </span><span class="n">allItems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Item</span><span class="p">(</span><span class="s">&quot;10001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ネックレス&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ジュエリ&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Item</span><span class="p">(</span><span class="s">&quot;10002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;パーカー&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ファッション&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Item</span><span class="p">(</span><span class="s">&quot;10003&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;フェイスクリーム&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ビューティ&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Item</span><span class="p">(</span><span class="s">&quot;10004&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;サプリメント&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ヘルス&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Item</span><span class="p">(</span><span class="s">&quot;10005&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ブルーベリー&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;フード&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 全てのItemリストを返すメソッド</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getAllItems</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">allItems</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 個別のItemを返すメソッド</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Item</span><span class="w"> </span><span class="nf">getItem</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">itemId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">allItems</span><span class="p">.</span><span class="na">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">allItems</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="na">getItemId</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="n">itemId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">allItems</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">    </span><span class="c1">// itemIdが見つからなかったらnullを返す</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id11">
+<h3>2-5. コントローラ作成<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.app.web</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.PathVariable</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.model.Item</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.service.ItemService</span><span class="p">;</span>
+
+<span class="nd">@RestController</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ItemController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ItemService</span><span class="w"> </span><span class="n">itemService</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// @GetMappingで&quot;/items&quot;へアクセスしたときにgetAllItems()を実行</span>
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/items&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getAllItems</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">getAllItems</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// @GetMapping(&quot;/items&quot;)</span>
+<span class="w">    </span><span class="c1">// public String getAllItems() {</span>
+<span class="w">    </span><span class="c1">//     return &quot;ALL items !!&quot;;</span>
+<span class="w">    </span><span class="c1">// }</span>
+
+<span class="w">    </span><span class="c1">// 全てのitemではなく、itemIdで個別の情報を返す</span>
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/items/{id}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Item</span><span class="w"> </span><span class="nf">getItem</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">getItem</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>BFFと同様に、コントローラクラスがSpringの起動クラスとは別ディレクトリにあるため、ComponentScanを実施する必要がある。</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfigure.java</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.backenditem.app.web&quot;</span><span class="p">)</span><span class="w">   </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="p">{</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id12">
+<h3>2-6.動作確認<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 </section>
 </section>
 </section>
