@@ -43,10 +43,9 @@ SpringMicroservice/frontend-webapp/src/main
 | domain | ServiceクラスやRepositoryクラスなど |
 
 ### 1-3. `.html`作成
-ログインページ `resources/templates/login.html`
 
 ```{code-block} html
-:caption: resources/templates/login.html
+:caption: ログインページ： resources/templates/login.html
 
 <!DOCTYPE html>
 <!-- Thymeleafを有効化 => th:XXXX という属性を各タグに追加することで利用可能 -->
@@ -82,4 +81,141 @@ SpringMicroservice/frontend-webapp/src/main
     </form>
 </body>
 </html>
+```
+
+ログイン後に表示されるホームページ
+```{code-block} html
+:caption: resources/templates/home.html
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcomeページ</title>
+</head>
+<body>
+    <div>Successful Login!</div>
+
+    <ul>
+        <li><a href="./items.html" th:href="@{/items}">商品一覧</a></li>
+    </ul>
+    <ul>
+        <li><a href="./logout.html" th:href="@{/logout}">ログアウト</a></li>
+    </ul>
+</body>
+</html>
+```
+
+ログアウトページ
+```{code-block} html
+:caption: resources/templates/logout.html
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ログアウトページ</title>
+</head>
+<body>
+    <h1>Microservice WebApp Logout</h1>
+    <form action="#" th:action="@{/logout}" method="post">
+        <div>
+            <button type="submit">ログアウト</button>
+        </div>
+    </form>
+</body>
+</html>
+```
+
+### 1-4. `frontController.java`作成
+```{code-block} java
+:caption: app/web/frontController.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class frontController {
+    @GetMapping
+    public String home(){
+        return "home";
+    }
+
+    @GetMapping("/login")
+    public String showLogin(){
+        // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String showLogout(){
+        return "logout";
+    }
+}
+```
+
+### 1-5. `MvcConfig.java`作成
+今回作成したディレクトリ構成だと、SpringBootの起動クラスである``と、コントローラクラスである``は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）
+
+そこで、``を作成することで明示的にコントローラクラスを読み込む。
+
+```{code-block} java
+:caption: config/MvcConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@ComponentScan("com.example.frontendwebapp.app.web")    //Controllerクラスは別ディレクトリなので読み込んであげる
+public class MvcConfig implements WebMvcConfigurer{
+    
+}
+```
+### 1-5. `SecurityConfig.java`作成
+SpringSecurityの挙動をカスタムする
+
+```{code-block} java
+:caption: config/SecurityConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/login/*").permitAll()    // "/login"は認証不要
+            .anyRequest().authenticated()               // その他のリクエストは認証が必要
+            )
+            .formLogin((form) -> form   // 認証方式はformログイン
+            .loginPage("/login")    // 認証ページは"/login"
+            .permitAll()
+            )
+            .logout((logout) -> logout.permitAll());    // ログアウト機能を有効化し、すべてのユーザがログアウト可能
+        
+            return http.build();
+    }
+
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new Pbkdf2PasswordEncoder();
+    // }
+
+    // userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。
+    // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
+    // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
+}
 ```
