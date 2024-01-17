@@ -36,3 +36,8 @@ SpringMicroservice/frontend-webapp/src/main
     └── templates
 ```
 
+| ディレクトリ | 役割 |
+| ---- | ---- |
+| app | アプリケーション層に関するもの |
+| config | Spring Bootの設定クラスを配置する。起動クラス、Webアプリケーションの設定、セキュリティ設定、データベース接続など |
+| domain | ServiceクラスやRepositoryクラスなど |
