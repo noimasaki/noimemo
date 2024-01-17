@@ -426,3 +426,115 @@ public class MvcConfig implements WebMvcConfigurer{
 
 ![items](_static/SpringMicroservice_1/items.png)
 
+
+## 3. BFF改修：BFF -> バックエンドへアクセス可能とする
+ここまでで、認証機能を持つBFF、商品情報を返すバックエンドサービスが完成した。ここからは、BFFからバックエンドサービスを呼び出せるように改修する。
+
+### 3-1. バックエンドサービスのリッスンポート・URLの変更
+ローカル環境で開発しているため、BFFのリッスンポートとバックエンドのリッスンポートを別ポート(デフォルト8080→8081）とする。また、バックエンドサービスのURLを`/backend/*`で受け付けられるように変更する。
+
+上記2点を実現するためには、バックエンドサービスの`application.properties`もしくは`application.yml`を作成・編集することで実現ができ、今回や`application.yml`を作成して設定をyaml形式で記載する。
+
+```{code-block} yaml
+:caption: src/main/resources/application.yml
+
+server:
+  servlet:
+   context-path: /backend
+  port: 8081
+```
+これにより、バックエンドサービスはリッスンポートが8081となり、待ち受けるURLもこれまで`http://localhost:8080/items`だったのが`http://localhost:8081/backend/items`となる。
+
+### 3-2. BFFのサービス追加
+クライアントからBFFへ商品情報取得のリクエストがあったときにバックエンドのAPIを呼び出すサービスクラスを追加する。
+
+バックエンドのREST APIを呼び出すために、BFFにてhttpクライアント機能をRestTemplateを利用して実装する。サービスクラスを新たに作成し、RestTemplateを実装する。
+
+```{code-block} java
+:caption: domain/service/frontItemService.java
+
+package com.example.frontendwebapp.domain.service;
+
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class frontItemService {
+    
+    private RestTemplate restTemplate;
+
+    public frontItemService (RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
+
+    public String getAllItems() {
+        String URL = "http://localhost:8081/backend/items";
+        String items = restTemplate.getForObject(URL, String.class);
+
+        return items;
+    }
+}
+```
+
+Spring起動クラスと別ディレクトリのため、ComponentScanを設定する。
+```{code-block} java
+:caption: config/DomainConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan("com.example.frontendwebapp.domain.service")
+public class DomainConfig {
+    
+}
+```
+
+### 3-3. BFFのコントローラ改修
+```{code-block} java
+:caption: app/web/frontController.java
+:emphasize-lines: 30-38
+
+package com.example.frontendwebapp.app.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.frontendwebapp.domain.service.frontItemService;
+
+@Controller
+public class frontController {
+    @GetMapping
+    public String home(){
+        return "home";
+    }
+
+    @GetMapping("/login")
+    public String showLogin(){
+        // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String showLogout(){
+        return "logout";
+    }
+
+    @Autowired
+    private frontItemService frontItemService;
+
+    @GetMapping("/items")
+    @ResponseBody
+    // 【@ResponseBody】
+    // Thymeleafを利用しているため、Stringでreturnしてしまうとhtmlファイル名であると解釈してしまうため、
+    // htmlファイルではなくてレスポンス本文であることを明示的にするアノテーション
+    public String showItems(){
+        return frontItemService.getAllItems();
+    }
+}
+```
