@@ -20,7 +20,7 @@
 
 1. ディレクトリ構成変更
 可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。
-```
+```bash
 SpringMicroservice/frontend-webapp/src/main
 ├── java
 │   └── com
@@ -35,3 +35,4 @@ SpringMicroservice/frontend-webapp/src/main
     ├── static
     └── templates
 ```
+
