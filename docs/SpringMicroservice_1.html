@@ -480,11 +480,27 @@
 </pre></div>
 </div>
 </div>
+<p>今回のディレクトリ構造では、<code class="docutils literal notranslate"><span class="pre">&#64;Service</span></code>アノテーションを付与したサービスクラスがSpring起動クラスとは別ディレクトリとなっているため、自動でComponentscanされない。よって、明示的にサービスクラスをComponentscanの対象にする必要がある。</p>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">config/DomainConfigure.java</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.backenditem.domain.service&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DomainConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
 </section>
 <section id="id11">
 <h3>2-5. コントローラ作成<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id21">
-<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.app.web</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
@@ -522,8 +538,8 @@
 </div>
 </div>
 <p>BFFと同様に、コントローラクラスがSpringの起動クラスとは別ディレクトリにあるため、ComponentScanを実施する必要がある。</p>
-<div class="literal-block-wrapper docutils container" id="id22">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfigure.java</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfigure.java</span><a class="headerlink" href="#id23" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>

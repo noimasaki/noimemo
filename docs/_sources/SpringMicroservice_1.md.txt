@@ -349,6 +349,22 @@ public class ItemService {
 }
 ```
 
+今回のディレクトリ構造では、`@Service`アノテーションを付与したサービスクラスがSpring起動クラスとは別ディレクトリとなっているため、自動でComponentscanされない。よって、明示的にサービスクラスをComponentscanの対象にする必要がある。
+```{code-block} java
+:caption: config/DomainConfigure.java
+
+package com.example.backenditem.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan("com.example.backenditem.domain.service")
+public class DomainConfig {
+    
+}
+```
+
 ### 2-5. コントローラ作成
 ```{code-block} java
 :caption: app/web/ItemController.java
