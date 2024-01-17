@@ -496,7 +496,7 @@ public class DomainConfig {
 ### 3-3. BFFのコントローラ改修
 ```{code-block} java
 :caption: app/web/frontController.java
-:emphasize-lines: 30-38
+:emphasize-lines: 28-38
 
 package com.example.frontendwebapp.app.web;
 
@@ -538,3 +538,7 @@ public class frontController {
     }
 }
 ```
+
+### 3-4. 動作確認
+BFFとバックエンドを別々のウィンドウで開き、実行する。
+BFFの認証後、正常に`/items`が表示できるようになれば成功。
