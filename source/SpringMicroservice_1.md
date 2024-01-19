@@ -1,14 +1,16 @@
-# マイクロサービス作成
+# マイクロサービス作成① （ローカル環境での開発）
 ## 実施すること
 認証認可機能を持ったBFF（Backend for Frontend）と、商品情報のCRUD操作のAPIを提供するバックエンドサービスを作成する。
 
 ユーザはブラウザからBFFにアクセスし、認証成功後にバックエンドサービスにアクセスすることができる。
 
+なお、BFFとフロントエンドは同じ意味として記載していき、エディターはVisual Studio Codeを利用する。
+
 ## 作成の流れ
 1. BFFの作成
 2. バックエンドの作成
 3. BFF改修：BFF -> バックエンドへアクセス可能とする
-4. BFF改修：バックエンドから受け取ったjsonを画面に表示する
+4. コンテナ化
 
 ## 1. BFFの作成
 ### 1-1. プロジェクト作成（Spring Initializr）
@@ -542,3 +544,45 @@ public class frontController {
 ### 3-4. 動作確認
 BFFとバックエンドを別々のウィンドウで開き、実行する。
 BFFの認証後、正常に`/items`が表示できるようになれば成功。
+
+
+## 4. コンテナ化
+ここまで作成したBFFとバックエンドをそれぞれJarファイルへビルドした後にコンテナ化する。
+
+### 4-1. Spring Bootアプリのビルド
+#### BFF（frontend-webapp）
+SpringBootプロジェクトのソースディレクトリ（pom.xmlがあるところ）でビルドコマンドを実行する。今回はMavenでプロジェクトを作成しているので`mvn`コマンドを利用する。
+
+今回は簡単の為、ビルド時のテストを実施しない。`-DskipTests`オプションをつけて、テストを実施せずにビルドする。
+```bash
+mvn package spring-boot:repackage -DskipTests
+```
+ビルド実行後、下記のように`.jar`が作成される。
+
+![BFF jar build](_static/SpringMicroservice_1/BFF_jar.png)
+
+#### バックエンド（backend-item）
+BFFと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。
+
+### 4-2. コンテナイメージ作成
+作成した`.jar`を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリにDockerfileを作成してDockerビルドする。
+
+```{code-block} docker
+:caption: Dockerfile
+
+# FROM：ベースイメージの指定
+#  Spring InitializrでJava17を指定したので合わせる
+FROM openjdk:17-jdk-slim
+
+# アプリケーションのjarファイルへのパスを変数として定義
+ARG JAR_FILE=target/*.jar
+
+# jarファイルをDockerイメージ内の指定された場所にコピー
+COPY ${JAR_FILE} app.jar
+
+# コンテナがリッスンするポートを指定
+EXPOSE 8080
+
+# Dockerコンテナ起動時に実行されるコマンド
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
