@@ -564,9 +564,11 @@ mvn package spring-boot:repackage -DskipTests
 #### バックエンド（backend-item）
 BFFと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。
 
-### 4-2. コンテナイメージ作成
-作成した`.jar`を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリにDockerfileを作成してDockerビルドする。
+### 4-2. Dockerfile作成
+#### BFF（frontend-webapp）
+作成した`.jar`を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリに`Dockerfile`を作成してDockerビルドする。
 
+注意としてビルドした`.jar`は`target`フォルダ配下に一つとすること
 ```{code-block} docker
 :caption: Dockerfile
 
@@ -585,4 +587,45 @@ EXPOSE 8080
 
 # Dockerコンテナ起動時に実行されるコマンド
 ENTRYPOINT ["java","-jar","/app.jar"]
+```
+#### バックエンド（backend-item）
+BFFと同様に作成する。
+
+### 4-3. Dockerビルド
+ここからはDockerを利用するため、Dockerがインストール済みかつDockerが起動している必要がある。
+
+frontend-webappとbackend-itemそれぞれで作成した`Dockerfile`と同じディレクトリでビルドコマンドを実行すること。
+
+```bash
+# ビルド（frontend-webapp）
+docker build \
+    --no-cache \
+    --tag frontend-webapp:latest .
+
+# ビルド（backend-item）
+docker build \
+    --no-cache \
+    --tag backend-item:latest .
+
+# イメージの確認
+docker images
+-----------------
+REPOSITORY        TAG       IMAGE ID       CREATED         SIZE
+backend-item      latest    8d90bf448ed9   6 seconds ago   427MB
+frontend-webapp   latest    997a5b8a59cb   9 minutes ago   432MB
+```
+### 4-4. 動作確認
+
+```bash
+# コンテナ起動（frontend-webapp）
+docker run --rm \
+    --publish 8080:8080 \
+    --name frontend-webapp \
+    frontend-webapp
+
+# コンテナ起動（backend-item）
+docker run --rm \
+    --publish 8081:8081 \
+    --name backend-item \
+    backend-item
 ```
