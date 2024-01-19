@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マイクロサービス作成 &mdash; noimemo  ドキュメント</title>
+  <title>マイクロサービス作成① （ローカル環境での開発） &mdash; noimemo  ドキュメント</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -54,7 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成① （ローカル環境での開発）</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">実施すること</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">作成の流れ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bff">1. BFFの作成</a><ul>
@@ -83,6 +83,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#id15">3-4. 動作確認</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">4. コンテナ化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spring-boot">4-1. Spring Bootアプリのビルド</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bff-frontend-webapp">BFF（frontend-webapp）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#backend-item">バックエンド（backend-item）</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dockerfile">4-2. Dockerfile作成</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">BFF（frontend-webapp）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">バックエンド（backend-item）</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#docker">4-3. Dockerビルド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">4-4. 動作確認</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -101,7 +116,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">マイクロサービス作成</li>
+      <li class="breadcrumb-item active">マイクロサービス作成① （ローカル環境での開発）</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/SpringMicroservice_1.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -112,11 +127,12 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>マイクロサービス作成<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h1>マイクロサービス作成① （ローカル環境での開発）<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <section id="id2">
 <h2>実施すること<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>認証認可機能を持ったBFF（Backend for Frontend）と、商品情報のCRUD操作のAPIを提供するバックエンドサービスを作成する。</p>
 <p>ユーザはブラウザからBFFにアクセスし、認証成功後にバックエンドサービスにアクセスすることができる。</p>
+<p>なお、BFFとフロントエンドは同じ意味として記載していき、エディターはVisual Studio Codeを利用する。</p>
 </section>
 <section id="id3">
 <h2>作成の流れ<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
@@ -124,7 +140,7 @@
 <li><p>BFFの作成</p></li>
 <li><p>バックエンドの作成</p></li>
 <li><p>BFF改修：BFF -&gt; バックエンドへアクセス可能とする</p></li>
-<li><p>BFF改修：バックエンドから受け取ったjsonを画面に表示する</p></li>
+<li><p>コンテナ化</p></li>
 </ol>
 </section>
 <section id="bff">
@@ -183,8 +199,8 @@
 <section id="html">
 <h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
 <p>ログインページ</p>
-<div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
@@ -223,8 +239,8 @@
 </div>
 </div>
 <p>ログイン後に表示されるホームページ</p>
-<div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -245,8 +261,8 @@
 </div>
 </div>
 <p>ログアウトページ</p>
-<div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -267,8 +283,8 @@
 </section>
 <section id="frontcontroller-java">
 <h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id23" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
@@ -300,8 +316,8 @@
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
 <p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
 <p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
-<div class="literal-block-wrapper docutils container" id="id20">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id24">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id24" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -320,8 +336,8 @@
 <section id="securityconfig-java">
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id21">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id25" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
@@ -399,8 +415,8 @@
 <h3>2-3. モデル作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <p>商品情報のモデルを作成する。</p>
 <p>Getter・Setterおよびコンストラクタは、VS codeの補完機能を使うと自動で作成が可能。右クリックから<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Getters</span> <span class="pre">and</span> <span class="pre">Setters...</span></code>と<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Constructors...</span></code>を選択。</p>
-<div class="literal-block-wrapper docutils container" id="id22">
-<div class="code-block-caption"><span class="caption-text">domain/model/Item.java</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id26">
+<div class="code-block-caption"><span class="caption-text">domain/model/Item.java</span><a class="headerlink" href="#id26" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.model</span><span class="p">;</span>
 
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Item</span><span class="w"> </span><span class="p">{</span>
@@ -448,8 +464,8 @@
 <h3>2-4. サービス作成<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
 <p>コントローラから呼ばれるビジネスロジックであるサービスクラスを作成する。
 なお、ここでは前述の通り、参照機能のみをまずは実装する。</p>
-<div class="literal-block-wrapper docutils container" id="id23">
-<div class="code-block-caption"><span class="caption-text">domain/service/ItemService.java</span><a class="headerlink" href="#id23" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id27">
+<div class="code-block-caption"><span class="caption-text">domain/service/ItemService.java</span><a class="headerlink" href="#id27" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.domain.service</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
@@ -488,8 +504,8 @@
 </div>
 </div>
 <p>今回のディレクトリ構造では、<code class="docutils literal notranslate"><span class="pre">&#64;Service</span></code>アノテーションを付与したサービスクラスがSpring起動クラスとは別ディレクトリとなっているため、自動でComponentscanされない。よって、明示的にサービスクラスをComponentscanの対象にする必要がある。</p>
-<div class="literal-block-wrapper docutils container" id="id24">
-<div class="code-block-caption"><span class="caption-text">config/DomainConfigure.java</span><a class="headerlink" href="#id24" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id28">
+<div class="code-block-caption"><span class="caption-text">config/DomainConfigure.java</span><a class="headerlink" href="#id28" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -506,8 +522,8 @@
 </section>
 <section id="id11">
 <h3>2-5. コントローラ作成<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id25">
-<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id25" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id29">
+<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id29" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.app.web</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
@@ -545,8 +561,8 @@
 </div>
 </div>
 <p>BFFと同様に、コントローラクラスがSpringの起動クラスとは別ディレクトリにあるため、ComponentScanを実施する必要がある。</p>
-<div class="literal-block-wrapper docutils container" id="id26">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfigure.java</span><a class="headerlink" href="#id26" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id30">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfigure.java</span><a class="headerlink" href="#id30" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.backenditem.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -575,8 +591,8 @@
 <h3>3-1. バックエンドサービスのリッスンポート・URLの変更<a class="headerlink" href="#url" title="Link to this heading"></a></h3>
 <p>ローカル環境で開発しているため、BFFのリッスンポートとバックエンドのリッスンポートを別ポート(デフォルト8080→8081）とする。また、バックエンドサービスのURLを<code class="docutils literal notranslate"><span class="pre">/backend/*</span></code>で受け付けられるように変更する。</p>
 <p>上記2点を実現するためには、バックエンドサービスの<code class="docutils literal notranslate"><span class="pre">application.properties</span></code>もしくは<code class="docutils literal notranslate"><span class="pre">application.yml</span></code>を作成・編集することで実現ができ、今回や<code class="docutils literal notranslate"><span class="pre">application.yml</span></code>を作成して設定をyaml形式で記載する。</p>
-<div class="literal-block-wrapper docutils container" id="id27">
-<div class="code-block-caption"><span class="caption-text">src/main/resources/application.yml</span><a class="headerlink" href="#id27" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id31">
+<div class="code-block-caption"><span class="caption-text">src/main/resources/application.yml</span><a class="headerlink" href="#id31" title="Link to this code"></a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">server</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">servlet</span><span class="p">:</span>
 <span class="w">   </span><span class="nt">context-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/backend</span>
@@ -590,8 +606,8 @@
 <h3>3-2. BFFのサービス追加<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <p>クライアントからBFFへ商品情報取得のリクエストがあったときにバックエンドのAPIを呼び出すサービスクラスを追加する。</p>
 <p>バックエンドのREST APIを呼び出すために、BFFにてhttpクライアント機能をRestTemplateを利用して実装する。サービスクラスを新たに作成し、RestTemplateを実装する。</p>
-<div class="literal-block-wrapper docutils container" id="id28">
-<div class="code-block-caption"><span class="caption-text">domain/service/frontItemService.java</span><a class="headerlink" href="#id28" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id32">
+<div class="code-block-caption"><span class="caption-text">domain/service/frontItemService.java</span><a class="headerlink" href="#id32" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.domain.service</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.web.client.RestTemplateBuilder</span><span class="p">;</span>
@@ -618,8 +634,8 @@
 </div>
 </div>
 <p>Spring起動クラスと別ディレクトリのため、ComponentScanを設定する。</p>
-<div class="literal-block-wrapper docutils container" id="id29">
-<div class="code-block-caption"><span class="caption-text">config/DomainConfig.java</span><a class="headerlink" href="#id29" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id33">
+<div class="code-block-caption"><span class="caption-text">config/DomainConfig.java</span><a class="headerlink" href="#id33" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -636,8 +652,8 @@
 </section>
 <section id="id14">
 <h3>3-3. BFFのコントローラ改修<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id30">
-<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id30" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id34">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id34" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
@@ -685,6 +701,98 @@
 <h3>3-4. 動作確認<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <p>BFFとバックエンドを別々のウィンドウで開き、実行する。
 BFFの認証後、正常に<code class="docutils literal notranslate"><span class="pre">/items</span></code>が表示できるようになれば成功。</p>
+</section>
+</section>
+<section id="id16">
+<h2>4. コンテナ化<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<p>ここまで作成したBFFとバックエンドをそれぞれJarファイルへビルドした後にコンテナ化する。</p>
+<section id="spring-boot">
+<h3>4-1. Spring Bootアプリのビルド<a class="headerlink" href="#spring-boot" title="Link to this heading"></a></h3>
+<section id="bff-frontend-webapp">
+<h4>BFF（frontend-webapp）<a class="headerlink" href="#bff-frontend-webapp" title="Link to this heading"></a></h4>
+<p>SpringBootプロジェクトのソースディレクトリ（pom.xmlがあるところ）でビルドコマンドを実行する。今回はMavenでプロジェクトを作成しているので<code class="docutils literal notranslate"><span class="pre">mvn</span></code>コマンドを利用する。</p>
+<p>今回は簡単の為、ビルド時のテストを実施しない。<code class="docutils literal notranslate"><span class="pre">-DskipTests</span></code>オプションをつけて、テストを実施せずにビルドする。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mvn<span class="w"> </span>package<span class="w"> </span>spring-boot:repackage<span class="w"> </span>-DskipTests
+</pre></div>
+</div>
+<p>ビルド実行後、下記のように<code class="docutils literal notranslate"><span class="pre">.jar</span></code>が作成される。</p>
+<p><img alt="BFF jar build" src="_images/BFF_jar.png" /></p>
+</section>
+<section id="backend-item">
+<h4>バックエンド（backend-item）<a class="headerlink" href="#backend-item" title="Link to this heading"></a></h4>
+<p>BFFと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。</p>
+</section>
+</section>
+<section id="dockerfile">
+<h3>4-2. Dockerfile作成<a class="headerlink" href="#dockerfile" title="Link to this heading"></a></h3>
+<section id="id17">
+<h4>BFF（frontend-webapp）<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
+<p>作成した<code class="docutils literal notranslate"><span class="pre">.jar</span></code>を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリに<code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>を作成してDockerビルドする。</p>
+<p>注意としてビルドした<code class="docutils literal notranslate"><span class="pre">.jar</span></code>は<code class="docutils literal notranslate"><span class="pre">target</span></code>フォルダ配下に一つとすること</p>
+<div class="literal-block-wrapper docutils container" id="id35">
+<div class="code-block-caption"><span class="caption-text">Dockerfile</span><a class="headerlink" href="#id35" title="Link to this code"></a></div>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># FROM：ベースイメージの指定</span>
+<span class="c">#  Spring InitializrでJava17を指定したので合わせる</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">openjdk:17-jdk-slim</span>
+
+<span class="c"># アプリケーションのjarファイルへのパスを変数として定義</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">JAR_FILE</span><span class="o">=</span>target/*.jar
+
+<span class="c"># jarファイルをDockerイメージ内の指定された場所にコピー</span>
+<span class="k">COPY</span><span class="w"> </span><span class="si">${</span><span class="nv">JAR_FILE</span><span class="si">}</span><span class="w"> </span>app.jar
+
+<span class="c"># コンテナがリッスンするポートを指定</span>
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">8080</span>
+
+<span class="c"># Dockerコンテナ起動時に実行されるコマンド</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span><span class="s2">&quot;-jar&quot;</span><span class="p">,</span><span class="s2">&quot;/app.jar&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id18">
+<h4>バックエンド（backend-item）<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<p>BFFと同様に作成する。</p>
+</section>
+</section>
+<section id="docker">
+<h3>4-3. Dockerビルド<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<p>ここからはDockerを利用するため、Dockerがインストール済みかつDockerが起動している必要がある。</p>
+<p>frontend-webappとbackend-itemそれぞれで作成した<code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>と同じディレクトリでビルドコマンドを実行すること。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ビルド（frontend-webapp）</span>
+docker<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--no-cache<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tag<span class="w"> </span>frontend-webapp:latest<span class="w"> </span>.
+
+<span class="c1"># ビルド（backend-item）</span>
+docker<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--no-cache<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tag<span class="w"> </span>backend-item:latest<span class="w"> </span>.
+
+<span class="c1"># イメージの確認</span>
+docker<span class="w"> </span>images
+-----------------
+REPOSITORY<span class="w">        </span>TAG<span class="w">       </span>IMAGE<span class="w"> </span>ID<span class="w">       </span>CREATED<span class="w">         </span>SIZE
+backend-item<span class="w">      </span>latest<span class="w">    </span>8d90bf448ed9<span class="w">   </span><span class="m">6</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">   </span>427MB
+frontend-webapp<span class="w">   </span>latest<span class="w">    </span>997a5b8a59cb<span class="w">   </span><span class="m">9</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="w">   </span>432MB
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h3>4-4. 動作確認<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># コンテナ起動（frontend-webapp）</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--publish<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>frontend-webapp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>frontend-webapp
+
+<span class="c1"># コンテナ起動（backend-item）</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--publish<span class="w"> </span><span class="m">8081</span>:8081<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>backend-item<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>backend-item
+</pre></div>
+</div>
 </section>
 </section>
 </section>
