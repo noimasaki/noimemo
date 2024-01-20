@@ -100,20 +100,17 @@
 </section>
 <section id="vpc">
 <h2>1. VPC作成<a class="headerlink" href="#vpc" title="Link to this heading"></a></h2>
-<section id="id3">
-<h3>1-1. VPC<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<ol class="arabic simple">
-<li><p>VPC作成</p></li>
-</ol>
+<section id="vpc-vpc-vpc-vpc">
+<h3>1-1. VPC作成 [VPC &gt; お使いのVPC &gt; VPC を作成]<a class="headerlink" href="#vpc-vpc-vpc-vpc" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>作成するリソース：VPCのみ</p></li>
 <li><p>名前タグ：ma-noim-vpc</p></li>
 <li><p>IPv4 CIDR：10.2.76.0/24
 設定できたら「VPCを作成」</p></li>
 </ul>
-<ol class="arabic simple" start="2">
-<li><p>サブネット作成 [VPC &gt; サブネット &gt; サブネットを作成]</p></li>
-</ol>
+</section>
+<section id="id3">
+<h3>1-2. サブネット作成 [VPC &gt; サブネット &gt; サブネットを作成]<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>VPC ID：ma-noim-vpc
 その他の設定は以下のように4つのサブネットに分割する</p></li>
@@ -148,7 +145,46 @@
 <td>10.2.76.192/26</td>
 </tr>
 </tbody>
-</table></section>
+</table>
+</section>
+<section id="id4">
+<h3>1-3. ルートテーブル作成 [VPC &gt; ルートテーブル &gt; ルートテーブルを作成]<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>ここまで作成したサブネットはデフォルトのルートテーブルに接続されている。</p>
+<p><img alt="default_rtb" src="_images/default_rtb.png" /></p>
+<p>デフォルトのルートテーブルはNATゲートウェイのルーティングが有効化されているプライベートサブネット向けであるため、インターネットからアクセス可能としたいパブリックサブネットは、インターネットゲーウェイのルーティングが有効化されているカスタムルートテーブルに紐づける必要がある。</p>
+<p>まずは、カスタムルートテーブルを作成する。</p>
+<ul class="simple">
+<li><p>名前：ma-noim-vpc-rtb-pub</p></li>
+<li><p>VPC：ma-noim-vpc</p></li>
+</ul>
+<p>カスタムルートテーブルをサブネットに紐づける。[VPC &gt; ルートテーブル &gt; rtb-ID &gt; サブネットの関連付けを編集]</p>
+<ul class="simple">
+<li><p>関連付け対象①：ma-noim-vpc-subnet-public1</p></li>
+<li><p>関連付け対象②：ma-noim-vpc-subnet-public2</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>1-4. インターネットゲートウェイ作成 [VPC &gt; インターネットゲートウェイ &gt; インターネットゲートウェイの作成]<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>カスタムルートテーブルのデフォルトゲートウェイにインターネットゲートウェイを紐づけるために、インターネットゲートウェイを作成する</p>
+<ul class="simple">
+<li><p>名前：ma-noim-vpc-igw</p></li>
+</ul>
+<p>作成したigwをVPCにアタッチする[VPC &gt; インターネットゲートウェイ &gt; VPC にアタッチ (インターネットゲートウェイID)]</p>
+<ul class="simple">
+<li><p>使用可能なVPC：ma-noim-vpc</p></li>
+</ul>
+</section>
+<section id="vpc-rtb-id">
+<h3>1-5. カスタムルートテーブルにルートを追加 [VPC &gt; ルートテーブル &gt; rtb-ID &gt; ルートを編集]<a class="headerlink" href="#vpc-rtb-id" title="Link to this heading"></a></h3>
+<p>igwの作成ができたら、ルートテーブルの設定を開き、ルートを追加する</p>
+<ul class="simple">
+<li><p>送信先：0.0.0.0/0</p></li>
+<li><p>ターゲット：ma-noim-vpc-igwのインターネットゲートウェイID</p></li>
+</ul>
+</section>
+</section>
+<section id="alb">
+<h2>2. ALB作成<a class="headerlink" href="#alb" title="Link to this heading"></a></h2>
 </section>
 </section>
 
