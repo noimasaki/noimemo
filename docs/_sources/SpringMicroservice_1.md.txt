@@ -629,3 +629,12 @@ docker run --rm \
     --name backend-item \
     backend-item
 ```
+
+- `--rm`オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）
+- `-d`オプション：バックグラウンドで実行してくれる
+`-d`オプションを指定しなかった場合は`Ctrl+C`で終了
+
+ブラウザで[http://localhost:8080/](http://localhost:8080/)にアクセスしてログイン画面が表示されればfrontend-webappはOK
+
+[http://localhost:8081/](http://localhost:8081/)にアクセスして商品情報が表示されればbackend-itemもOK
+
