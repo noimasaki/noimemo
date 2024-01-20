@@ -112,12 +112,43 @@
 設定できたら「VPCを作成」</p></li>
 </ul>
 <ol class="arabic simple" start="2">
-<li><p>サブネット作成</p></li>
+<li><p>サブネット作成 [VPC &gt; サブネット &gt; サブネットを作成]</p></li>
 </ol>
 <ul class="simple">
-<li></li>
+<li><p>VPC ID：ma-noim-vpc
+その他の設定は以下のように4つのサブネットに分割する</p></li>
 </ul>
-</section>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>サブネット名</th>
+<th>アベイラビリティーゾーン</th>
+<th>IPv4 subnet CIDR block</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ma-noim-vpc-subnet-public1</td>
+<td>ap-northeast-1a</td>
+<td>10.2.76.0/26</td>
+</tr>
+<tr>
+<td>ma-noim-vpc-subnet-public2</td>
+<td>ap-northeast-1c</td>
+<td>10.2.76.64/26</td>
+</tr>
+<tr>
+<td>ma-noim-vpc-subnet-private1</td>
+<td>ap-northeast-1a</td>
+<td>10.2.76.128/26</td>
+</tr>
+<tr>
+<td>ma-noim-vpc-subnet-private2</td>
+<td>ap-northeast-1c</td>
+<td>10.2.76.192/26</td>
+</tr>
+</tbody>
+</table></section>
 </section>
 </section>
 
