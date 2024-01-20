@@ -2,7 +2,7 @@
 ## 実施すること
 AWS上でコンテナが動作する環境を構築する。まずは基本的な構成を作成して動作できることを目指す。
 
-![aws](_static/SpringMicroservice_2/aws.drawio.png)
+![aws](_static/SpringMicroservice_2/aws.drawio.svg)
 
 ## 作成の流れ
 1. VPC作成
