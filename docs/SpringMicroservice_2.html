@@ -68,13 +68,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#alb">2. ALB作成</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id6">2-1. セキュリティグループ作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">2-2. ターゲットグループ</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id8">パブリックサブネット向け</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id9">プライベートサブネット向け</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">2-1. ALB作成</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id11">パブリックサブネット向け</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2-2. ターゲットグループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2-3. ALB作成</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">パブリックサブネット向け</a></li>
 </ul>
 </li>
 </ul>
@@ -212,27 +208,17 @@
 </section>
 <section id="alb">
 <h2>2. ALB作成<a class="headerlink" href="#alb" title="Link to this heading"></a></h2>
-<p>インターネットからフロントエンドへのアクセスだけでなく、フロントエンドからバックエンドへのアクセスもHTTPを利用した構成であるため、ロードバランサにはアプリケーションロードバランサ（ALB）を利用する。また、パブリックサブネットへのアクセスとプライベートサブネットへのアクセスはアクセス元を制御する（プライベートサブネットへはインターネットからの通信を遮断）必要があるので、publicとprivateはそれぞれ別のALBを用意して、セキュリティグループにてアクセス制御を実施します。</p>
+<p>インターネットからフロントエンドへのアクセスだけでなく、フロントエンドからバックエンドへのアクセスもHTTPを利用した構成であるため、ロードバランサにはアプリケーションロードバランサ（ALB）を利用する。また、パブリックサブネットへのアクセスとプライベートサブネットへのアクセスはアクセス元を制御する（プライベートサブネットへはインターネットからの通信を遮断）必要があるので、publicとprivateはそれぞれ別のALBを用意して、セキュリティグループにてアクセス制御を実施する。</p>
 <section id="id6">
 <h3>2-1. セキュリティグループ作成<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
-<p>それぞれのALBに適用するセキュリティグループを作成しておきます。</p>
+<p>それぞれのALBに適用するセキュリティグループ（通信制御）を作成しておく</p>
 <p>[EC2 &gt; セキュリティグループ &gt; セキュリティグループを作成]</p>
-<ul class="simple">
-<li><p>①インターネット→パブリックサブネットのセキュリティグループ</p></li>
-<li><p>セキュリティグループ名：ma-noim-sg-pub</p></li>
-<li><p>VPC：ma-noim-vpc</p></li>
-<li><p>インバウンドルール：HTTP(80番ポート)、ソースは0.0.0.0/0</p></li>
-<li><p>②パブリックサブネット→プライベートサブネットのセキュリティグループ</p></li>
-<li><p>セキュリティグループ名：ma-noim-sg-pri</p></li>
-<li><p>VPC：ma-noim-vpc</p></li>
-<li><p>インバウンドルール：HTTP(80番ポート)、ソースは10.2.76.0/24</p></li>
-</ul>
 <table border="1" class="docutils">
 <thead>
 <tr>
-<th>----</th>
-<th>public向け</th>
-<th>private向け</th>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
 </tr>
 </thead>
 <tbody>
@@ -244,17 +230,17 @@
 <tr>
 <td>VPC</td>
 <td>ma-noim-vpc</td>
-<td></td>
+<td>ma-noim-vpc</td>
 </tr>
 <tr>
-<td>インバウンドルール</td>
-<td>HTTP(80)</td>
-<td></td>
+<td>インバウンドルール（プロトコル）</td>
+<td>HTTP/80</td>
+<td>HTTP/80</td>
 </tr>
 <tr>
-<td>^</td>
-<td>送信元：0.0.0.0/0</td>
-<td>送信元：10.2.76.0/24</td>
+<td>インバウンドルール（送信元）</td>
+<td>0.0.0.0/0</td>
+<td>10.2.76.0/24</td>
 </tr>
 </tbody>
 </table>
@@ -262,26 +248,49 @@
 <section id="id7">
 <h3>2-2. ターゲットグループ<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <p>[EC2 &gt; ターゲットグループ &gt; ターゲットグループの作成]</p>
-<section id="id8">
-<h4>パブリックサブネット向け<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
-<ul class="simple">
-<li><p>ターゲットタイプ：インスタンス</p></li>
-<li><p>ターゲットグループ名：ma-noim-tg-pub</p></li>
-<li><p>プロトコル/ポート：HTTP/80</p></li>
-<li><p>VPC：ma-noim-vpc</p></li>
-<li><p>ヘルスチェク：/index.html</p></li>
-</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ターゲットタイプ</td>
+<td>インスタンス</td>
+<td>インスタンス</td>
+</tr>
+<tr>
+<td>ターゲットグループ名</td>
+<td>ma-noim-tg-pub</td>
+<td>ma-noim-tg-pri</td>
+</tr>
+<tr>
+<td>プロトコル/ポート</td>
+<td>HTTP/80</td>
+<td>HTTP/80</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>ma-noim-vpc</td>
+<td>ma-noim-vpc</td>
+</tr>
+<tr>
+<td>ヘルスチェク</td>
+<td>/index.html</td>
+<td>/index.html</td>
+</tr>
+</tbody>
+</table>
 <p>ターゲットを登録する画面は、後にECSサービスを作成する時に指定するので空欄で作成する。</p>
 </section>
-<section id="id9">
-<h4>プライベートサブネット向け<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
-</section>
-</section>
-<section id="id10">
-<h3>2-1. ALB作成<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<section id="id8">
+<h3>2-3. ALB作成<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <p>[EC2 &gt; ロードバランサー &gt; ロードバランサータイプの比較と選択]</p>
-<section id="id11">
-<h4>パブリックサブネット向け<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<section id="id9">
+<h4>パブリックサブネット向け<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>ロードバランサータイプ：Application Load Balancer</p></li>
 <li><p>ロードバランサー名：ma-noim-alb-pub</p></li>
@@ -289,7 +298,8 @@
 <li><p>VPC：ma-noim-vpc</p></li>
 <li><p>マッピング：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2</p></li>
 <li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
-<li></li>
+<li><p>リスナー（プロトコル/ポート）：HTTP/80</p></li>
+<li><p>転送先：ma-noim-tg-pub</p></li>
 </ul>
 </section>
 </section>
