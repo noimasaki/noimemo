@@ -793,6 +793,13 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <span class="w">    </span>backend-item
 </pre></div>
 </div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--rm</span></code>オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span></code>オプション：バックグラウンドで実行してくれる
+<code class="docutils literal notranslate"><span class="pre">-d</span></code>オプションを指定しなかった場合は<code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code>で終了</p></li>
+</ul>
+<p>ブラウザで<a class="reference external" href="http://localhost:8080/">http://localhost:8080/</a>にアクセスしてログイン画面が表示されればfrontend-webappはOK</p>
+<p><a class="reference external" href="http://localhost:8081/">http://localhost:8081/</a>にアクセスして商品情報が表示されればbackend-itemもOK</p>
 </section>
 </section>
 </section>
