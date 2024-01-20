@@ -90,13 +90,14 @@ igwの作成ができたら、ルートテーブルの設定を開き、ルー�
 ### 2-3. ALB作成
 [EC2 > ロードバランサー > ロードバランサータイプの比較と選択]
 
-#### パブリックサブネット向け
-  - ロードバランサータイプ：Application Load Balancer
-  - ロードバランサー名：ma-noim-alb-pub
-  - スキーム：インターネット向け
-  - VPC：ma-noim-vpc
-  - マッピング：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2
-  - セキュリティグループ：ma-noim-sg-pub
-  - リスナー（プロトコル/ポート）：HTTP/80
-  - 転送先：ma-noim-tg-pub
+|  | パブリックサブネット | プライベートサブネット |
+| ---- | ---- | ---- |
+| ロードバランサータイプ | Application Load Balancer | Application Load Balancer |
+| ロードバランサー名 | ma-noim-alb-pub | ma-noim-alb-pri |
+| スキーム | インターネット向け | 内部 |
+| VPC | ma-noim-vpc | ma-noim-vpc |
+| マッピング | ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2 | ma-noim-vpc-subnet-private1, ma-noim-vpc-subnet-private2 |
+| セキュリティグループ | ma-noim-sg-pub | ma-noim-sg-pri |
+| リスナー（プロトコル/ポート）| HTTP/80 | HTTP/80 |
+| 転送先 | ma-noim-tg-pub | ma-noim-tg-pri |
 
