@@ -16,5 +16,6 @@
    MySQL.md
    SpringMicroservice.md
    SpringSecurity.md
+   GitHubAction_DockerPush.md
    SpringMicroservice_1.md
    SpringMicroservice_2.md
