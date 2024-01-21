@@ -69,10 +69,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#alb">2. ALB作成</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id6">2-1. セキュリティグループ作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id7">2-2. ターゲットグループ</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">2-3. ALB作成</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id9">パブリックサブネット向け</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2-3. ALB作成</a></li>
 </ul>
 </li>
 </ul>
@@ -289,19 +286,57 @@
 <section id="id8">
 <h3>2-3. ALB作成<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <p>[EC2 &gt; ロードバランサー &gt; ロードバランサータイプの比較と選択]</p>
-<section id="id9">
-<h4>パブリックサブネット向け<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
-<ul class="simple">
-<li><p>ロードバランサータイプ：Application Load Balancer</p></li>
-<li><p>ロードバランサー名：ma-noim-alb-pub</p></li>
-<li><p>スキーム：インターネット向け</p></li>
-<li><p>VPC：ma-noim-vpc</p></li>
-<li><p>マッピング：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2</p></li>
-<li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
-<li><p>リスナー（プロトコル/ポート）：HTTP/80</p></li>
-<li><p>転送先：ma-noim-tg-pub</p></li>
-</ul>
-</section>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ロードバランサータイプ</td>
+<td>Application Load Balancer</td>
+<td>Application Load Balancer</td>
+</tr>
+<tr>
+<td>ロードバランサー名</td>
+<td>ma-noim-alb-pub</td>
+<td>ma-noim-alb-pri</td>
+</tr>
+<tr>
+<td>スキーム</td>
+<td>インターネット向け</td>
+<td>内部</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>ma-noim-vpc</td>
+<td>ma-noim-vpc</td>
+</tr>
+<tr>
+<td>マッピング</td>
+<td>ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2</td>
+<td>ma-noim-vpc-subnet-private1, ma-noim-vpc-subnet-private2</td>
+</tr>
+<tr>
+<td>セキュリティグループ</td>
+<td>ma-noim-sg-pub</td>
+<td>ma-noim-sg-pri</td>
+</tr>
+<tr>
+<td>リスナー（プロトコル/ポート）</td>
+<td>HTTP/80</td>
+<td>HTTP/80</td>
+</tr>
+<tr>
+<td>転送先</td>
+<td>ma-noim-tg-pub</td>
+<td>ma-noim-tg-pri</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 </section>
