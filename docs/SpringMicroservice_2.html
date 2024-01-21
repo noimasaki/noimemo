@@ -250,6 +250,7 @@
 <section id="id7">
 <h3>2-2. ターゲットグループ<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <p>[EC2 &gt; ターゲットグループ &gt; ターゲットグループの作成]</p>
+<p>ECSで起動タイプでFargateを利用する場合はターゲットタイプは「IPアドレス」。起動タイプをインスタンスとするならば「インスタンス」。</p>
 <table border="1" class="docutils">
 <thead>
 <tr>
@@ -261,8 +262,8 @@
 <tbody>
 <tr>
 <td>ターゲットタイプ</td>
-<td>インスタンス</td>
-<td>インスタンス</td>
+<td>IPアドレス</td>
+<td>IPアドレス</td>
 </tr>
 <tr>
 <td>ターゲットグループ名</td>
@@ -364,7 +365,10 @@
 <li><p>タスク定義ファミリー：ma-noim-ecs-task-frontend</p></li>
 <li><p>起動タイプ：AWS Fargate</p></li>
 <li><p>タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）</p></li>
-<li></li>
+<li><p>コンテナ 名前：frontend-webapp</p></li>
+<li><p>コンテナ イメージ：noimasaki/frontend-webapp</p></li>
+<li><p>コンテナ ポートマッピング：8080</p></li>
+<li><p>ログ収集：有効</p></li>
 </ul>
 </section>
 <section id="id11">
@@ -379,7 +383,7 @@
 <li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
 <li><p>パブリックIP：有効</p></li>
 <li><p>ロードバランサー：ma-noim-alb-pub</p></li>
-<li><p>リスナー：80:HTTP→</p></li>
+<li><p>リスナー：80:HTTP</p></li>
 </ul>
 </section>
 </section>
