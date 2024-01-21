@@ -101,3 +101,36 @@ igwの作成ができたら、ルートテーブルの設定を開き、ルー�
 | リスナー（プロトコル/ポート）| HTTP/80 | HTTP/80 |
 | 転送先 | ma-noim-tg-pub | ma-noim-tg-pri |
 
+### 2-4. パスベースのルーティング設定
+★よくわからず★
+
+https://news.mynavi.jp/techplus/article/techp4359/
+
+
+## 4. ECSクラスタ作成
+[Amazon Elastic Container Service > クラスターの作成]
+
+ - クラスタ名：ma-noim-ecs-cluster-pub
+ - インフラストラクチャ：AWS Fargate
+
+## 5. ECSタスク定義
+[Amazon Elastic Container Service > 新しいタスク定義の作成]
+
+ - タスク定義ファミリー：ma-noim-ecs-task-frontend
+ - 起動タイプ：AWS Fargate
+ - タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）
+ - 
+
+
+## 6. ECSサービス定義
+[Amazon Elastic Container Service > クラスター > クラスターID > サービスの作成]
+
+ - アプリケーションタイプ：サービス
+ - ファミリー：ma-noim-ecs-task-frontend
+ - サービス名：ma-noim-ecs-service-pub
+ - VPC：ma-noim-vpc
+ - サブネット：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2
+ - セキュリティグループ：ma-noim-sg-pub
+ - パブリックIP：有効
+ - ロードバランサー：ma-noim-alb-pub
+ - リスナー：80:HTTP→
