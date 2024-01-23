@@ -77,9 +77,11 @@ igwの作成ができたら、ルートテーブルの設定を開き、ルー�
 ### 2-2. ターゲットグループ
 [EC2 > ターゲットグループ > ターゲットグループの作成]
 
+ECSで起動タイプでFargateを利用する場合はターゲットタイプは「IPアドレス」。起動タイプをインスタンスとするならば「インスタンス」。
+
 |  | パブリックサブネット | プライベートサブネット |
 | ---- | ---- | ---- |
-| ターゲットタイプ | インスタンス | インスタンス |
+| ターゲットタイプ | IPアドレス | IPアドレス |
 | ターゲットグループ名 | ma-noim-tg-pub | ma-noim-tg-pri |
 | プロトコル/ポート| HTTP/80 | HTTP/80 |
 | VPC | ma-noim-vpc | ma-noim-vpc |
@@ -119,7 +121,10 @@ https://news.mynavi.jp/techplus/article/techp4359/
  - タスク定義ファミリー：ma-noim-ecs-task-frontend
  - 起動タイプ：AWS Fargate
  - タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）
- - 
+ - コンテナ 名前：frontend-webapp
+ - コンテナ イメージ：noimasaki/frontend-webapp
+ - コンテナ ポートマッピング：8080
+ - ログ収集：有効
 
 
 ## 6. ECSサービス定義
@@ -133,4 +138,4 @@ https://news.mynavi.jp/techplus/article/techp4359/
  - セキュリティグループ：ma-noim-sg-pub
  - パブリックIP：有効
  - ロードバランサー：ma-noim-alb-pub
- - リスナー：80:HTTP→
+ - リスナー：80:HTTP
