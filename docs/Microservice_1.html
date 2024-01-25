@@ -60,6 +60,16 @@
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成①　（ローカル環境での開発）</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">実施すること</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">作成の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">1. フロントエンド作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spring-initializr">1-1. プロジェクト作成（Spring Initializr）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1-2. ディレクトリ構成変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mvcconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -95,6 +105,254 @@
 <p>認証認可機能と画面表示機能を持ったフロントエンドサービスと、商品情報のCRUD操作のAPIを提供するバックエンドサービスを作成する。</p>
 <p>ユーザはブラウザからFrontendにアクセスし、認証成功後にBackendにアクセスすることができる。</p>
 <p><img alt="Architecture" src="_images/architecture.drawio.svg" /></p>
+</section>
+<section id="id3">
+<h2>作成の流れ<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>フロントエンド作成</p></li>
+<li><p>バックエンド作成</p></li>
+<li><p>BFF改修：BFF -&gt; バックエンドへアクセス可能とする</p></li>
+<li><p>コンテナ化</p></li>
+</ol>
+</section>
+<section id="id4">
+<h2>1. フロントエンド作成<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="spring-initializr">
+<h3>1-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Java: 17</p></li>
+<li><p>SpringBoot: 3.2.1</p></li>
+<li><p>dependencies: spring-boot-starter-web</p></li>
+<li><p>dependencies: spring-boot-starter-webflux</p></li>
+<li><p>dependencies: spring-boot-starter-security</p></li>
+<li><p>dependencies: spring-boot-starter-thymeleaf</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>1-2. ディレクトリ構成変更<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>可読性向上の為、<code class="docutils literal notranslate"><span class="pre">.java</span></code>が含まれるディレクトリを以下のように変更する。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SpringMicroservice/frontend-webapp/src/main
+├──<span class="w"> </span>java
+│<span class="w">   </span>└──<span class="w"> </span>com
+│<span class="w">       </span>└──<span class="w"> </span>example
+│<span class="w">           </span>└──<span class="w"> </span>frontendwebapp
+│<span class="w">               </span>├──<span class="w"> </span>app
+│<span class="w">               </span>├──<span class="w"> </span>config
+│<span class="w">               </span>│<span class="w">   </span>└──<span class="w"> </span>FrontendWebappApplication.java
+│<span class="w">               </span>└──<span class="w"> </span>domain
+└──<span class="w"> </span>resources
+<span class="w">    </span>├──<span class="w"> </span>application.properties
+<span class="w">    </span>├──<span class="w"> </span>static
+<span class="w">    </span>└──<span class="w"> </span>templates
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>ディレクトリ</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>app</td>
+<td>アプリケーション層に関するもの</td>
+</tr>
+<tr>
+<td>config</td>
+<td>Spring Bootの設定クラスを配置する。起動クラス、Webアプリケーションの設定、セキュリティ設定、データベース接続など</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>ServiceクラスやRepositoryクラスなど</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="html">
+<h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
+<p>ログインページ</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ログインページ<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Microservice WebApp Login<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+
+    <span class="cm">&lt;!-- URLパラメータに「error」が含まれていたら、メッセージ出力 --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">th:if</span><span class="o">=</span><span class="s">&quot;${param.error}&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>ユーザー名もしくはパスワードが違います<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+    <span class="cm">&lt;!-- ユーザ名・PWをサーバへ送信するためのForm --&gt;</span>
+    <span class="cm">&lt;!-- submitボタンが押下された時のaction（URLパス`/login`へ`post`する）※@はthのリンク記法 --&gt;</span>
+    <span class="cm">&lt;!-- `action=&quot;#&quot; はThymleafが有効化されていれば上書きされる --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">th:action</span><span class="o">=</span><span class="s">&quot;@{/login}&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;usernameInput&quot;</span><span class="p">&gt;</span>ユーザ名<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;usernameInput&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;username&quot;</span><span class="p">&gt;</span>
+            <span class="cm">&lt;!-- name=&quot;username&quot;はSecurityConfig.javaにてフィールド名指定を合わせる必要がある --&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;passwordInput&quot;</span><span class="p">&gt;</span>パスワード<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;password&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;passwordInput&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;password&quot;</span><span class="p">&gt;</span>
+            <span class="cm">&lt;!-- name=&quot;password&quot;はSecurityConfig.javaにてフィールド名指定を合わせる必要がある --&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>ログイン<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+<p>ログイン後に表示されるホームページ</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Welcomeページ<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>Successful Login!<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;./items.html&quot;</span> <span class="na">th:href</span><span class="o">=</span><span class="s">&quot;@{/items}&quot;</span><span class="p">&gt;</span>商品一覧<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;./logout.html&quot;</span> <span class="na">th:href</span><span class="o">=</span><span class="s">&quot;@{/logout}&quot;</span><span class="p">&gt;</span>ログアウト<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+<p>ログアウトページ</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>ログアウトページ<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Microservice WebApp Logout<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">th:action</span><span class="o">=</span><span class="s">&quot;@{/logout}&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>ログアウト<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="frontcontroller-java">
+<h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">frontController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@GetMapping</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">home</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;home&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/login&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">showLogin</span><span class="p">(){</span>
+<span class="w">        </span><span class="c1">// Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;login&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/logout&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">showLogout</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;logout&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="mvcconfig-java">
+<h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
+<p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
+<p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.frontendwebapp.app.web&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="p">{</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="securityconfig-java">
+<h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
+<p>SpringSecurityの挙動をカスタムする</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.security.config.annotation.web.builders.HttpSecurity</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.security.config.annotation.web.configuration.EnableWebSecurity</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.security.web.SecurityFilterChain</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@EnableWebSecurity</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SecurityConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。</span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">SecurityFilterChain</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="n">HttpSecurity</span><span class="w"> </span><span class="n">http</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">http</span>
+<span class="w">            </span><span class="p">.</span><span class="na">authorizeHttpRequests</span><span class="p">((</span><span class="n">requests</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">requests</span>
+<span class="w">            </span><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="s">&quot;/login/*&quot;</span><span class="p">).</span><span class="na">permitAll</span><span class="p">()</span><span class="w">    </span><span class="c1">// &quot;/login&quot;は認証不要</span>
+<span class="w">            </span><span class="p">.</span><span class="na">anyRequest</span><span class="p">().</span><span class="na">authenticated</span><span class="p">()</span><span class="w">               </span><span class="c1">// その他のリクエストは認証が必要</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="na">formLogin</span><span class="p">((</span><span class="n">form</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">form</span><span class="w">   </span><span class="c1">// 認証方式はformログイン</span>
+<span class="w">            </span><span class="p">.</span><span class="na">loginPage</span><span class="p">(</span><span class="s">&quot;/login&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">// 認証ページは&quot;/login&quot;</span>
+<span class="w">            </span><span class="p">.</span><span class="na">permitAll</span><span class="p">()</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="na">logout</span><span class="p">((</span><span class="n">logout</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">logout</span><span class="p">.</span><span class="na">permitAll</span><span class="p">());</span><span class="w">    </span><span class="c1">// ログアウト機能を有効化し、すべてのユーザがログアウト可能</span>
+<span class="w">        </span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">http</span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// @Bean</span>
+<span class="w">    </span><span class="c1">// public PasswordEncoder passwordEncoder() {</span>
+<span class="w">    </span><span class="c1">//     return new Pbkdf2PasswordEncoder();</span>
+<span class="w">    </span><span class="c1">// }</span>
+
+<span class="w">    </span><span class="c1">// userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。</span>
+<span class="w">    </span><span class="c1">// userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる</span>
+<span class="w">    </span><span class="c1">// passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 </section>
 
