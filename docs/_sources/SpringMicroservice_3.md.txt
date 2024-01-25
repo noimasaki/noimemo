@@ -35,16 +35,72 @@ service:
 #### 2-2. application.ymlから情報を取得するクラスを作成
 
 ```{code-block} java
-:caption: app/web/ItemController.java
+:caption: app/web/ServiceProperties.java
 
 package com.example.frontendwebapp.app.web;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+///////////////////////////////////////////////////////////////////////
+// @ConfigurationProperties を利用することで、application.ymlの値を取得できる
+//  - prefix = "service"をしていることで、「service」階層を指定
+//  - 変数String dns を宣言することで、service階層配下のdnsフィールドを取得
+// ========== application.yml ==========
+// service:
+//     dns: http://xxxx.com ←private String dns; に格納される
+//     username: Taro
+//     pw: hogehoge
+// =====================================
+///////////////////////////////////////////////////////////////////////
+
 @Component
 @ConfigurationProperties(prefix = "service")
 public class ServiceProperties {
+
     private String dns;
+
+    public String getDns(){
+        return dns;
+    }
+}
+
+```
+
+#### 2-3. MvcConfig.javaでgetDnsで取得した基本URIを設定する
+
+```{code-block} java
+:caption: app/web/ServiceProperties.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.example.frontendwebapp.app.web.ServiceProperties;
+
+@Configuration
+@ComponentScan("com.example.frontendwebapp.app.web")    //Controllerクラスは別ディレクトリなので読み込んであげる
+public class MvcConfig implements WebMvcConfigurer{
+    
+    // backendを呼び出すときの基本URIをServicePropertiesから取得する
+    // つまり、「/backend/items」へリクエストを送信するときに
+    // getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する
+    @Autowired
+    ServiceProperties properties;
+
+    @Bean
+    public RestOperations restOperations(RestTemplateBuilder restTemplateBuilder){
+        return restTemplateBuilder.rootUri(properties.getDns()).build();
+    }
 }
 ```
+
+
+
+
