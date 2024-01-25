@@ -23,7 +23,7 @@
 - dependencies: spring-boot-starter-thymeleaf
 
 ### 1-2. ディレクトリ構成変更
-可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。
+可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。合わせて`application.yml`を作成する。
 ```bash
 SpringMicroservice/frontend-webapp/src/main
 ├── java
@@ -32,10 +32,11 @@ SpringMicroservice/frontend-webapp/src/main
 │           └── frontendwebapp
 │               ├── app
 │               ├── config
-│               │   └── FrontendWebappApplication.java
+│               │   └── FrontendWebappApplication.java  # 起動クラス
 │               └── domain
 └── resources
     ├── application.properties
+    ├── application.yml         # 新規作成：パラメータ記載用
     ├── static
     └── templates
 ```
@@ -155,6 +156,44 @@ public class frontController {
     public String showLogout(){
         return "logout";
     }
+}
+```
+
+### 1-5. `WebClientConfig.java`作成
+フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。
+
+
+```{code-block} java
+:caption: config/WebClientConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.example.frontendwebapp.app.web.ServiceProperties;
+
+@Configuration
+@ComponentScan("com.example.frontendwebapp.app.web")    //Controllerクラスは別ディレクトリなので読み込んであげる
+
+public class WebClientConfig {
+    // backendを呼び出すときの基本URIをServicePropertiesから取得する
+    // つまり、「/backend/items」へリクエストを送信するときに
+    // getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する
+
+    @Autowired
+    ServiceProperties serviceProperties;
+    
+    @Bean
+    public WebClient webClient(){
+        return WebClient.builder()
+            .baseUrl(serviceProperties.getDns())
+            .build();
+    }
+    
 }
 ```
 
