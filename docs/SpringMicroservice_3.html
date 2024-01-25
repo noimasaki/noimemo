@@ -22,6 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="マイクロサービス作成① （ローカル環境での開発）" href="Microservice_1.html" />
     <link rel="prev" title="マイクロサービス作成② （AWS環境の構築）" href="SpringMicroservice_2.html" /> 
 </head>
 
@@ -63,10 +64,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#backenddns">2. backendへのアクセス時のDNS設定</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#applicaion-ymlalbfqdn">2-1. applicaion.ymlへALBのFQDNを記載</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#application-yml">2-2. application.ymlから情報を取得するクラスを作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mvcconfig-javagetdnsuri">2-3. MvcConfig.javaでgetDnsで取得した基本URIを設定する</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①　（ローカル環境での開発）</a></li>
 </ul>
 
         </div>
@@ -131,16 +134,68 @@
 <section id="application-yml">
 <h3>2-2. application.ymlから情報を取得するクラスを作成<a class="headerlink" href="#application-yml" title="Link to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">app/web/ItemController.java</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">app/web/ServiceProperties.java</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.context.properties.ConfigurationProperties</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span>
 
+<span class="c1">///////////////////////////////////////////////////////////////////////</span>
+<span class="c1">// @ConfigurationProperties を利用することで、application.ymlの値を取得できる</span>
+<span class="c1">//  - prefix = &quot;service&quot;をしていることで、「service」階層を指定</span>
+<span class="c1">//  - 変数String dns を宣言することで、service階層配下のdnsフィールドを取得</span>
+<span class="c1">// ========== application.yml ==========</span>
+<span class="c1">// service:</span>
+<span class="c1">//     dns: http://xxxx.com ←private String dns; に格納される</span>
+<span class="c1">//     username: Taro</span>
+<span class="c1">//     pw: hogehoge</span>
+<span class="c1">// =====================================</span>
+<span class="c1">///////////////////////////////////////////////////////////////////////</span>
+
 <span class="nd">@Component</span>
 <span class="nd">@ConfigurationProperties</span><span class="p">(</span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;service&quot;</span><span class="p">)</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ServiceProperties</span><span class="w"> </span><span class="p">{</span>
+
 <span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">dns</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getDns</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">dns</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="mvcconfig-javagetdnsuri">
+<h3>2-3. MvcConfig.javaでgetDnsで取得した基本URIを設定する<a class="headerlink" href="#mvcconfig-javagetdnsuri" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">app/web/ServiceProperties.java</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.web.client.RestTemplateBuilder</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.client.RestOperations</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web.ServiceProperties</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.frontendwebapp.app.web&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="p">{</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// backendを呼び出すときの基本URIをServicePropertiesから取得する</span>
+<span class="w">    </span><span class="c1">// つまり、「/backend/items」へリクエストを送信するときに</span>
+<span class="w">    </span><span class="c1">// getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="n">ServiceProperties</span><span class="w"> </span><span class="n">properties</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">RestOperations</span><span class="w"> </span><span class="nf">restOperations</span><span class="p">(</span><span class="n">RestTemplateBuilder</span><span class="w"> </span><span class="n">restTemplateBuilder</span><span class="p">){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">restTemplateBuilder</span><span class="p">.</span><span class="na">rootUri</span><span class="p">(</span><span class="n">properties</span><span class="p">.</span><span class="na">getDns</span><span class="p">()).</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -154,6 +209,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="SpringMicroservice_2.html" class="btn btn-neutral float-left" title="マイクロサービス作成② （AWS環境の構築）" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Microservice_1.html" class="btn btn-neutral float-right" title="マイクロサービス作成① （ローカル環境での開発）" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
