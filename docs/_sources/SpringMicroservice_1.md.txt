@@ -589,7 +589,7 @@ EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 #### バックエンド（backend-item）
-BFFと同様に作成する。
+BFFと同様に作成する。ただし、EXPOSE 8081とすること。
 
 ### 4-3. Dockerビルド
 ここからはDockerを利用するため、Dockerがインストール済みかつDockerが起動している必要がある。
