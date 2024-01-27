@@ -162,6 +162,10 @@ public class frontController {
 ### 1-5. `WebClientConfig.java`作成
 フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。
 
+@ComponentScan("com.example.frontendwebapp.app.web")
+// SpringBootの起動クラスとこのControllerクラスは別パッケージ（ディレクトリ）である為、
+// ComponentScanアノテーションを利用して本パッケージをスキャン対象として
+// SpringBootに通知することで、コントローラクラスが読み込まれる。★修正
 
 ```{code-block} java
 :caption: config/WebClientConfig.java
@@ -177,8 +181,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.example.frontendwebapp.app.web.ServiceProperties;
 
 @Configuration
-@ComponentScan("com.example.frontendwebapp.app.web")    //Controllerクラスは別ディレクトリなので読み込んであげる
-
 public class WebClientConfig {
     // backendを呼び出すときの基本URIをServicePropertiesから取得する
     // つまり、「/backend/items」へリクエストを送信するときに
@@ -197,27 +199,7 @@ public class WebClientConfig {
 }
 ```
 
-### 1-5. `MvcConfig.java`作成
-今回作成したディレクトリ構成だと、SpringBootの起動クラスである``と、コントローラクラスである``は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）
-
-そこで、``を作成することで明示的にコントローラクラスを読み込む。
-
-```{code-block} java
-:caption: config/MvcConfig.java
-
-package com.example.frontendwebapp.config;
-
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-@Configuration
-@ComponentScan("com.example.frontendwebapp.app.web")    //Controllerクラスは別ディレクトリなので読み込んであげる
-public class MvcConfig implements WebMvcConfigurer{
-    
-}
-```
-### 1-5. `SecurityConfig.java`作成
+### 1-6. `SecurityConfig.java`作成
 SpringSecurityの挙動をカスタムする
 
 ```{code-block} java
@@ -251,14 +233,11 @@ public class SecurityConfig {
         
             return http.build();
     }
-
-    // @Bean
-    // public PasswordEncoder passwordEncoder() {
-    //     return new Pbkdf2PasswordEncoder();
-    // }
-
-    // userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。
-    // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
-    // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
 }
 ```
+
+
+### 1-7. 動作確認
+
+
+## 2. バックエンド作成

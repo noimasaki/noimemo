@@ -67,10 +67,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#webclientconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mvcconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-6. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1-7. 動作確認</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">2. バックエンド作成</a></li>
 </ul>
 </li>
 </ul>
@@ -174,8 +175,8 @@
 <section id="html">
 <h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
 <p>ログインページ</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
@@ -214,8 +215,8 @@
 </div>
 </div>
 <p>ログイン後に表示されるホームページ</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -236,8 +237,8 @@
 </div>
 </div>
 <p>ログアウトページ</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -258,8 +259,8 @@
 </section>
 <section id="frontcontroller-java">
 <h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">app/web/frontController.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
@@ -290,8 +291,12 @@
 <section id="webclientconfig-java">
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成<a class="headerlink" href="#webclientconfig-java" title="Link to this heading"></a></h3>
 <p>フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">config/WebClientConfig.java</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<p>&#64;ComponentScan(&quot;com.example.frontendwebapp.app.web&quot;)
+// SpringBootの起動クラスとこのControllerクラスは別パッケージ（ディレクトリ）である為、
+// ComponentScanアノテーションを利用して本パッケージをスキャン対象として
+// SpringBootに通知することで、コントローラクラスが読み込まれる。★修正</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">config/WebClientConfig.java</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
@@ -303,8 +308,6 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web.ServiceProperties</span><span class="p">;</span>
 
 <span class="nd">@Configuration</span>
-<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.frontendwebapp.app.web&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
-
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebClientConfig</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// backendを呼び出すときの基本URIをServicePropertiesから取得する</span>
 <span class="w">    </span><span class="c1">// つまり、「/backend/items」へリクエストを送信するときに</span>
@@ -325,32 +328,11 @@
 </div>
 </div>
 </section>
-<section id="mvcconfig-java">
-<h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
-<p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
-<p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="p">;</span>
-
-<span class="nd">@Configuration</span>
-<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.frontendwebapp.app.web&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="p">{</span>
-<span class="w">    </span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</section>
 <section id="securityconfig-java">
-<h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
+<h3>1-6. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
@@ -379,20 +361,17 @@
 <span class="w">        </span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">http</span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="c1">// @Bean</span>
-<span class="w">    </span><span class="c1">// public PasswordEncoder passwordEncoder() {</span>
-<span class="w">    </span><span class="c1">//     return new Pbkdf2PasswordEncoder();</span>
-<span class="w">    </span><span class="c1">// }</span>
-
-<span class="w">    </span><span class="c1">// userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。</span>
-<span class="w">    </span><span class="c1">// userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる</span>
-<span class="w">    </span><span class="c1">// passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </section>
+<section id="id6">
+<h3>1-7. 動作確認<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="id7">
+<h2>2. バックエンド作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
 </section>
 </section>
 
