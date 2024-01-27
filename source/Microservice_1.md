@@ -9,7 +9,8 @@
 ## 作成の流れ
 1. バックエンド作成
 2. フロントエンド作成
-3. コンテナ化
+3. フロントエンド→バックエンド呼び出し
+4. コンテナ化
 
 ## 1. バックエンド作成
 フロントから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。ただし、まずは商品情報参照機能のみを提供し、その他の機能は別途追加する。
@@ -177,18 +178,23 @@ public class ItemController {
 ### 1-6. アプリケーションプロパティの設定
 アプリケーションの構成情報（DB接続情報・サーバ設定・ログ設定など）をJavaファイルとは別のところに記載することで、ソースファイルにハードコーディングすることなく動作を変更することが可能となる。
 
-今回は、バックエンドサービスのコンテキストパスを指定する。以下を指定することで、待ち受けるURLもこれまで`http://localhost:8080/item`だったのが`http://localhost:8081/backend-items/item/*`となる。
+今回は、バックエンドサービスのコンテキストパスを指定する。以下を指定することで、待ち受けるURLもこれまで`http://localhost:8080/item`だったのが`http://localhost:8080/backend-items/item`となる。
 
 ```{code-block} yaml
-:caption: src/main/resources/application.yml
+:caption: 【backend-item】/resources/application.yml
 
 server:
   servlet:
    context-path: /backend-item
-  port: 8081
+  port: 8080
 ```
 
+コンテキストパスをマイクロサービス毎に変えることで、AWSのALBのパスルーティングで適したマイクロサービスにルーティングすることができる。
 
+### 1-7. 動作確認
+バックエンド単体の動作確認を実施する。
+
+[http://localhost:8080/backend-item/items](http://localhost:8080/backend-item/items)へアクセスして、全ての商品情報を取得できること。
 
 
 ## 2. フロントエンド作成
@@ -324,8 +330,8 @@ SpringInitializerでは`application.properties`が作成されるが、yaml形�
 service:{code-block} yaml
 :caption: resources/application.yml
 
-    backendEndpoint: http://localhost:8081
-    # backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
+    # backendEndpoint: http://localhost:8081
+    backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
 ```
 
 ### 2-5. `WebClientConfig.java`作成
@@ -482,6 +488,25 @@ public class SecurityConfig {
 ```
 
 ### 2-9. 動作確認
+ここまで作成することで、認証認可機能を持ったフロントエンドが動作する。
 
+![Spring起動](_static/Microservice_1/1.png)
 
-## 2. バックエンド作成
+ログイン画面
+
+![login](_static/Microservice_1/2.png)
+
+ログイン成功→ホームページが表示
+
+![home](_static/Microservice_1/3.png)
+
+ログアウトリンク押下→ログアウト画面
+
+![logout](_static/Microservice_1/4.png)
+
+ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
+
+![error](_static/Microservice_1/5.png)
+
+## 3. フロント→バックエンド呼び出し
+ここまでの実装で、フロントエンドからバックエンドを呼び出すことが可能となっている。
