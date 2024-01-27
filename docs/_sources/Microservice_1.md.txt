@@ -31,10 +31,10 @@
 SpringMicroservice/frontend-webapp/src/main
 ├── java/com/example
 │   └── frontendwebapp
-│       ├── app     # アプリケーション層
-│       ├── domain  # ドメイン層
-│       └── config  # 各種Spring設定クラスを配置
-│           └── FrontendWebappApplication.java  # 起動クラス
+│       ├── app                             # アプリケーション層
+│       ├── domain                          # ドメイン層
+│       ├── config                          # 各種Spring設定クラスを配置
+│       └── FrontendWebappApplication.java  # 起動クラス
 └── resources
     ├── application.properties  # 削除：今回は.ymlに記載
     ├── application.yml         # 新規作成：アプリケーション設定ファイル
@@ -42,30 +42,8 @@ SpringMicroservice/frontend-webapp/src/main
     └── templates   # テンプレート（html）
 ```
 
-### 1-3. ComponentScanの追加
-SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下（本構成だとconfig配下）のみが認識対象である。今回のディレクトリ構成（=パッケージ構成）ではappとdomainは別パッケージ扱いとなるため、`@ComponentScan`を利用して明示的にスキャン対象を追加してあげる必要がある。
+SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下のみが認識対象である。例えば、config配下に起動クラスを配置した場合には`@ComponentScan`を利用して、スキャン対象のディレクトリを明示的に指定する必要がある。
 
-```{code-block} java
-:caption: config/FrontendWebappApplication.java
-:emphasize-lines: 9-10
-
-package com.example.frontendwebapp.config;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-
-@SpringBootApplication
-@ComponentScan("com.example.frontendwebapp.app")	// アプリケーション層
-@ComponentScan("com.example.frontendwebapp.domain")	// ドメイン層
-public class FrontendWebappApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(FrontendWebappApplication.class, args);
-	}
-
-}
-```
 
 ### 1-3. `.html`作成
 フロントエンドは画面を生成してクライアントに返す役割があるため、各種htmlを作成する。画面作成にあたって、Thymeleafを利用する。
@@ -190,6 +168,45 @@ public class frontController {
 }
 ```
 
+
+
+### 1-6. `SecurityConfig.java`作成
+SpringSecurityの挙動をカスタムする
+
+```{code-block} java
+:caption: config/SecurityConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/login/*").permitAll()    // "/login"は認証不要
+            .anyRequest().authenticated()               // その他のリクエストは認証が必要
+            )
+            .formLogin((form) -> form   // 認証方式はformログイン
+            .loginPage("/login")    // 認証ページは"/login"
+            .permitAll()
+            )
+            .logout((logout) -> logout.permitAll());    // ログアウト機能を有効化し、すべてのユーザがログアウト可能
+        
+            return http.build();
+    }
+}
+```
+
 ### 1-5. `WebClientConfig.java`作成
 フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。
 
@@ -229,44 +246,6 @@ public class WebClientConfig {
     
 }
 ```
-
-### 1-6. `SecurityConfig.java`作成
-SpringSecurityの挙動をカスタムする
-
-```{code-block} java
-:caption: config/SecurityConfig.java
-
-package com.example.frontendwebapp.config;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
-    
-    // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
-    @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/login/*").permitAll()    // "/login"は認証不要
-            .anyRequest().authenticated()               // その他のリクエストは認証が必要
-            )
-            .formLogin((form) -> form   // 認証方式はformログイン
-            .loginPage("/login")    // 認証ページは"/login"
-            .permitAll()
-            )
-            .logout((logout) -> logout.permitAll());    // ログアウト機能を有効化し、すべてのユーザがログアウト可能
-        
-            return http.build();
-    }
-}
-```
-
 
 ### 1-7. 動作確認
 
