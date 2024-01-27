@@ -66,6 +66,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id5">1-2. ディレクトリ構成変更</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webclientconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mvcconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
 </ul>
@@ -130,7 +131,7 @@
 </section>
 <section id="id5">
 <h3>1-2. ディレクトリ構成変更<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
-<p>可読性向上の為、<code class="docutils literal notranslate"><span class="pre">.java</span></code>が含まれるディレクトリを以下のように変更する。</p>
+<p>可読性向上の為、<code class="docutils literal notranslate"><span class="pre">.java</span></code>が含まれるディレクトリを以下のように変更する。合わせて<code class="docutils literal notranslate"><span class="pre">application.yml</span></code>を作成する。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SpringMicroservice/frontend-webapp/src/main
 ├──<span class="w"> </span>java
 │<span class="w">   </span>└──<span class="w"> </span>com
@@ -138,10 +139,11 @@
 │<span class="w">           </span>└──<span class="w"> </span>frontendwebapp
 │<span class="w">               </span>├──<span class="w"> </span>app
 │<span class="w">               </span>├──<span class="w"> </span>config
-│<span class="w">               </span>│<span class="w">   </span>└──<span class="w"> </span>FrontendWebappApplication.java
+│<span class="w">               </span>│<span class="w">   </span>└──<span class="w"> </span>FrontendWebappApplication.java<span class="w">  </span><span class="c1"># 起動クラス</span>
 │<span class="w">               </span>└──<span class="w"> </span>domain
 └──<span class="w"> </span>resources
 <span class="w">    </span>├──<span class="w"> </span>application.properties
+<span class="w">    </span>├──<span class="w"> </span>application.yml<span class="w">         </span><span class="c1"># 新規作成：パラメータ記載用</span>
 <span class="w">    </span>├──<span class="w"> </span>static
 <span class="w">    </span>└──<span class="w"> </span>templates
 </pre></div>
@@ -285,12 +287,50 @@
 </div>
 </div>
 </section>
+<section id="webclientconfig-java">
+<h3>1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成<a class="headerlink" href="#webclientconfig-java" title="Link to this heading"></a></h3>
+<p>フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">config/WebClientConfig.java</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.reactive.function.client.WebClient</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web.ServiceProperties</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="p">(</span><span class="s">&quot;com.example.frontendwebapp.app.web&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">//Controllerクラスは別ディレクトリなので読み込んであげる</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebClientConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// backendを呼び出すときの基本URIをServicePropertiesから取得する</span>
+<span class="w">    </span><span class="c1">// つまり、「/backend/items」へリクエストを送信するときに</span>
+<span class="w">    </span><span class="c1">// getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する</span>
+
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="n">ServiceProperties</span><span class="w"> </span><span class="n">serviceProperties</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">WebClient</span><span class="w"> </span><span class="nf">webClient</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">WebClient</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span>
+<span class="w">            </span><span class="p">.</span><span class="na">baseUrl</span><span class="p">(</span><span class="n">serviceProperties</span><span class="p">.</span><span class="na">getDns</span><span class="p">())</span>
+<span class="w">            </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
 <section id="mvcconfig-java">
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">MvcConfig.java</span></code>作成<a class="headerlink" href="#mvcconfig-java" title="Link to this heading"></a></h3>
 <p>今回作成したディレクトリ構成だと、SpringBootの起動クラスである<code class="docutils literal notranslate"><span class="pre">と、コントローラクラスである</span></code>は別ディレクトリに存在するため、そのままだとコントローラクラスが読みこまれずに正常に画面遷移することができない。（起動クラスと同ディレクトリおよびサブディレクトリは自動的に読み込んでくれる）</p>
 <p>そこで、``を作成することで明示的にコントローラクラスを読み込む。</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">config/MvcConfig.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
@@ -309,8 +349,8 @@
 <section id="securityconfig-java">
 <h3>1-5. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
