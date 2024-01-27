@@ -9,9 +9,7 @@
 ## 作成の流れ
 1. バックエンド作成
 2. フロントエンド作成
-3. BFF改修：BFF -> バックエンドへアクセス可能とする
-4. コンテナ化
-
+3. コンテナ化
 
 ## 2. フロントエンド作成
 ### 2-1. プロジェクト作成（Spring Initializr）
@@ -249,9 +247,10 @@ public class frontController {
     @GetMapping("/items")
     @ResponseBody
     public String items(){
-        return itemService.getAllItems();   // @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn
+        // @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn
+        return itemService.getAllItems();
     }
-    
+
 }
 ```
 
@@ -291,6 +290,7 @@ public class SecurityConfig {
         
             return http.build();
     }
+    
 }
 ```
 

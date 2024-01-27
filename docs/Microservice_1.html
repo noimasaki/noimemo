@@ -115,7 +115,6 @@
 <ol class="arabic simple">
 <li><p>バックエンド作成</p></li>
 <li><p>フロントエンド作成</p></li>
-<li><p>BFF改修：BFF -&gt; バックエンドへアクセス可能とする</p></li>
 <li><p>コンテナ化</p></li>
 </ol>
 </section>
@@ -359,9 +358,10 @@
 <span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/items&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nd">@ResponseBody</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">items</span><span class="p">(){</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">getAllItems</span><span class="p">();</span><span class="w">   </span><span class="c1">// @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn</span>
+<span class="w">        </span><span class="c1">// @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">getAllItems</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span>
+
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -400,6 +400,7 @@
 <span class="w">        </span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">http</span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
 <span class="p">}</span>
 </pre></div>
 </div>
