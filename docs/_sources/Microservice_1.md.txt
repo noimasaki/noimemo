@@ -11,6 +11,186 @@
 2. フロントエンド作成
 3. コンテナ化
 
+## 1. バックエンド作成
+フロントから呼び出されるバックエンドを作成する。商品情報の参照、登録、更新、削除のREST APIを提供する。ただし、まずは商品情報参照機能のみを提供し、その他の機能は別途追加する。
+
+### 1-1. プロジェクト作成（Spring Initializr）
+- SpringBoot: 3.2.2
+- GroupId: com.example（デフォルト）
+- ArtifactId: backend-item
+- Packaging type: Jar
+- Java version: 17
+- dependencies: Spring Web（spring-boot-starter-web）
+
+### 1-2. ディレクトリ構成変更
+```bash
+SpringMicroservice/backend-item/src/main
+├── java/com/example
+│   └── backenditem
+│       ├── BackendItemApplication.java # 起動クラス
+│       ├── app                         # アプリケーション層
+│       │   └── ItemController.java
+│       ├── config                      # 各種Spring設定クラスを配置
+│       └── domain                      # ドメイン層
+│           ├── ItemModel.java
+│           └── ItemService.java
+└── resources
+    ├── application.yml # アプリケーション設定ファイル
+    ├── static          # 静的リソース（CSS、JavaScript、画像など）
+    └── templates       # テンプレート（html）
+        ├── home.html
+        ├── login.html
+        └── logout.html
+```
+
+### 1-3. モデル作成
+商品情報のモデルを作成する。
+
+Getter・Setterおよびコンストラクタは、VS codeの補完機能を使うと自動で作成が可能。右クリックから`ソースアクション > Generate Getters and Setters...`と`ソースアクション > Generate Constructors...`を選択。
+
+```{code-block} java
+:caption: domain/Item.java
+
+package com.example.backenditem.domain;
+
+public class Item {
+    private String itemId;          //商品ID
+    private String itemName;        //商品名
+    private String itemCategory;    //商品カテゴリー
+
+    // コンストラクタ
+    public Item(String itemId, String itemName, String itemCategory) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemCategory = itemCategory;
+    }
+
+    // GetterおよびSetter
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
+    }
+    
+}
+
+```
+
+### 1-4. サービス作成
+コントローラから呼ばれるビジネスロジックであるサービスクラスを作成する。
+なお、ここでは前述の通り、参照機能のみをまずは実装する。
+
+```{code-block} java
+:caption: domain/ItemService.java
+
+package com.example.backenditem.domain;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class ItemService {
+    private List<Item> allItems = Arrays.asList(
+        new Item("10001", "ネックレス", "ジュエリ"),
+        new Item("10002", "パーカー", "ファッション"),
+        new Item("10003", "フェイスクリーム", "ビューティ"),
+        new Item("10004", "サプリメント", "ヘルス"),
+        new Item("10005", "ブルーベリー", "フード")
+    );
+
+    // 全てのItemリストを返すメソッド
+    public List<Item> getAllItems() {
+        return allItems;
+    }
+
+    // 個別のItemを返すメソッド
+    public Item getItem(String itemId) {
+        for (int i=0; i<allItems.size(); i++){
+            if (allItems.get(i).getItemId().equals(itemId)) {
+                return allItems.get(i);
+            }
+        }
+        return null;    // itemIdが見つからなかったらnullを返す
+    }
+
+}
+```
+
+### 1-5. コントローラ作成
+```{code-block} java
+:caption: app/ItemController.java
+
+package com.example.backenditem.app;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.backenditem.domain.Item;
+import com.example.backenditem.domain.ItemService;
+
+@RestController
+public class ItemController {
+    @Autowired
+    private ItemService itemService;
+
+    // 全てのItem情報を返す
+    // http://<ホスト名>:<ポート番号>/
+    @GetMapping("/items")
+    public List<Item> getAllItems(){
+        return itemService.getAllItems();
+    }
+
+    // 個別のItem情報を返す
+    // http://<ホスト名>:<ポート番号>/{商品ID}
+    @GetMapping("/items/{itemId}")
+    public Item getItem(@PathVariable("itemId") String itemId){
+        return itemService.getItem(itemId);
+    }
+
+}
+```
+
+### 1-6. アプリケーションプロパティの設定
+アプリケーションの構成情報（DB接続情報・サーバ設定・ログ設定など）をJavaファイルとは別のところに記載することで、ソースファイルにハードコーディングすることなく動作を変更することが可能となる。
+
+今回は、バックエンドサービスのコンテキストパスを指定する。以下を指定することで、待ち受けるURLもこれまで`http://localhost:8080/item`だったのが`http://localhost:8081/backend-items/item/*`となる。
+
+```{code-block} yaml
+:caption: src/main/resources/application.yml
+
+server:
+  servlet:
+   context-path: /backend-item
+  port: 8081
+```
+
+
+
+
 ## 2. フロントエンド作成
 ### 2-1. プロジェクト作成（Spring Initializr）
 - SpringBoot: 3.2.2
@@ -24,20 +204,27 @@
 - dependencies: Thymeleaf（spring-boot-starter-thymeleaf）
 
 ### 2-2. ディレクトリ構成変更
-可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。合わせて`application.yml`を作成する。
+可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。今後作成するファイルを含めて以下のような構成となる。
+
 ```bash
 SpringMicroservice/frontend-webapp/src/main
 ├── java/com/example
 │   └── frontendwebapp
+│       ├── FrontendWebappApplication.java  # 起動クラス
 │       ├── app                             # アプリケーション層
-│       ├── domain                          # ドメイン層
+│       │   └── frontController.java
 │       ├── config                          # 各種Spring設定クラスを配置
-│       └── FrontendWebappApplication.java  # 起動クラス
+│       │   ├── SecurityConfig.java
+│       │   └── WebClientConfig.java
+│       └── domain                          # ドメイン層
+│           └── itemService.java
 └── resources
-    ├── application.properties  # 削除：今回は.ymlに記載
-    ├── application.yml         # 新規作成：アプリケーション設定ファイル
-    ├── static      # 静的リソース（CSS、JavaScript、画像など）
-    └── templates   # テンプレート（html）
+    ├── application.yml # アプリケーション設定ファイル
+    ├── static          # 静的リソース（CSS、JavaScript、画像など）
+    └── templates       # テンプレート（html）
+        ├── home.html
+        ├── login.html
+        └── logout.html
 ```
 
 SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下のみが認識対象である。例えば、config配下に起動クラスを配置した場合には`@ComponentScan`を利用して、スキャン対象のディレクトリを明示的に指定する必要がある。
@@ -129,9 +316,9 @@ SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認�
 ```
 
 ### 2-4. アプリケーションプロパティの設定
-アプリケーションの構成情報（DB接続情報・サーバ設定・ログ設定など）をJavaファイルとは別のところに記載することで、ソースファイルにハードコーディングすることなく動作を変更することが可能となる。
-
 今回、バックエンドへアクセスするときのエンドポイント情報（FQDN）を記載する。本アプリケーションは最終的にコンテナ化してAWS上で動作させるが、バックエンドはALBを利用してフロントエンドからアクセスするため、プロパティファイルから読みだす構成とする。
+
+SpringInitializerでは`application.properties`が作成されるが、yaml形式で記載するため、ファイルをリネームして以下を記載する。
 
 ```
 service:{code-block} yaml
@@ -193,7 +380,7 @@ public class itemService {
 
     public String getAllItems(){
         return webClient.get()
-                .uri("/backend/items")
+                .uri("/backend-item/items")
                 .retrieve()                 // retrieveの後にレスポンスを抽出する方法を記述する
                 .bodyToMono(String.class)   // String型で受け取る
                 .block();                   // ブロッキング
