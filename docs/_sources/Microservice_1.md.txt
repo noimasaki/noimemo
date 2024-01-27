@@ -7,14 +7,14 @@
 ![Architecture](_static/Microservice_1/architecture.drawio.svg)
 
 ## 作成の流れ
-1. フロントエンド作成
-2. バックエンド作成
+1. バックエンド作成
+2. フロントエンド作成
 3. BFF改修：BFF -> バックエンドへアクセス可能とする
 4. コンテナ化
 
 
-## 1. フロントエンド作成
-### 1-1. プロジェクト作成（Spring Initializr）
+## 2. フロントエンド作成
+### 2-1. プロジェクト作成（Spring Initializr）
 - SpringBoot: 3.2.2
 - GroupId: com.example（デフォルト）
 - ArtifactId: frontend-webapp
@@ -25,7 +25,7 @@
 - dependencies: Spring Security（spring-boot-starter-security）
 - dependencies: Thymeleaf（spring-boot-starter-thymeleaf）
 
-### 1-2. ディレクトリ構成変更
+### 2-2. ディレクトリ構成変更
 可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。合わせて`application.yml`を作成する。
 ```bash
 SpringMicroservice/frontend-webapp/src/main
@@ -45,7 +45,7 @@ SpringMicroservice/frontend-webapp/src/main
 SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下のみが認識対象である。例えば、config配下に起動クラスを配置した場合には`@ComponentScan`を利用して、スキャン対象のディレクトリを明示的に指定する必要がある。
 
 
-### 1-3. `.html`作成
+### 2-3. `.html`作成
 フロントエンドは画面を生成してクライアントに返す役割があるため、各種htmlを作成する。画面作成にあたって、Thymeleafを利用する。
 
 ログインページ
@@ -130,18 +130,94 @@ SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認�
 </html>
 ```
 
-### 1-4. `frontController.java`作成
-@GetMappingを利用して特定のパスへのGET時に、Thymeleafによりテンプレートから生成されたhtmlを返すコントローラを作成する。
+### 2-4. アプリケーションプロパティの設定
+アプリケーションの構成情報（DB接続情報・サーバ設定・ログ設定など）をJavaファイルとは別のところに記載することで、ソースファイルにハードコーディングすることなく動作を変更することが可能となる。
 
-バックエンドを呼び出す処理は後ほど追加する。
+今回、バックエンドへアクセスするときのエンドポイント情報（FQDN）を記載する。本アプリケーションは最終的にコンテナ化してAWS上で動作させるが、バックエンドはALBを利用してフロントエンドからアクセスするため、プロパティファイルから読みだす構成とする。
+
+```
+service:{code-block} yaml
+:caption: resources/application.yml
+
+    backendEndpoint: http://localhost:8081
+    # backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
+```
+
+### 2-5. `WebClientConfig.java`作成
+フロントエンドからバックエンドAPIを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。
+
+```{code-block} java
+:caption: config/WebClientConfig.java
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+public class WebClientConfig {
+
+    // application.ymlからプロパティservice.backendEndpointの値を取得して
+    // 変数backendEndpointへ設定する
+    @Value("${service.backendEndpoint}")
+    private String backendEndpoint;
+    
+    // backendを呼び出すときの基本URIを設定
+    // つまり、「/backend/items」へリクエストを送信するときに
+    // 基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する
+    @Bean
+    public WebClient webClient(){
+        return WebClient.builder()
+                .baseUrl(backendEndpoint)
+                .build();
+    }
+
+}
+```
+
+### 2-6. バックエンド呼び出し用サービスクラス作成
+WebClientを利用して、backend-itemを呼び出すサービスクラスを作成
+```{code-block} java
+:caption: domain/itemService.java
+
+package com.example.frontendwebapp.domain;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Service
+public class itemService {
+    @Autowired
+    WebClient webClient;
+
+    public String getAllItems(){
+        return webClient.get()
+                .uri("/backend/items")
+                .retrieve()                 // retrieveの後にレスポンスを抽出する方法を記述する
+                .bodyToMono(String.class)   // String型で受け取る
+                .block();                   // ブロッキング
+    }
+}
+```
+
+
+### 2-7. `frontController.java`作成
+@GetMappingを利用して特定のパスへのGET時に、Thymeleafによりテンプレートから生成されたhtmlを返すコントローラを作成する。
 
 ```{code-block} java
 :caption: app/frontController.java
 
 package com.example.frontendwebapp.app;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.frontendwebapp.domain.itemService;
 
 @Controller
 public class frontController {
@@ -165,12 +241,24 @@ public class frontController {
         return "logout";    // logout.htmlをreturn
     }
 
+    // backend-item呼び出し
+    // http://<ホスト名>:<ポート番号>/items
+    @Autowired
+    private itemService itemService;
+
+    @GetMapping("/items")
+    @ResponseBody
+    public String items(){
+        return itemService.getAllItems();   // @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn
+    }
+    
 }
 ```
 
+Thymeleafを利用しているため、Stringでreturnしてしまうとhtmlファイル名であると解釈してしまうため、htmlファイルではなくてレスポンス本文であることを明示的にする@ResponseBodyアノテーションを付与する。
 
 
-### 1-6. `SecurityConfig.java`作成
+### 2-8. `SecurityConfig.java`作成
 SpringSecurityの挙動をカスタムする
 
 ```{code-block} java
@@ -188,7 +276,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
     
-    // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
@@ -207,47 +294,7 @@ public class SecurityConfig {
 }
 ```
 
-### 1-5. `WebClientConfig.java`作成
-フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。
-
-@ComponentScan("com.example.frontendwebapp.app.web")
-// SpringBootの起動クラスとこのControllerクラスは別パッケージ（ディレクトリ）である為、
-// ComponentScanアノテーションを利用して本パッケージをスキャン対象として
-// SpringBootに通知することで、コントローラクラスが読み込まれる。★修正
-
-```{code-block} java
-:caption: config/WebClientConfig.java
-
-package com.example.frontendwebapp.config;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import com.example.frontendwebapp.app.web.ServiceProperties;
-
-@Configuration
-public class WebClientConfig {
-    // backendを呼び出すときの基本URIをServicePropertiesから取得する
-    // つまり、「/backend/items」へリクエストを送信するときに
-    // getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する
-
-    @Autowired
-    ServiceProperties serviceProperties;
-    
-    @Bean
-    public WebClient webClient(){
-        return WebClient.builder()
-            .baseUrl(serviceProperties.getDns())
-            .build();
-    }
-    
-}
-```
-
-### 1-7. 動作確認
+### 2-9. 動作確認
 
 
 ## 2. バックエンド作成
