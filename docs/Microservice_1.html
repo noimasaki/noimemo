@@ -61,17 +61,19 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成①　（ローカル環境での開発）</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">実施すること</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">作成の流れ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">1. フロントエンド作成</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#spring-initializr">1-1. プロジェクト作成（Spring Initializr）</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">1-2. ディレクトリ構成変更</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#html">1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">1-6. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#webclientconfig-java">1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">1-7. 動作確認</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">2. フロントエンド作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spring-initializr">2-1. プロジェクト作成（Spring Initializr）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">2-2. ディレクトリ構成変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#html">2-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2-4. アプリケーションプロパティの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webclientconfig-java">2-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2-6. バックエンド呼び出し用サービスクラス作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontcontroller-java">2-7. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#securityconfig-java">2-8. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2-9. 動作確認</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">2. バックエンド作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">2. バックエンド作成</a></li>
 </ul>
 </li>
 </ul>
@@ -111,16 +113,16 @@
 <section id="id3">
 <h2>作成の流れ<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>フロントエンド作成</p></li>
 <li><p>バックエンド作成</p></li>
+<li><p>フロントエンド作成</p></li>
 <li><p>BFF改修：BFF -&gt; バックエンドへアクセス可能とする</p></li>
 <li><p>コンテナ化</p></li>
 </ol>
 </section>
 <section id="id4">
-<h2>1. フロントエンド作成<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<h2>2. フロントエンド作成<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
 <section id="spring-initializr">
-<h3>1-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h3>
+<h3>2-1. プロジェクト作成（Spring Initializr）<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>SpringBoot: 3.2.2</p></li>
 <li><p>GroupId: com.example（デフォルト）</p></li>
@@ -134,7 +136,7 @@
 </ul>
 </section>
 <section id="id5">
-<h3>1-2. ディレクトリ構成変更<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<h3>2-2. ディレクトリ構成変更<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>可読性向上の為、<code class="docutils literal notranslate"><span class="pre">.java</span></code>が含まれるディレクトリを以下のように変更する。合わせて<code class="docutils literal notranslate"><span class="pre">application.yml</span></code>を作成する。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SpringMicroservice/frontend-webapp/src/main
 ├──<span class="w"> </span>java/com/example
@@ -153,11 +155,11 @@
 <p>SpringBootでは<code class="docutils literal notranslate"><span class="pre">&#64;Controller</span></code>や<code class="docutils literal notranslate"><span class="pre">&#64;Service</span></code>がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下のみが認識対象である。例えば、config配下に起動クラスを配置した場合には<code class="docutils literal notranslate"><span class="pre">&#64;ComponentScan</span></code>を利用して、スキャン対象のディレクトリを明示的に指定する必要がある。</p>
 </section>
 <section id="html">
-<h3>1-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
+<h3>2-3. <code class="docutils literal notranslate"><span class="pre">.html</span></code>作成<a class="headerlink" href="#html" title="Link to this heading"></a></h3>
 <p>フロントエンドは画面を生成してクライアントに返す役割があるため、各種htmlを作成する。画面作成にあたって、Thymeleafを利用する。</p>
 <p>ログインページ</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">resources/templates/login.html</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="cm">&lt;!-- Thymeleafを有効化 =&gt; th:XXXX という属性を各タグに追加することで利用可能 --&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
@@ -196,8 +198,8 @@
 </div>
 </div>
 <p>ログイン後に表示されるホームページ</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">resources/templates/home.html</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -218,8 +220,8 @@
 </div>
 </div>
 <p>ログアウトページ</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">resources/templates/logout.html</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:th</span><span class="o">=</span><span class="s">&quot;http://www.thymeleaf.org&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -238,16 +240,94 @@
 </div>
 </div>
 </section>
+<section id="id6">
+<h3>2-4. アプリケーションプロパティの設定<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>アプリケーションの構成情報（DB接続情報・サーバ設定・ログ設定など）をJavaファイルとは別のところに記載することで、ソースファイルにハードコーディングすることなく動作を変更することが可能となる。</p>
+<p>今回、バックエンドへアクセスするときのエンドポイント情報（FQDN）を記載する。本アプリケーションは最終的にコンテナ化してAWS上で動作させるが、バックエンドはALBを利用してフロントエンドからアクセスするため、プロパティファイルから読みだす構成とする。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">service</span><span class="p">:{</span><span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">}</span> <span class="n">yaml</span>
+<span class="p">:</span><span class="n">caption</span><span class="p">:</span> <span class="n">resources</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">yml</span>
+
+    <span class="n">backendEndpoint</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8081</span>
+    <span class="c1"># backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】</span>
+</pre></div>
+</div>
+</section>
+<section id="webclientconfig-java">
+<h3>2-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成<a class="headerlink" href="#webclientconfig-java" title="Link to this heading"></a></h3>
+<p>フロントエンドからバックエンドAPIを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">config/WebClientConfig.java</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.reactive.function.client.WebClient</span><span class="p">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebClientConfig</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// application.ymlからプロパティservice.backendEndpointの値を取得して</span>
+<span class="w">    </span><span class="c1">// 変数backendEndpointへ設定する</span>
+<span class="w">    </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&quot;${service.backendEndpoint}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">backendEndpoint</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// backendを呼び出すときの基本URIを設定</span>
+<span class="w">    </span><span class="c1">// つまり、「/backend/items」へリクエストを送信するときに</span>
+<span class="w">    </span><span class="c1">// 基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する</span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">WebClient</span><span class="w"> </span><span class="nf">webClient</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">WebClient</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span>
+<span class="w">                </span><span class="p">.</span><span class="na">baseUrl</span><span class="p">(</span><span class="n">backendEndpoint</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h3>2-6. バックエンド呼び出し用サービスクラス作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>WebClientを利用して、backend-itemを呼び出すサービスクラスを作成</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">domain/itemService.java</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.domain</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.reactive.function.client.WebClient</span><span class="p">;</span>
+
+<span class="nd">@Service</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">itemService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="n">WebClient</span><span class="w"> </span><span class="n">webClient</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getAllItems</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">webClient</span><span class="p">.</span><span class="na">get</span><span class="p">()</span>
+<span class="w">                </span><span class="p">.</span><span class="na">uri</span><span class="p">(</span><span class="s">&quot;/backend/items&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">retrieve</span><span class="p">()</span><span class="w">                 </span><span class="c1">// retrieveの後にレスポンスを抽出する方法を記述する</span>
+<span class="w">                </span><span class="p">.</span><span class="na">bodyToMono</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">   </span><span class="c1">// String型で受け取る</span>
+<span class="w">                </span><span class="p">.</span><span class="na">block</span><span class="p">();</span><span class="w">                   </span><span class="c1">// ブロッキング</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
 <section id="frontcontroller-java">
-<h3>1-4. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
+<h3>2-7. <code class="docutils literal notranslate"><span class="pre">frontController.java</span></code>作成<a class="headerlink" href="#frontcontroller-java" title="Link to this heading"></a></h3>
 <p>&#64;GetMappingを利用して特定のパスへのGET時に、Thymeleafによりテンプレートから生成されたhtmlを返すコントローラを作成する。</p>
-<p>バックエンドを呼び出す処理は後ほど追加する。</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">app/frontController.java</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">app/frontController.java</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app</span><span class="p">;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.ResponseBody</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.domain.itemService</span><span class="p">;</span>
 
 <span class="nd">@Controller</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">frontController</span><span class="w"> </span><span class="p">{</span>
@@ -271,16 +351,28 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;logout&quot;</span><span class="p">;</span><span class="w">    </span><span class="c1">// logout.htmlをreturn</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="c1">// backend-item呼び出し</span>
+<span class="w">    </span><span class="c1">// http://&lt;ホスト名&gt;:&lt;ポート番号&gt;/items</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">itemService</span><span class="w"> </span><span class="n">itemService</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/items&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nd">@ResponseBody</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">items</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">getAllItems</span><span class="p">();</span><span class="w">   </span><span class="c1">// @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </div>
+<p>Thymeleafを利用しているため、Stringでreturnしてしまうとhtmlファイル名であると解釈してしまうため、htmlファイルではなくてレスポンス本文であることを明示的にする&#64;ResponseBodyアノテーションを付与する。</p>
 </section>
 <section id="securityconfig-java">
-<h3>1-6. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
+<h3>2-8. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h3>
 <p>SpringSecurityの挙動をカスタムする</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">config/SecurityConfig.java</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
@@ -293,7 +385,6 @@
 <span class="nd">@EnableWebSecurity</span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SecurityConfig</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span>
-<span class="w">    </span><span class="c1">// 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。</span>
 <span class="w">    </span><span class="nd">@Bean</span>
 <span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">SecurityFilterChain</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="n">HttpSecurity</span><span class="w"> </span><span class="n">http</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">http</span>
@@ -314,52 +405,12 @@
 </div>
 </div>
 </section>
-<section id="webclientconfig-java">
-<h3>1-5. <code class="docutils literal notranslate"><span class="pre">WebClientConfig.java</span></code>作成<a class="headerlink" href="#webclientconfig-java" title="Link to this heading"></a></h3>
-<p>フロントエンドからバックエンドを呼び出す時は、Spring WebFluxに内包されているHTTPクライアントである「WebClient」を利用する。</p>
-<p>&#64;ComponentScan(&quot;com.example.frontendwebapp.app.web&quot;)
-// SpringBootの起動クラスとこのControllerクラスは別パッケージ（ディレクトリ）である為、
-// ComponentScanアノテーションを利用して本パッケージをスキャン対象として
-// SpringBootに通知することで、コントローラクラスが読み込まれる。★修正</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">config/WebClientConfig.java</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.config</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.reactive.function.client.WebClient</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.frontendwebapp.app.web.ServiceProperties</span><span class="p">;</span>
-
-<span class="nd">@Configuration</span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebClientConfig</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// backendを呼び出すときの基本URIをServicePropertiesから取得する</span>
-<span class="w">    </span><span class="c1">// つまり、「/backend/items」へリクエストを送信するときに</span>
-<span class="w">    </span><span class="c1">// getDns()メソッドで取得した基本URIを設定して「http://xxxx.com/backend/items」へリクエストを送信する</span>
-
-<span class="w">    </span><span class="nd">@Autowired</span>
-<span class="w">    </span><span class="n">ServiceProperties</span><span class="w"> </span><span class="n">serviceProperties</span><span class="p">;</span>
-<span class="w">    </span>
-<span class="w">    </span><span class="nd">@Bean</span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">WebClient</span><span class="w"> </span><span class="nf">webClient</span><span class="p">(){</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">WebClient</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span>
-<span class="w">            </span><span class="p">.</span><span class="na">baseUrl</span><span class="p">(</span><span class="n">serviceProperties</span><span class="p">.</span><span class="na">getDns</span><span class="p">())</span>
-<span class="w">            </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</section>
-<section id="id6">
-<h3>1-7. 動作確認<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<section id="id8">
+<h3>2-9. 動作確認<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 </section>
 </section>
-<section id="id7">
-<h2>2. バックエンド作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id9">
+<h2>2. バックエンド作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
 </section>
 </section>
 
