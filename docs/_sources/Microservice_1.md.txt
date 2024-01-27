@@ -15,39 +15,61 @@
 
 ## 1. フロントエンド作成
 ### 1-1. プロジェクト作成（Spring Initializr）
-- Java: 17
-- SpringBoot: 3.2.1
-- dependencies: spring-boot-starter-web
-- dependencies: spring-boot-starter-webflux
-- dependencies: spring-boot-starter-security
-- dependencies: spring-boot-starter-thymeleaf
+- SpringBoot: 3.2.2
+- GroupId: com.example（デフォルト）
+- ArtifactId: frontend-webapp
+- Packaging type: Jar
+- Java version: 17
+- dependencies: Spring Web（spring-boot-starter-web）
+- dependencies: Spring Reactive Web（spring-boot-starter-webflux）
+- dependencies: Spring Security（spring-boot-starter-security）
+- dependencies: Thymeleaf（spring-boot-starter-thymeleaf）
 
 ### 1-2. ディレクトリ構成変更
 可読性向上の為、`.java`が含まれるディレクトリを以下のように変更する。合わせて`application.yml`を作成する。
 ```bash
 SpringMicroservice/frontend-webapp/src/main
-├── java
-│   └── com
-│       └── example
-│           └── frontendwebapp
-│               ├── app
-│               ├── config
-│               │   └── FrontendWebappApplication.java  # 起動クラス
-│               └── domain
+├── java/com/example
+│   └── frontendwebapp
+│       ├── app     # アプリケーション層
+│       ├── domain  # ドメイン層
+│       └── config  # 各種Spring設定クラスを配置
+│           └── FrontendWebappApplication.java  # 起動クラス
 └── resources
-    ├── application.properties
-    ├── application.yml         # 新規作成：パラメータ記載用
-    ├── static
-    └── templates
+    ├── application.properties  # 削除：今回は.ymlに記載
+    ├── application.yml         # 新規作成：アプリケーション設定ファイル
+    ├── static      # 静的リソース（CSS、JavaScript、画像など）
+    └── templates   # テンプレート（html）
 ```
 
-| ディレクトリ | 役割 |
-| ---- | ---- |
-| app | アプリケーション層に関するもの |
-| config | Spring Bootの設定クラスを配置する。起動クラス、Webアプリケーションの設定、セキュリティ設定、データベース接続など |
-| domain | ServiceクラスやRepositoryクラスなど |
+### 1-3. ComponentScanの追加
+SpringBootでは`@Controller`や`@Service`がついたクラスを自動で認識する。しかし、起動クラスが配置されたディレクトリ配下（本構成だとconfig配下）のみが認識対象である。今回のディレクトリ構成（=パッケージ構成）ではappとdomainは別パッケージ扱いとなるため、`@ComponentScan`を利用して明示的にスキャン対象を追加してあげる必要がある。
+
+```{code-block} java
+:caption: config/FrontendWebappApplication.java
+:emphasize-lines: 9-10
+
+package com.example.frontendwebapp.config;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+@ComponentScan("com.example.frontendwebapp.app")	// アプリケーション層
+@ComponentScan("com.example.frontendwebapp.domain")	// ドメイン層
+public class FrontendWebappApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(FrontendWebappApplication.class, args);
+	}
+
+}
+```
 
 ### 1-3. `.html`作成
+フロントエンドは画面を生成してクライアントに返す役割があるため、各種htmlを作成する。画面作成にあたって、Thymeleafを利用する。
+
 ログインページ
 ```{code-block} html
 :caption: resources/templates/login.html
@@ -131,31 +153,40 @@ SpringMicroservice/frontend-webapp/src/main
 ```
 
 ### 1-4. `frontController.java`作成
-```{code-block} java
-:caption: app/web/frontController.java
+@GetMappingを利用して特定のパスへのGET時に、Thymeleafによりテンプレートから生成されたhtmlを返すコントローラを作成する。
 
-package com.example.frontendwebapp.config;
+バックエンドを呼び出す処理は後ほど追加する。
+
+```{code-block} java
+:caption: app/frontController.java
+
+package com.example.frontendwebapp.app;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class frontController {
+
+    // 引数なしの場合はアプリケーションのコンテキストルート
+    // http://<ホスト名>:<ポート番号>/ へのGET時に呼び出される
     @GetMapping
     public String home(){
-        return "home";
+        return "home";      // home.htmlをreturn
     }
 
+    // http://<ホスト名>:<ポート番号>/login
     @GetMapping("/login")
-    public String showLogin(){
-        // Thymeleafを利用しているため、記載で`/resources/templates/login.html`をreturnする
-        return "login";
+    public String login(){
+        return "login";     // login.htmlをreturn
     }
 
+    // http://<ホスト名>:<ポート番号>/logout
     @GetMapping("/logout")
-    public String showLogout(){
-        return "logout";
+    public String logout(){
+        return "logout";    // logout.htmlをreturn
     }
+
 }
 ```
 
