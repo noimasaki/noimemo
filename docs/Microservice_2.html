@@ -114,7 +114,7 @@
 <h2>実施すること<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>作成したSpringBootアプリケーションを含めたコンテナをAWS上で動作させる。</p>
 <p>アーキテクチャは以下のように作成する。</p>
-<p><img alt="aws" src="_images/aws.drawio.svg" /></p>
+<p><img alt="aws" src="_images/architecture.drawio1.svg" /></p>
 </section>
 <section id="id2">
 <h2>作成の流れ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
@@ -154,22 +154,22 @@
 </thead>
 <tbody>
 <tr>
-<td>ma-noim-vpc-subnet-public1</td>
+<td>ma-noim-subnet-pub1</td>
 <td>ap-northeast-1a</td>
 <td>10.2.76.0/26</td>
 </tr>
 <tr>
-<td>ma-noim-vpc-subnet-public2</td>
+<td>ma-noim-subnet-pub2</td>
 <td>ap-northeast-1c</td>
 <td>10.2.76.64/26</td>
 </tr>
 <tr>
-<td>ma-noim-vpc-subnet-private1</td>
+<td>ma-noim-subnet-pri1</td>
 <td>ap-northeast-1a</td>
 <td>10.2.76.128/26</td>
 </tr>
 <tr>
-<td>ma-noim-vpc-subnet-private2</td>
+<td>ma-noim-subnet-pri2</td>
 <td>ap-northeast-1c</td>
 <td>10.2.76.192/26</td>
 </tr>
@@ -188,8 +188,8 @@
 </ul>
 <p>カスタムルートテーブルをサブネットに紐づける。[VPC &gt; ルートテーブル &gt; rtb-ID &gt; サブネットの関連付けを編集]</p>
 <ul class="simple">
-<li><p>関連付け対象①：ma-noim-vpc-subnet-public1</p></li>
-<li><p>関連付け対象②：ma-noim-vpc-subnet-public2</p></li>
+<li><p>関連付け対象①：ma-noim-subnet-pub1</p></li>
+<li><p>関連付け対象②：ma-noim-subnet-pub2</p></li>
 </ul>
 </section>
 <section id="id5">
@@ -327,8 +327,8 @@
 </tr>
 <tr>
 <td>マッピング</td>
-<td>ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2</td>
-<td>ma-noim-vpc-subnet-private1, ma-noim-vpc-subnet-private2</td>
+<td>ma-noim-subnet-pub1, ma-noim-subnet-pub2</td>
+<td>ma-noim-subnet-pri1, ma-noim-subnet-pri2</td>
 </tr>
 <tr>
 <td>セキュリティグループ</td>
@@ -383,7 +383,7 @@
 <li><p>ファミリー：ma-noim-ecs-task-frontend</p></li>
 <li><p>サービス名：ma-noim-ecs-service-pub</p></li>
 <li><p>VPC：ma-noim-vpc</p></li>
-<li><p>サブネット：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2</p></li>
+<li><p>サブネット：ma-noim-subnet-pub1, ma-noim-subnet-pub2</p></li>
 <li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
 <li><p>パブリックIP：有効</p></li>
 <li><p>ロードバランサー：ma-noim-alb-pub</p></li>
