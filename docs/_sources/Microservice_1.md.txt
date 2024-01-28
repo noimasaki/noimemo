@@ -547,7 +547,7 @@ server:
 ログイン後、商品一覧のリンク押下してバックエンドから商品情報が取得できること。
 
 ### 3-4. 設定もどし
-アプリケーション構成情報を以下とする。ただし、以下の設定はこの後実施するコンテナ化した時のローカル環境での動作確認用の構成である。よって、AWSにデプロイするときはバックエンドのエンドポイントをALBのFQDNとする必要がある。
+アプリケーション構成情報を以下とする。
 
 ```{code-block} yaml
 :caption: 【backend-item】/resources/application.yml
@@ -562,8 +562,8 @@ server:
 :caption: 【frontend-webapp】/resources/application.yml
 :emphasize-lines: 1
 
-    backendEndpoint: http://localhost:8081  # 一時的に変更。後にALBのFQDNに直す。
-    # backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
+    # backendEndpoint: http://localhost:8081  # 一時的に変更。後にALBのFQDNに直す。
+    backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
 ```
 
 
@@ -580,13 +580,13 @@ mvn package spring-boot:repackage -DskipTests
 ```
 ビルド実行後、下記のように`.jar`が作成される。
 
-![BFF jar build](_static/SpringMicroservice_1/BFF_jar.png)
+![BFF jar build](_static/Microservice_1/BFF_jar.png)
 
 #### バックエンド（backend-item）
 フロントエンドと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。
 
 ### 4-2. Dockerfile作成
-#### BFF（frontend-webapp）
+#### フロントエンド（frontend-webapp）
 作成した`.jar`を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリに`Dockerfile`を作成してDockerビルドする。
 
 注意としてビルドした`.jar`は`target`フォルダ配下に一つとすること
@@ -603,14 +603,14 @@ ARG JAR_FILE=target/*.jar
 # jarファイルをDockerイメージ内の指定された場所にコピー
 COPY ${JAR_FILE} app.jar
 
-# コンテナがリッスンするポートを指定
+# コンテナがリッスンするポート
 EXPOSE 8080
 
 # Dockerコンテナ起動時に実行されるコマンド
 ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 #### バックエンド（backend-item）
-BFFと同様に作成する。ただし、EXPOSE 8081とすること。
+フロントエンドと同様に作成する。
 
 ### 4-3. Dockerビルド
 ここからはDockerを利用するため、Dockerがインストール済みかつDockerが起動している必要がある。
@@ -646,7 +646,7 @@ docker run --rm \
 
 # コンテナ起動（backend-item）
 docker run --rm \
-    --publish 8081:8081 \
+    --publish 8081:8080 \
     --name backend-item \
     backend-item
 ```
@@ -657,4 +657,6 @@ docker run --rm \
 
 ブラウザで[http://localhost:8080/](http://localhost:8080/)にアクセスしてログイン画面が表示されればfrontend-webappはOK
 
-[http://localhost:8081/](http://localhost:8081/)にアクセスして商品情報が表示されればbackend-itemもOK
+[http://localhost:8081/backend-item/items](http://localhost:8081/backend-item/items)にアクセスして商品情報が表示されればbackend-itemもOK
+
+ただし、フロントエンドからバックエンドを呼ぶときはlocalhostを指定してもコンテナ自身を示してしまうので、コンテナ間通信はできない（docker networkを作成すればできる）
