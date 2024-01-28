@@ -4,11 +4,7 @@
 
 アーキテクチャは以下のように作成する。
 
-
-
-
-
-![aws](_static/SpringMicroservice_2/aws.drawio.svg)
+![aws](_static/Microservice_2/architecture.drawio.svg)
 
 ## 作成の流れ
 1. VPC作成
@@ -31,10 +27,10 @@
 
 | サブネット名 | アベイラビリティーゾーン | IPv4 subnet CIDR block |
 | ---- | ---- | ---- |
-| ma-noim-vpc-subnet-public1 | ap-northeast-1a | 10.2.76.0/26 |
-| ma-noim-vpc-subnet-public2 | ap-northeast-1c | 10.2.76.64/26 |
-| ma-noim-vpc-subnet-private1 | ap-northeast-1a | 10.2.76.128/26 |
-| ma-noim-vpc-subnet-private2 | ap-northeast-1c | 10.2.76.192/26 |
+| ma-noim-subnet-pub1 | ap-northeast-1a | 10.2.76.0/26 |
+| ma-noim-subnet-pub2 | ap-northeast-1c | 10.2.76.64/26 |
+| ma-noim-subnet-pri1 | ap-northeast-1a | 10.2.76.128/26 |
+| ma-noim-subnet-pri2 | ap-northeast-1c | 10.2.76.192/26 |
 
 ### 1-3. ルートテーブル作成 [VPC > ルートテーブル > ルートテーブルを作成]
 ここまで作成したサブネットはデフォルトのルートテーブルに接続されている。
@@ -48,8 +44,8 @@
   - VPC：ma-noim-vpc
 
 カスタムルートテーブルをサブネットに紐づける。[VPC > ルートテーブル > rtb-ID > サブネットの関連付けを編集]
-  - 関連付け対象①：ma-noim-vpc-subnet-public1
-  - 関連付け対象②：ma-noim-vpc-subnet-public2
+  - 関連付け対象①：ma-noim-subnet-pub1
+  - 関連付け対象②：ma-noim-subnet-pub2
 
 ### 1-4. インターネットゲートウェイ作成 [VPC > インターネットゲートウェイ > インターネットゲートウェイの作成]
 カスタムルートテーブルのデフォルトゲートウェイにインターネットゲートウェイを紐づけるために、インターネットゲートウェイを作成する
@@ -104,7 +100,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 | ロードバランサー名 | ma-noim-alb-pub | ma-noim-alb-pri |
 | スキーム | インターネット向け | 内部 |
 | VPC | ma-noim-vpc | ma-noim-vpc |
-| マッピング | ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2 | ma-noim-vpc-subnet-private1, ma-noim-vpc-subnet-private2 |
+| マッピング | ma-noim-subnet-pub1, ma-noim-subnet-pub2 | ma-noim-subnet-pri1, ma-noim-subnet-pri2 |
 | セキュリティグループ | ma-noim-sg-pub | ma-noim-sg-pri |
 | リスナー（プロトコル/ポート）| HTTP/80 | HTTP/80 |
 | 転送先 | ma-noim-tg-pub | ma-noim-tg-pri |
@@ -140,7 +136,7 @@ https://news.mynavi.jp/techplus/article/techp4359/
  - ファミリー：ma-noim-ecs-task-frontend
  - サービス名：ma-noim-ecs-service-pub
  - VPC：ma-noim-vpc
- - サブネット：ma-noim-vpc-subnet-public1, ma-noim-vpc-subnet-public2
+ - サブネット：ma-noim-subnet-pub1, ma-noim-subnet-pub2
  - セキュリティグループ：ma-noim-sg-pub
  - パブリックIP：有効
  - ロードバランサー：ma-noim-alb-pub
