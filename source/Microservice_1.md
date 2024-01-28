@@ -328,7 +328,7 @@ SpringInitializerでは`application.properties`が作成されるが、yaml形�
 
 ```
 service:{code-block} yaml
-:caption: resources/application.yml
+:caption: 【frontend-webapp】/resources/application.yml
 
     # backendEndpoint: http://localhost:8081
     backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
@@ -513,3 +513,148 @@ ID/PWが異なる場合にはログイン出来ずにメッセージ出力され
 
 ![routing](_static/Microservice_1/routing.drawio.svg)
 
+ここでは、SpringBootを起動して動作確認を実施する。ローカル環境上で動作させるため、リッスンポートの重複がない状態に一時的にした後に動作確認を実施する。
+
+### 3-1. バックエンドの起動
+アプリケーション構成情報が以下となっていることを確認する。
+
+```{code-block} yaml
+:caption: 【backend-item】/resources/application.yml
+:emphasize-lines: 3-4
+
+server:
+  servlet:
+   context-path: /backend-item
+  port: 8081    # 一時的に変更。後に8080に戻す。
+```
+
+[http://localhost:8081/backend-item/items](http://localhost:8081/backend-item/items)へアクセスして、全ての商品情報を取得できること。
+
+### 3-2. フロントエンドの起動
+アプリケーション構成情報が以下となっていることを確認する。
+
+```{code-block} yaml
+:caption: 【frontend-webapp】/resources/application.yml
+:emphasize-lines: 1
+
+    backendEndpoint: http://localhost:8081  # 一時的に変更。後にALBのFQDNに直す。
+    # backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
+```
+
+[http://localhost:8080/items](http://localhost:8080/items)へアクセスして、正常にログインできること。
+
+### 3-3. 動作確認
+ログイン後、商品一覧のリンク押下してバックエンドから商品情報が取得できること。
+
+### 3-4. 設定もどし
+アプリケーション構成情報を以下とする。ただし、以下の設定はこの後実施するコンテナ化した時のローカル環境での動作確認用の構成である。よって、AWSにデプロイするときはバックエンドのエンドポイントをALBのFQDNとする必要がある。
+
+```{code-block} yaml
+:caption: 【backend-item】/resources/application.yml
+:emphasize-lines: 3-4
+
+server:
+  servlet:
+   context-path: /backend-item
+  port: 8080
+```
+```{code-block} yaml
+:caption: 【frontend-webapp】/resources/application.yml
+:emphasize-lines: 1
+
+    backendEndpoint: http://localhost:8081  # 一時的に変更。後にALBのFQDNに直す。
+    # backendEndpoint: http://【バックエンドECSクラスターへ負荷分散するALBのFQDN】
+```
+
+
+## 4. コンテナ化
+ここまで作成したフロントエンドとバックエンドをそれぞれJarファイルへビルドした後にコンテナ化する。
+
+### 4-1. Spring Bootアプリのビルド
+#### フロントエンド（frontend-webapp）
+SpringBootプロジェクトのソースディレクトリ（pom.xmlがあるところ）でビルドコマンドを実行する。今回はMavenでプロジェクトを作成しているので`mvn`コマンドを利用する。
+
+今回は簡単の為、ビルド時のテストを実施しない。`-DskipTests`オプションをつけて、テストを実施せずにビルドする。
+```bash
+mvn package spring-boot:repackage -DskipTests
+```
+ビルド実行後、下記のように`.jar`が作成される。
+
+![BFF jar build](_static/SpringMicroservice_1/BFF_jar.png)
+
+#### バックエンド（backend-item）
+フロントエンドと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。
+
+### 4-2. Dockerfile作成
+#### BFF（frontend-webapp）
+作成した`.jar`を含んだコンテナを作成する。BFFとバックエンドそれぞれのプロジェクトディレクトリに`Dockerfile`を作成してDockerビルドする。
+
+注意としてビルドした`.jar`は`target`フォルダ配下に一つとすること
+```{code-block} docker
+:caption: Dockerfile
+
+# FROM：ベースイメージの指定
+#  Spring InitializrでJava17を指定したので合わせる
+FROM openjdk:17-jdk-slim
+
+# アプリケーションのjarファイルへのパスを変数として定義
+ARG JAR_FILE=target/*.jar
+
+# jarファイルをDockerイメージ内の指定された場所にコピー
+COPY ${JAR_FILE} app.jar
+
+# コンテナがリッスンするポートを指定
+EXPOSE 8080
+
+# Dockerコンテナ起動時に実行されるコマンド
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+#### バックエンド（backend-item）
+BFFと同様に作成する。ただし、EXPOSE 8081とすること。
+
+### 4-3. Dockerビルド
+ここからはDockerを利用するため、Dockerがインストール済みかつDockerが起動している必要がある。
+
+frontend-webappとbackend-itemそれぞれで作成した`Dockerfile`と同じディレクトリでビルドコマンドを実行すること。
+
+```bash
+# ビルド（frontend-webapp）
+docker build \
+    --no-cache \
+    --tag frontend-webapp:latest .
+
+# ビルド（backend-item）
+docker build \
+    --no-cache \
+    --tag backend-item:latest .
+
+# イメージの確認
+docker images
+-----------------
+REPOSITORY        TAG       IMAGE ID       CREATED         SIZE
+backend-item      latest    8d90bf448ed9   6 seconds ago   427MB
+frontend-webapp   latest    997a5b8a59cb   9 minutes ago   432MB
+```
+### 4-4. 動作確認
+
+```bash
+# コンテナ起動（frontend-webapp）
+docker run --rm \
+    --publish 8080:8080 \
+    --name frontend-webapp \
+    frontend-webapp
+
+# コンテナ起動（backend-item）
+docker run --rm \
+    --publish 8081:8081 \
+    --name backend-item \
+    backend-item
+```
+
+- `--rm`オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）
+- `-d`オプション：バックグラウンドで実行してくれる
+`-d`オプションを指定しなかった場合は`Ctrl+C`で終了
+
+ブラウザで[http://localhost:8080/](http://localhost:8080/)にアクセスしてログイン画面が表示されればfrontend-webappはOK
+
+[http://localhost:8081/](http://localhost:8081/)にアクセスして商品情報が表示されればbackend-itemもOK
