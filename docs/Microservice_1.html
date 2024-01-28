@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マイクロサービス作成① （ローカル環境での開発） &mdash; noimemo  ドキュメント</title>
+  <title>マイクロサービス作成①（ローカル環境での開発） &mdash; noimemo  ドキュメント</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -22,7 +22,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="prev" title="マイクロサービス作成③ （アプリケーション改修）" href="SpringMicroservice_3.html" /> 
+    <link rel="next" title="マイクロサービス作成② （AWS環境の構築）" href="SpringMicroservice_2.html" />
+    <link rel="prev" title="GitHubActionsを利用した自動ビルド" href="GitHubAction_DockerPush.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,10 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
-<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_1.html">マイクロサービス作成① （ローカル環境での開発）</a></li>
-<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
-<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成①　（ローカル環境での開発）</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成①（ローカル環境での開発）</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">実施すること</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">作成の流れ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id4">1. バックエンド作成</a><ul>
@@ -107,6 +105,8 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
 </ul>
 
         </div>
@@ -123,7 +123,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">マイクロサービス作成①　（ローカル環境での開発）</li>
+      <li class="breadcrumb-item active">マイクロサービス作成①（ローカル環境での開発）</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Microservice_1.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -134,7 +134,7 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>マイクロサービス作成①　（ローカル環境での開発）<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h1>マイクロサービス作成①（ローカル環境での開発）<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <section id="id2">
 <h2>実施すること<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>認証認可機能と画面表示機能を持ったフロントエンドサービスと、商品情報のCRUD操作のAPIを提供するバックエンドサービスを作成する。</p>
@@ -174,7 +174,7 @@
 │<span class="w">       </span>│<span class="w">   </span>└──<span class="w"> </span>ItemController.java
 │<span class="w">       </span>├──<span class="w"> </span>config<span class="w">                      </span><span class="c1"># 各種Spring設定クラスを配置</span>
 │<span class="w">       </span>└──<span class="w"> </span>domain<span class="w">                      </span><span class="c1"># ドメイン層</span>
-│<span class="w">           </span>├──<span class="w"> </span>ItemModel.java
+│<span class="w">           </span>├──<span class="w"> </span>Item.java
 │<span class="w">           </span>└──<span class="w"> </span>ItemService.java
 └──<span class="w"> </span>resources
 <span class="w">    </span>├──<span class="w"> </span>application.yml<span class="w"> </span><span class="c1"># アプリケーション設定ファイル</span>
@@ -637,15 +637,15 @@
 <section id="id16">
 <h3>2-9. 動作確認<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <p>ここまで作成することで、認証認可機能を持ったフロントエンドが動作する。</p>
-<p><img alt="Spring起動" src="_images/11.png" /></p>
+<p><img alt="Spring起動" src="_images/1.png" /></p>
 <p>ログイン画面</p>
-<p><img alt="login" src="_images/21.png" /></p>
+<p><img alt="login" src="_images/2.png" /></p>
 <p>ログイン成功→ホームページが表示</p>
-<p><img alt="home" src="_images/31.png" /></p>
+<p><img alt="home" src="_images/3.png" /></p>
 <p>ログアウトリンク押下→ログアウト画面</p>
-<p><img alt="logout" src="_images/41.png" /></p>
+<p><img alt="logout" src="_images/4.png" /></p>
 <p>ID/PWが異なる場合にはログイン出来ずにメッセージ出力される</p>
-<p><img alt="error" src="_images/51.png" /></p>
+<p><img alt="error" src="_images/5.png" /></p>
 </section>
 </section>
 <section id="id17">
@@ -717,7 +717,7 @@
 </pre></div>
 </div>
 <p>ビルド実行後、下記のように<code class="docutils literal notranslate"><span class="pre">.jar</span></code>が作成される。</p>
-<p><img alt="BFF jar build" src="_images/BFF_jar1.png" /></p>
+<p><img alt="BFF jar build" src="_images/BFF_jar.png" /></p>
 </section>
 <section id="backend-item">
 <h4>バックエンド（backend-item）<a class="headerlink" href="#backend-item" title="Link to this heading"></a></h4>
@@ -810,7 +810,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="SpringMicroservice_3.html" class="btn btn-neutral float-left" title="マイクロサービス作成③ （アプリケーション改修）" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GitHubAction_DockerPush.html" class="btn btn-neutral float-left" title="GitHubActionsを利用した自動ビルド" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SpringMicroservice_2.html" class="btn btn-neutral float-right" title="マイクロサービス作成② （AWS環境の構築）" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

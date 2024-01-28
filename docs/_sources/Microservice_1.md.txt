@@ -1,4 +1,4 @@
-# マイクロサービス作成①　（ローカル環境での開発）
+# マイクロサービス作成①（ローカル環境での開発）
 ## 実施すること
 認証認可機能と画面表示機能を持ったフロントエンドサービスと、商品情報のCRUD操作のAPIを提供するバックエンドサービスを作成する。
 
@@ -33,7 +33,7 @@ SpringMicroservice/backend-item/src/main
 │       │   └── ItemController.java
 │       ├── config                      # 各種Spring設定クラスを配置
 │       └── domain                      # ドメイン層
-│           ├── ItemModel.java
+│           ├── Item.java
 │           └── ItemService.java
 └── resources
     ├── application.yml # アプリケーション設定ファイル
