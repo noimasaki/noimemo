@@ -363,11 +363,12 @@
 <p>作成できたALBに割り当てられたFQDNを確認する。
 <img alt="alb_fqdn" src="_images/alb_fqdn.png" /></p>
 <p>つまり、以下のような経路で動作する事となる。
-<img alt="route" src="_static/Microservice_2/reoute.drawio.svg" /></p>
+<img alt="route" src="_images/route.drawio.svg" /></p>
 <p>フロントエンドからバックエンドを呼び出す時の構成情報を修正する。</p>
 <div class="literal-block-wrapper docutils container" id="id13">
 <div class="code-block-caption"><span class="caption-text">【frontend-webapp】/resources/application.yml</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="w">    </span><span class="nt">backendEndpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://internal-ma-noim-alb-pri-1918403812.ap-northeast-1.elb.amazonaws.com</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">service</span><span class="p">:</span>
+<span class="hll"><span class="w">    </span><span class="nt">backendEndpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://internal-ma-noim-alb-pri-1918403812.ap-northeast-1.elb.amazonaws.com</span>
 </span></pre></div>
 </div>
 </div>
