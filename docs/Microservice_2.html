@@ -77,9 +77,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id11">3. コンテナプッシュ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ecs">4. ECSクラスタ作成</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id12">5. ECSタスク定義</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id13">6. ECSサービス定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ecs">4. ECS作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">4-1. ECSクラスタ作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">5. ECSタスク定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">6. ECSサービス定義</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
@@ -400,8 +403,8 @@
 <p>つまり、以下のような経路で動作する事となる。
 <img alt="route" src="_images/route.drawio.svg" /></p>
 <p>フロントエンドからバックエンドを呼び出す時の構成情報を修正する。</p>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">【frontend-webapp】/resources/application.yml</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">【frontend-webapp】/resources/application.yml</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">service</span><span class="p">:</span>
 <span class="hll"><span class="w">    </span><span class="nt">backendEndpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://internal-ma-noim-alb-pri-1627874572.ap-northeast-1.elb.amazonaws.com</span>
 </span></pre></div>
@@ -414,15 +417,40 @@
 <p><a class="reference external" href="https://noimasaki.github.io/noimemo/GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a>を参照して、DockerHubへコンテナをアップロードする。次の手順ではECSにてDockerHubからコンテナをダウンロードしてECSタスクを定義する。</p>
 </section>
 <section id="ecs">
-<h2>4. ECSクラスタ作成<a class="headerlink" href="#ecs" title="Link to this heading"></a></h2>
+<h2>4. ECS作成<a class="headerlink" href="#ecs" title="Link to this heading"></a></h2>
+<p>https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/</p>
+<section id="id12">
+<h3>4-1. ECSクラスタ作成<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <p>[Amazon Elastic Container Service &gt; クラスターの作成]</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>クラスタ名</td>
+<td>ma-noim-ecs-cluster-frontend</td>
+<td>ma-noim-ecs-cluster-backend-item</td>
+</tr>
+<tr>
+<td>インフラストラクチャ</td>
+<td>AWS Fargate</td>
+<td>AWS Fargate</td>
+</tr>
+</tbody>
+</table>
 <ul class="simple">
 <li><p>クラスタ名：ma-noim-ecs-cluster-pub</p></li>
 <li><p>インフラストラクチャ：AWS Fargate</p></li>
 </ul>
 </section>
-<section id="id12">
-<h2>5. ECSタスク定義<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+</section>
+<section id="id13">
+<h2>5. ECSタスク定義<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
 <p>[Amazon Elastic Container Service &gt; 新しいタスク定義の作成]</p>
 <ul class="simple">
 <li><p>タスク定義ファミリー：ma-noim-ecs-task-frontend</p></li>
@@ -430,23 +458,36 @@
 <li><p>タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）</p></li>
 <li><p>コンテナ 名前：frontend-webapp</p></li>
 <li><p>コンテナ イメージ：noimasaki/frontend-webapp</p></li>
-<li><p>コンテナ ポートマッピング：8080</p></li>
+<li><p>コンテナ 必須コンテナ：はい</p></li>
+<li><p>コンテナ コンテナポート：8080</p></li>
+<li><p>コンテナ プロトコル：TCP</p></li>
+<li><p>ログ収集：有効</p></li>
+<li><p>タスク定義ファミリー：ma-noim-ecs-task-backend-item</p></li>
+<li><p>起動タイプ：AWS Fargate</p></li>
+<li><p>タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）</p></li>
+<li><p>コンテナ 名前：frontend-webapp</p></li>
+<li><p>コンテナ イメージ：noimasaki/frontend-webapp</p></li>
+<li><p>コンテナ 必須コンテナ：はい</p></li>
+<li><p>コンテナ コンテナポート：8080</p></li>
+<li><p>コンテナ プロトコル：TCP</p></li>
 <li><p>ログ収集：有効</p></li>
 </ul>
 </section>
-<section id="id13">
-<h2>6. ECSサービス定義<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
-<p>[Amazon Elastic Container Service &gt; クラスター &gt; クラスターID &gt; サービスの作成]</p>
+<section id="id14">
+<h2>6. ECSサービス定義<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>[Amazon Elastic Container Service &gt; クラスター &gt; 【クラスターID】 &gt; サービスの作成]</p>
 <ul class="simple">
 <li><p>アプリケーションタイプ：サービス</p></li>
 <li><p>ファミリー：ma-noim-ecs-task-frontend</p></li>
-<li><p>サービス名：ma-noim-ecs-service-pub</p></li>
+<li><p>サービス名：ma-noim-ecs-service-frontend</p></li>
 <li><p>VPC：ma-noim-vpc</p></li>
 <li><p>サブネット：ma-noim-subnet-pub1, ma-noim-subnet-pub2</p></li>
 <li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
 <li><p>パブリックIP：有効</p></li>
 <li><p>ロードバランサー：ma-noim-alb-pub</p></li>
+<li><p>ロードバランサー ヘルスチェックの猶予期間：60秒</p></li>
 <li><p>リスナー：80:HTTP</p></li>
+<li><p>ターゲットグループ：ma-noim-tg-pub</p></li>
 </ul>
 </section>
 </section>
