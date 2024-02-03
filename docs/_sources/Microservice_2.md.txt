@@ -144,7 +144,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 
 - [ルールアクションの定義] アクションの種類：ターゲットグループへ転送
 - [ルールアクションの定義] ターゲットグループ：ma-noim-tg-backend-item
-- [ルールの優先度] 優先度：1（デフォルトより優先されていればOK）
+- [ルールの優先度] 優先度：1（デフォルトルールより優先されていればOK）
 
 
 ### 2-5. ALBのFQDNをアプリケーション構成情報に反映
@@ -160,10 +160,10 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 :emphasize-lines: 2
 
 service:
-    backendEndpoint: http://internal-ma-noim-alb-pri-1918403812.ap-northeast-1.elb.amazonaws.com
+    backendEndpoint: http://internal-ma-noim-alb-pri-1627874572.ap-northeast-1.elb.amazonaws.com
 ```
 ## 3. コンテナプッシュ
-
+[GitHubActionsを利用した自動ビルド](https://noimasaki.github.io/noimemo/GitHubAction_DockerPush.html)を参照して、DockerHubへコンテナをアップロードする。次の手順ではECSにてDockerHubからコンテナをダウンロードしてECSタスクを定義する。
 
 ## 4. ECSクラスタ作成
 [Amazon Elastic Container Service > クラスターの作成]
