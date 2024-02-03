@@ -227,3 +227,16 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - ロードバランサー ヘルスチェックの猶予期間：60秒
  - リスナー：80:HTTP
  - ターゲットグループ：ma-noim-tg-pub
+
+
+ - アプリケーションタイプ：サービス
+ - ファミリー：ma-noim-ecs-task-backend-item
+ - サービス名：ma-noim-ecs-service-backend-item
+ - VPC：ma-noim-vpc
+ - サブネット：ma-noim-subnet-pri1, ma-noim-subnet-pri2
+ - セキュリティグループ：ma-noim-sg-pri
+ - パブリックIP：有効
+ - ロードバランサー：ma-noim-alb-pri
+ - ロードバランサー ヘルスチェックの猶予期間：60秒
+ - リスナー：80:HTTP
+ - ターゲットグループ：ma-noim-tg-backend-item
