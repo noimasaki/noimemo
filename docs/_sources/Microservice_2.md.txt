@@ -100,7 +100,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 |  | パブリックサブネット | プライベートサブネット |
 | ---- | ---- | ---- |
 | ターゲットタイプ | IPアドレス | IPアドレス |
-| ターゲットグループ名 | ma-noim-tg-pub | ma-noim-tg-pri |
+| ターゲットグループ名 | ma-noim-tg-pub | ma-noim-tg-backend-item |
 | プロトコル/ポート| HTTP/80 | HTTP/80 |
 | VPC | ma-noim-vpc | ma-noim-vpc |
 | ヘルスチェク | /login.html | /backend-item/items |
@@ -121,7 +121,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 | マッピング | ma-noim-subnet-pub1, ma-noim-subnet-pub2 | ma-noim-subnet-pri1, ma-noim-subnet-pri2 |
 | セキュリティグループ | ma-noim-sg-pub | ma-noim-sg-pri |
 | リスナー（プロトコル/ポート）| HTTP/80 | HTTP/80 |
-| リスナー（転送先） | ma-noim-tg-pub | ma-noim-tg-pri |
+| リスナー（転送先） | ma-noim-tg-pub | ma-noim-tg-backend-item |
 後の設定はデフォルトのまま。
 
 例として、パブリック向けALBの設定は以下のようになる。
@@ -129,11 +129,22 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 ![ALB_pub](_static/Microservice_2/ALB_pub.png)
 
 ### 2-4. パスベースのルーティング設定
-[EC2 > ロードバランサー > ma-noim-tg-pri]
+[EC2 > ロードバランサー > ma-noim-tg-backend-item > HTTP:80 リスナー]
 
+プライベートサブネットへの転送はパスベースルーティングを利用する。パスベースルーティングを利用することで、「/backend-item/を含むURLはターゲットグループAへ転送する。/backend-xxx/を含むURLはターゲットグループBへ転送する」といったことが可能となる。
 
+パスベースルーティングの設定は作成したリスナーのルールで設定する。
 
-https://news.mynavi.jp/techplus/article/techp4359/
+![ALB_path](_static/Microservice_2/ALB_path.png)
+
+- [ルールを追加] Name：backend-item
+- [ルール条件の定義] ルールの条件タイプ：パス = /backend-item/*
+
+![ALB_path_rule](_static/Microservice_2/ALB_path_rule.png)
+
+- [ルールアクションの定義] アクションの種類：ターゲットグループへ転送
+- [ルールアクションの定義] ターゲットグループ：ma-noim-tg-backend-item
+- [ルールの優先度] 優先度：1（デフォルトより優先されていればOK）
 
 
 ### 2-5. ALBのFQDNをアプリケーション構成情報に反映

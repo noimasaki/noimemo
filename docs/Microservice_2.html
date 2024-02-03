@@ -292,7 +292,7 @@
 <tr>
 <td>ターゲットグループ名</td>
 <td>ma-noim-tg-pub</td>
-<td>ma-noim-tg-pri</td>
+<td>ma-noim-tg-backend-item</td>
 </tr>
 <tr>
 <td>プロトコル/ポート</td>
@@ -364,7 +364,7 @@
 <tr>
 <td>リスナー（転送先）</td>
 <td>ma-noim-tg-pub</td>
-<td>ma-noim-tg-pri</td>
+<td>ma-noim-tg-backend-item</td>
 </tr>
 <tr>
 <td>後の設定はデフォルトのまま。</td>
@@ -378,8 +378,20 @@
 </section>
 <section id="id10">
 <h3>2-4. パスベースのルーティング設定<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
-<p>[EC2 &gt; ロードバランサー &gt; ma-noim-tg-pri]</p>
-<p>https://news.mynavi.jp/techplus/article/techp4359/</p>
+<p>[EC2 &gt; ロードバランサー &gt; ma-noim-tg-backend-item &gt; HTTP:80 リスナー]</p>
+<p>プライベートサブネットへの転送はパスベースルーティングを利用する。パスベースルーティングを利用することで、「/backend-item/を含むURLはターゲットグループAへ転送する。/backend-xxx/を含むURLはターゲットグループBへ転送する」といったことが可能となる。</p>
+<p>パスベースルーティングの設定は作成したリスナーのルールで設定する。</p>
+<p><img alt="ALB_path" src="_images/ALB_path.png" /></p>
+<ul class="simple">
+<li><p>[ルールを追加] Name：backend-item</p></li>
+<li><p>[ルール条件の定義] ルールの条件タイプ：パス = /backend-item/*</p></li>
+</ul>
+<p><img alt="ALB_path_rule" src="_images/ALB_path_rule.png" /></p>
+<ul class="simple">
+<li><p>[ルールアクションの定義] アクションの種類：ターゲットグループへ転送</p></li>
+<li><p>[ルールアクションの定義] ターゲットグループ：ma-noim-tg-backend-item</p></li>
+<li><p>[ルールの優先度] 優先度：1（デフォルトより優先されていればOK）</p></li>
+</ul>
 </section>
 <section id="albfqdn">
 <h3>2-5. ALBのFQDNをアプリケーション構成情報に反映<a class="headerlink" href="#albfqdn" title="Link to this heading"></a></h3>
