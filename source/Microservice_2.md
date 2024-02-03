@@ -165,33 +165,65 @@ service:
 ## 3. コンテナプッシュ
 [GitHubActionsを利用した自動ビルド](https://noimasaki.github.io/noimemo/GitHubAction_DockerPush.html)を参照して、DockerHubへコンテナをアップロードする。次の手順ではECSにてDockerHubからコンテナをダウンロードしてECSタスクを定義する。
 
-## 4. ECSクラスタ作成
+## 4. ECS作成
+https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
+
+
+### 4-1. ECSクラスタ作成
 [Amazon Elastic Container Service > クラスターの作成]
+
+|  | パブリックサブネット | プライベートサブネット |
+| ---- | ---- | ---- |
+| クラスタ名 | ma-noim-ecs-cluster-frontend | ma-noim-ecs-cluster-backend-item |
+| インフラストラクチャ | AWS Fargate | AWS Fargate |
+
+
 
  - クラスタ名：ma-noim-ecs-cluster-pub
  - インフラストラクチャ：AWS Fargate
 
+
+
+
 ## 5. ECSタスク定義
 [Amazon Elastic Container Service > 新しいタスク定義の作成]
+
+
+
 
  - タスク定義ファミリー：ma-noim-ecs-task-frontend
  - 起動タイプ：AWS Fargate
  - タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）
  - コンテナ 名前：frontend-webapp
  - コンテナ イメージ：noimasaki/frontend-webapp
- - コンテナ ポートマッピング：8080
+ - コンテナ 必須コンテナ：はい
+ - コンテナ コンテナポート：8080
+ - コンテナ プロトコル：TCP
+ - ログ収集：有効
+
+
+ - タスク定義ファミリー：ma-noim-ecs-task-backend-item
+ - 起動タイプ：AWS Fargate
+ - タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）
+ - コンテナ 名前：frontend-webapp
+ - コンテナ イメージ：noimasaki/frontend-webapp
+ - コンテナ 必須コンテナ：はい
+ - コンテナ コンテナポート：8080
+ - コンテナ プロトコル：TCP
  - ログ収集：有効
 
 
 ## 6. ECSサービス定義
-[Amazon Elastic Container Service > クラスター > クラスターID > サービスの作成]
+[Amazon Elastic Container Service > クラスター > 【クラスターID】 > サービスの作成]
 
  - アプリケーションタイプ：サービス
  - ファミリー：ma-noim-ecs-task-frontend
- - サービス名：ma-noim-ecs-service-pub
+ - サービス名：ma-noim-ecs-service-frontend
  - VPC：ma-noim-vpc
  - サブネット：ma-noim-subnet-pub1, ma-noim-subnet-pub2
  - セキュリティグループ：ma-noim-sg-pub
  - パブリックIP：有効
  - ロードバランサー：ma-noim-alb-pub
+ - ロードバランサー ヘルスチェックの猶予期間：60秒
  - リスナー：80:HTTP
+ - ターゲットグループ：ma-noim-tg-pub
