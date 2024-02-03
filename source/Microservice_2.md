@@ -205,8 +205,8 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - タスク定義ファミリー：ma-noim-ecs-task-backend-item
  - 起動タイプ：AWS Fargate
  - タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）
- - コンテナ 名前：frontend-webapp
- - コンテナ イメージ：noimasaki/frontend-webapp
+ - コンテナ 名前：backend-item
+ - コンテナ イメージ：noimasaki/backend-item
  - コンテナ 必須コンテナ：はい
  - コンテナ コンテナポート：8080
  - コンテナ プロトコル：TCP
