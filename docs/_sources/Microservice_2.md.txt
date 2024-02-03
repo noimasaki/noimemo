@@ -235,7 +235,7 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - VPC：ma-noim-vpc
  - サブネット：ma-noim-subnet-pri1, ma-noim-subnet-pri2
  - セキュリティグループ：ma-noim-sg-pri
- - パブリックIP：有効
+ - パブリックIP：無効
  - ロードバランサー：ma-noim-alb-pri
  - ロードバランサー ヘルスチェックの猶予期間：60秒
  - リスナー：80:HTTP
