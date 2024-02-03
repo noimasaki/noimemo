@@ -120,13 +120,14 @@ https://news.mynavi.jp/techplus/article/techp4359/
 ![alb_fqdn](_static/Microservice_2/alb_fqdn.png)
 
 つまり、以下のような経路で動作する事となる。
-![route](_static/Microservice_2/reoute.drawio.svg)
+![route](_static/Microservice_2/route.drawio.svg)
 
 フロントエンドからバックエンドを呼び出す時の構成情報を修正する。
 ```{code-block} yaml
 :caption: 【frontend-webapp】/resources/application.yml
-:emphasize-lines: 1
+:emphasize-lines: 2
 
+service:
     backendEndpoint: http://internal-ma-noim-alb-pri-1918403812.ap-northeast-1.elb.amazonaws.com
 ```
 ## 3. コンテナプッシュ
