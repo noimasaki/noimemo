@@ -71,6 +71,48 @@ igwの作成ができたら、ルートテーブルの設定を開き、ルー�
   - 送信先：0.0.0.0/0
   - ターゲット：ma-noim-vpc-igwのインターネットゲートウェイID
 
+
+|   | ma-noim-rtb-pub |
+| ---- | ---- |
+| ルート | 送信先：0.0.0.0/0 → ターゲット：ma-noim-igw |
+| ルート | 送信先：10.2.76.0/24 → ターゲット：local |
+| サブネットの関連付け | ma-noim-subnet-pub1, ma-noim-subnet-pub2 |
+
+
+|   | ma-noim-rtb-pri1 |
+| ---- | ---- |
+| ルート | 送信先：0.0.0.0/0 → ターゲット：ma-noim-ngw1 |
+| ルート | 送信先：10.2.76.0/24 → ターゲット：local |
+| サブネットの関連付け | ma-noim-subnet-pri1 |
+
+|   | ma-noim-rtb-pri2 |
+| ---- | ---- |
+| ルート | 送信先：0.0.0.0/0 → ターゲット：ma-noim-ngw2 |
+| ルート | 送信先：10.2.76.0/24 → ターゲット：local |
+| サブネットの関連付け | ma-noim-subnet-pri2 |
+
+### Elastic IP
+[VPC > Elastic IPアドレス > Elastic IPアドレスを割り当てる]
+
+|  | プライベートサブネット a | プライベートサブネット c |
+| ---- | ---- | ---- |
+| ネットワークボーダーグループ | ap-northeast-1 | ap-northeast-1 |
+| パブリックIPv4アドレスプール | AmazonのIPv4アドレスプール | AmazonのIPv4アドレスプール |
+| タグ（任意） | Name=ma-noim-eip1 | Name=ma-noim-eip2 |
+
+### 1-6. NATゲートウェイ
+[VPC > NATゲートウェイ > NATゲートウェイを作成]
+
+|  | プライベートサブネット a | プライベートサブネット c |
+| ---- | ---- | ---- |
+| 名前 | ma-noim-ngw1 | ma-noim-ngw2 |
+| サブネット | ma-noim-subnet-pub1 | ma-noim-subnet-pub2 |
+| 接続タイプ | パブリック | パブリック |
+| Elastic IP | ma-noim-eip1 | ma-noim-eip2 |
+
+接続タイプの「プライベート」はプライベートネットワークの拠点間（対オンプレなど）で使う時に使用する。
+
+
 ## 2. ALB作成
 インターネットからフロントエンドへのアクセスだけでなく、フロントエンドからバックエンドへのアクセスもHTTPを利用した構成であるため、ロードバランサにはアプリケーションロードバランサ（ALB）を利用する。また、パブリックサブネットへのアクセスとプライベートサブネットへのアクセスはアクセス元を制御する（プライベートサブネットへはインターネットからの通信を遮断）必要があるので、publicとprivateはそれぞれ別のALBを用意して、セキュリティグループにてアクセス制御を実施する。
 
@@ -178,9 +220,10 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
 | インフラストラクチャ | AWS Fargate | AWS Fargate |
 
 
-
- - クラスタ名：ma-noim-ecs-cluster-pub
- - インフラストラクチャ：AWS Fargate
+|  | パブリックサブネット | プライベートサブネット |
+| ---- | ---- | ---- |
+| クラスタ名 | ma-noim-ecs-cluster-frontend | ma-noim-ecs-cluster-backend-item |
+| インフラストラクチャ | AWS Fargate | AWS Fargate |
 
 
 
@@ -240,3 +283,5 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - ロードバランサー ヘルスチェックの猶予期間：60秒
  - リスナー：80:HTTP
  - ターゲットグループ：ma-noim-tg-backend-item
+
+backend-itemのタスクのステータスが「保留中」のままの場合、DockerHubからコンテナをプルできていない可能性がある。ネットワーク設定を確認し、プライベートサブネットからインターネットへの疎通性があるかどうか確認すること。
