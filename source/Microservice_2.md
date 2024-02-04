@@ -10,9 +10,7 @@
 1. VPC作成
 2. ALB作成
 3. コンテナのDockerHubへのプッシュ
-4. ECSクラスタ作成
-5. ECSタスク定義
-6. ECSサービス実行
+4. ECS作成
 
 ## 1. VPC作成
 VPCの要件は以下の通り。
@@ -156,7 +154,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 | VPC | ma-noim-vpc | ma-noim-vpc |
 | ヘルスチェク | /login.html | /backend-item/items |
 
-ターゲットを登録する画面は、後にECSサービスを作成する時に指定するのでデフォルトのままで作成する。
+ターゲットを登録する画面は、後にECSサービスを作成する時に指定する（ECSサービス作成時にALBおよびターゲットグループを選択することで、自動で登録される）のでデフォルトのままで作成する。
 
 ### 2-3. ALB作成
 [EC2 > ロードバランサー > ロードバランサータイプの比較と選択]
@@ -228,20 +226,14 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
 | クラスタ名 | ma-noim-ecs-cluster-frontend | ma-noim-ecs-cluster-backend-item |
 | インフラストラクチャ | AWS Fargate | AWS Fargate |
 
-
 |  | パブリックサブネット | プライベートサブネット |
 | ---- | ---- | ---- |
 | クラスタ名 | ma-noim-ecs-cluster-frontend | ma-noim-ecs-cluster-backend-item |
 | インフラストラクチャ | AWS Fargate | AWS Fargate |
 
 
-
-
-## 5. ECSタスク定義
+### 4-2. ECSタスク定義
 [Amazon Elastic Container Service > 新しいタスク定義の作成]
-
-
-
 
  - タスク定義ファミリー：ma-noim-ecs-task-frontend
  - 起動タイプ：AWS Fargate
@@ -265,7 +257,7 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - ログ収集：有効
 
 
-## 6. ECSサービス定義
+### 4-3. ECSサービス定義
 [Amazon Elastic Container Service > クラスター > 【クラスターID】 > サービスの作成]
 
  - アプリケーションタイプ：サービス
@@ -279,7 +271,6 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - ロードバランサー ヘルスチェックの猶予期間：60秒
  - リスナー：80:HTTP
  - ターゲットグループ：ma-noim-tg-pub
-
 
  - アプリケーションタイプ：サービス
  - ファミリー：ma-noim-ecs-task-backend-item
