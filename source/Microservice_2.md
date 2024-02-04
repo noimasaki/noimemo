@@ -15,18 +15,14 @@
 6. ECSサービス実行
 
 ## 1. VPC作成
-
 VPCの要件は以下の通り。
 - VPCは1つとし、CIDRは10.2.76.0/24
 - Availability Zoneは2つとし、それぞれにPublic subnetとPrivate subnetを作成する
 - Public subnetへはエンドユーザからからのアクセスを可能とする
 - Private subnetへはインターネットからのインバウンド通信は不可とするが、Private subnet内からインターネットへのアウトバンド通信は可能とする。（Private subnetにコンテナを配置するが、コンテナレジストリはインターネット上のDocker Hubを利用するため）
 
-要件を踏まえて以下のような構成とする。
+VPCの構成は以下の通り。
 ![VPC](_static/Microservice_2/VPC.drawio.svg)
-
-作成するVPCのリソースマップは以下
-![vpc](_static/Microservice_2/vpc.png)
 
 ### 1-1. VPC作成 [VPC > お使いのVPC > VPC を作成]
   - 作成するリソース：VPCのみ
@@ -60,8 +56,28 @@ VPC内へインターネットからの通信を受け付ける、およびVPC�
 
   - 使用可能なVPC：ma-noim-vpc
 
+### 1-4. Elastic IP割り当て
+[VPC > Elastic IPアドレス > Elastic IPアドレスを割り当てる]
 
-### 1-4. ルートテーブル作成
+|  | プライベートサブネット a | プライベートサブネット c |
+| ---- | ---- | ---- |
+| ネットワークボーダーグループ | ap-northeast-1 | ap-northeast-1 |
+| パブリックIPv4アドレスプール | AmazonのIPv4アドレスプール | AmazonのIPv4アドレスプール |
+| タグ（任意） | Name=ma-noim-eip1 | Name=ma-noim-eip2 |
+
+### 1-5. NATゲートウェイ作成
+[VPC > NATゲートウェイ > NATゲートウェイを作成]
+
+|  | プライベートサブネット a | プライベートサブネット c |
+| ---- | ---- | ---- |
+| 名前 | ma-noim-ngw1 | ma-noim-ngw2 |
+| サブネット | ma-noim-subnet-pub1 | ma-noim-subnet-pub2 |
+| 接続タイプ | パブリック | パブリック |
+| Elastic IP | ma-noim-eip1 | ma-noim-eip2 |
+
+接続タイプの「プライベート」はプライベートネットワークの拠点間（対オンプレなど）で使う時に使用する。
+
+### 1-6. カスタムルートテーブル作成
 [VPC > ルートテーブル > ルートテーブルを作成]
 
 ここまで作成したサブネットはデフォルトのルートテーブルに接続されている。
@@ -78,7 +94,7 @@ VPC内へインターネットからの通信を受け付ける、およびVPC�
 
 サブネット向けのルートテーブルは、デフォルトのものを利用する事とする。
 
-### 1-5. カスタムルートテーブルにルートを追加
+### 1-7. カスタムルートテーブルにルートを追加
 [VPC > ルートテーブル > rtb-ID > ルートを編集]
 
 igwの作成ができたら、ルートテーブルの設定を開き、ルートを追加する
@@ -104,27 +120,6 @@ igwの作成ができたら、ルートテーブルの設定を開き、ルー�
 | ルート | 送信先：0.0.0.0/0 → ターゲット：ma-noim-ngw2 |
 | ルート | 送信先：10.2.76.0/24 → ターゲット：local |
 | サブネットの関連付け | ma-noim-subnet-pri2 |
-
-### Elastic IP
-[VPC > Elastic IPアドレス > Elastic IPアドレスを割り当てる]
-
-|  | プライベートサブネット a | プライベートサブネット c |
-| ---- | ---- | ---- |
-| ネットワークボーダーグループ | ap-northeast-1 | ap-northeast-1 |
-| パブリックIPv4アドレスプール | AmazonのIPv4アドレスプール | AmazonのIPv4アドレスプール |
-| タグ（任意） | Name=ma-noim-eip1 | Name=ma-noim-eip2 |
-
-### 1-6. NATゲートウェイ
-[VPC > NATゲートウェイ > NATゲートウェイを作成]
-
-|  | プライベートサブネット a | プライベートサブネット c |
-| ---- | ---- | ---- |
-| 名前 | ma-noim-ngw1 | ma-noim-ngw2 |
-| サブネット | ma-noim-subnet-pub1 | ma-noim-subnet-pub2 |
-| 接続タイプ | パブリック | パブリック |
-| Elastic IP | ma-noim-eip1 | ma-noim-eip2 |
-
-接続タイプの「プライベート」はプライベートネットワークの拠点間（対オンプレなど）で使う時に使用する。
 
 
 ## 2. ALB作成
