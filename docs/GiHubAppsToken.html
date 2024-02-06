@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Appsトークンの発行・実装方法 &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Spring BootをDocker上で動かす" href="SpringOnDocker.html" />
+    <link rel="prev" title="Sphinx導入とGitHubページ作成" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GitHub Appsトークンの発行・実装方法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">GitHub Appsトークンとは</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">GitHub appsのセットアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1. GitHub Appsを作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2. 署名用秘密鍵の生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3. GitHub Appsをアカウントへインストール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#secretsapp-id">4. SecretsにApp IDと秘密鍵を登録</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#github-actionsgithub-apps">GitHub ActionsでGitHub Appsトークンを利用する方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">参考</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GitHub Appsトークンの発行・実装方法</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GiHubAppsToken.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="github-apps">
+<h1>GitHub Appsトークンの発行・実装方法<a class="headerlink" href="#github-apps" title="Link to this heading"></a></h1>
+<p>本記事では以下をまとめる。</p>
+<ul class="simple">
+<li><p>GitHub Appsトークンとは</p></li>
+<li><p>GitHub Appsの作成・インストール方法</p></li>
+<li><p>GitHub ActionsでGitHub Appsトークンを利用する方法</p></li>
+</ul>
+<section id="id1">
+<h2>GitHub Appsトークンとは<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>GitHub Actionsでリポジトリにpushしたいなど、ワークフローの内容によっては権限が必要な作業がある。
+用途ごとの権限をGitHubAppsトークンとして発行し、ワークフローに適用してあげれば、適切な権限管理が可能となる機能である。</p>
+<p>同様な機能として、Personal Access Tokensなどがあるが、classic扱いとなっている為、GitHub Appsトークンを利用することが望ましい。</p>
+</section>
+<section id="id2">
+<h2>GitHub appsのセットアップ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>1. GitHub Appsを作成<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Organizationsではなく、個人アカウントの場合はここにアクセス</p>
+<p><a class="reference external" href="https://github.com/settings/apps/new">https://github.com/settings/apps/new</a></p>
+<ul class="simple">
+<li><p>GitHub Apps name(*) : グローバルに一意の名前（例えば<code class="docutils literal notranslate"><span class="pre">ユーザ名ActionTokenGen</span></code>）</p></li>
+<li><p>Description : 任意のDescription</p></li>
+<li><p>Homepage URL(*) : 適当なダミー値でもOK（例えば<code class="docutils literal notranslate"><span class="pre">https://example.com</span></code>）</p></li>
+</ul>
+<p><img alt="name &amp; URL" src="_images/setting1.png" /></p>
+<p>Webhookは不要なのでチェックを外す</p>
+<p><img alt="Webhook" src="_images/setting2.png" /></p>
+<p>Permissionsには権限を設定する。
+今回はリポジトリ内のファイル（つまりContents）を書き換えたいので、次のように設定する。</p>
+<ul class="simple">
+<li><p>Repository permissions &gt; Contents &gt; Read and write</p></li>
+</ul>
+<p><img alt="Permissions" src="_images/setting3.png" /></p>
+<p>プライベート運用のため、「Only on this account」へチェックが入っていることを確認して「Greate GitHub App」をクリックすれば完了。</p>
+<p>管理画面が表示される。
+ここで確認できる「APP ID」は後程利用するのでメモする。</p>
+<p><img alt="General" src="_images/setting4.png" /></p>
+</section>
+<section id="id4">
+<h3>2. 署名用秘密鍵の生成<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>トークンの払い出しに使用する、署名用秘密鍵を生成する。</p>
+<p><img alt="GenPrivateKey" src="_images/setting5.png" /></p>
+<p>自動で<code class="docutils literal notranslate"><span class="pre">&lt;App名&gt;.&lt;作成日&gt;.private-key</span></code>というファイルがローカルにダウンロードされる。
+これを後にGitHubのSeacretsへ登録し、ローカルからも削除する。</p>
+</section>
+<section id="id5">
+<h3>3. GitHub Appsをアカウントへインストール<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>GitHub Appsは作成しただけでは使えず、アカウントにインストールする必要がある。「Install」をクリック。</p>
+<p><img alt="InstallGitHubApps" src="_images/setting6.png" /></p>
+<p>どのリポジトリにインストールするか聞かれるので、選択する。</p>
+<ul class="simple">
+<li><p>All repositories（全リポジトリを許可）: 運用は楽だがセキュリティ的にイマイチ</p></li>
+<li><p>Only select repositories（特定リポジトリのみ許可）: セキュアだが運用は少し煩雑</p></li>
+</ul>
+<p>今回は「Only select repositories」選択した。</p>
+<p><img alt="ChooseRepo" src="_images/setting7.png" /></p>
+</section>
+<section id="secretsapp-id">
+<h3>4. SecretsにApp IDと秘密鍵を登録<a class="headerlink" href="#secretsapp-id" title="Link to this heading"></a></h3>
+<p>App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登録する。</p>
+<p>対象リポジトリを開き、<code class="docutils literal notranslate"><span class="pre">Settings</span> <span class="pre">&gt;</span> <span class="pre">Secrets</span> <span class="pre">and</span> <span class="pre">variables</span> <span class="pre">&gt;</span> <span class="pre">Actions</span> <span class="pre">&gt;</span> <span class="pre">New</span> <span class="pre">repository</span> <span class="pre">secret</span></code>を選択
+次の２つのシークレットを登録する</p>
+<ul class="simple">
+<li><p>Name(*): PRIVATE_KEY</p></li>
+<li><p>Secret(*): ダウンロードした署名用秘密鍵 ※「-----BEGIN RSA PRIVATE KEY-----」から「-----END RSA PRIVATE KEY-----」まで</p></li>
+<li><p>Name(*): APP_ID</p></li>
+<li><p>Secret(*): GitHub Apps作成時に生成されたIDを記載</p></li>
+</ul>
+<p><img alt="RegiPrivateKey" src="_images/setting8.png" /></p>
+</section>
+</section>
+<section id="github-actionsgithub-apps">
+<h2>GitHub ActionsでGitHub Appsトークンを利用する方法<a class="headerlink" href="#github-actionsgithub-apps" title="Link to this heading"></a></h2>
+<p>例として下記のように記載する。（動作確認していないので</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1"># トークンを作成</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate GitHub Apps token</span>
+<span class="w">      </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generate-token</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tibdex/github-app-token@v1</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.APP_ID }}</span>
+<span class="w">        </span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.PRIVATE_KEY }}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Commit and push html</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w">  </span><span class="c1"># </span>
+<span class="w">        </span><span class="nt">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.generate-token.outputs.token }}</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">git config user.name &quot;GitHub Actions Bot&quot;</span>
+<span class="w">        </span><span class="no">git add -A</span>
+<span class="w">        </span><span class="no">git commit -m &quot;Converted MD files to HTML&quot; || echo &quot;No changes to commit&quot;</span>
+<span class="w">        </span><span class="no">git push</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>参考<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://zenn.dev/tmknom/articles/github-apps-token">https://zenn.dev/tmknom/articles/github-apps-token</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html" class="btn btn-neutral float-left" title="Sphinx導入とGitHubページ作成" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SpringOnDocker.html" class="btn btn-neutral float-right" title="Spring BootをDocker上で動かす" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

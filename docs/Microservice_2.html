@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>マイクロサービス作成② （AWS環境の構築） &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="マイクロサービス作成③ （アプリケーション改修）" href="SpringMicroservice_3.html" />
+    <link rel="prev" title="マイクロサービス作成①（ローカル環境での開発）" href="Microservice_1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">マイクロサービス作成② （AWS環境の構築）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">実施すること</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">作成の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vpc">1. VPC作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vpc-vpc-vpc-vpc">1-1. VPC作成 [VPC &gt; お使いのVPC &gt; VPC を作成]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1-2. サブネット作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1-3. インターネットゲートウェイ作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elastic-ip">1-4. Elastic IP割り当て</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nat">1-5. NATゲートウェイ作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1-6. カスタムルートテーブル作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1-7. カスタムルートテーブルにルートを追加</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#alb">2. ALB作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2-1. セキュリティグループ作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2-2. ターゲットグループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">2-3. ALB作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">2-4. パスベースのルーティング設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#albfqdn">2-5. ALBのFQDNをアプリケーション構成情報に反映</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">3. コンテナプッシュ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ecs">4. ECS作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">4-1. ECSクラスタ作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">4-2. ECSタスク定義</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">4-3. ECSサービス定義</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">マイクロサービス作成② （AWS環境の構築）</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Microservice_2.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="aws">
+<h1>マイクロサービス作成② （AWS環境の構築）<a class="headerlink" href="#aws" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>実施すること<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>作成したSpringBootアプリケーションを含めたコンテナをAWS上で動作させる。</p>
+<p>アーキテクチャは以下のように作成する。</p>
+<p><img alt="aws" src="_images/architecture.drawio1.svg" /></p>
+</section>
+<section id="id2">
+<h2>作成の流れ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>VPC作成</p></li>
+<li><p>ALB作成</p></li>
+<li><p>コンテナのDockerHubへのプッシュ</p></li>
+<li><p>ECS作成</p></li>
+</ol>
+</section>
+<section id="vpc">
+<h2>1. VPC作成<a class="headerlink" href="#vpc" title="Link to this heading"></a></h2>
+<p>VPCの要件は以下の通り。</p>
+<ul class="simple">
+<li><p>VPCは1つとし、CIDRは10.2.76.0/24</p></li>
+<li><p>Availability Zoneは2つとし、それぞれにPublic subnetとPrivate subnetを作成する</p></li>
+<li><p>Public subnetへはエンドユーザからからのアクセスを可能とする</p></li>
+<li><p>Private subnetへはインターネットからのインバウンド通信は不可とするが、Private subnet内からインターネットへのアウトバンド通信は可能とする。（Private subnetにコンテナを配置するが、コンテナレジストリはインターネット上のDocker Hubを利用するため）</p></li>
+</ul>
+<p>VPCの構成は以下の通り。
+<img alt="VPC" src="_images/VPC.drawio.svg" /></p>
+<section id="vpc-vpc-vpc-vpc">
+<h3>1-1. VPC作成 [VPC &gt; お使いのVPC &gt; VPC を作成]<a class="headerlink" href="#vpc-vpc-vpc-vpc" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>作成するリソース：VPCのみ</p></li>
+<li><p>名前タグ：ma-noim-vpc</p></li>
+<li><p>IPv4 CIDR：10.2.76.0/24</p></li>
+</ul>
+<p>設定できたら「VPCを作成」</p>
+</section>
+<section id="id3">
+<h3>1-2. サブネット作成<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>[VPC &gt; サブネット &gt; サブネットを作成]</p>
+<ul class="simple">
+<li><p>VPC ID：ma-noim-vpc
+その他の設定は以下のように4つのサブネットに分割する</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>サブネット名</th>
+<th>アベイラビリティーゾーン</th>
+<th>IPv4 subnet CIDR block</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ma-noim-subnet-pub1</td>
+<td>ap-northeast-1a</td>
+<td>10.2.76.0/26</td>
+</tr>
+<tr>
+<td>ma-noim-subnet-pub2</td>
+<td>ap-northeast-1c</td>
+<td>10.2.76.64/26</td>
+</tr>
+<tr>
+<td>ma-noim-subnet-pri1</td>
+<td>ap-northeast-1a</td>
+<td>10.2.76.128/26</td>
+</tr>
+<tr>
+<td>ma-noim-subnet-pri2</td>
+<td>ap-northeast-1c</td>
+<td>10.2.76.192/26</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h3>1-3. インターネットゲートウェイ作成<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>[VPC &gt; インターネットゲートウェイ &gt; インターネットゲートウェイの作成]</p>
+<p>VPC内へインターネットからの通信を受け付ける、およびVPC内からインターネットへ通信を可能とするため、インターネットゲートウェイを作成する</p>
+<ul class="simple">
+<li><p>名前：ma-noim-vpc-igw</p></li>
+</ul>
+<p>作成したらインターネットゲートウェイをVPCにアタッチする。</p>
+<p>[VPC &gt; インターネットゲートウェイ &gt; VPC にアタッチ (インターネットゲートウェイID)]</p>
+<ul class="simple">
+<li><p>使用可能なVPC：ma-noim-vpc</p></li>
+</ul>
+</section>
+<section id="elastic-ip">
+<h3>1-4. Elastic IP割り当て<a class="headerlink" href="#elastic-ip" title="Link to this heading"></a></h3>
+<p>[VPC &gt; Elastic IPアドレス &gt; Elastic IPアドレスを割り当てる]</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>プライベートサブネット a</th>
+<th>プライベートサブネット c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ネットワークボーダーグループ</td>
+<td>ap-northeast-1</td>
+<td>ap-northeast-1</td>
+</tr>
+<tr>
+<td>パブリックIPv4アドレスプール</td>
+<td>AmazonのIPv4アドレスプール</td>
+<td>AmazonのIPv4アドレスプール</td>
+</tr>
+<tr>
+<td>タグ（任意）</td>
+<td>Name=ma-noim-eip1</td>
+<td>Name=ma-noim-eip2</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="nat">
+<h3>1-5. NATゲートウェイ作成<a class="headerlink" href="#nat" title="Link to this heading"></a></h3>
+<p>[VPC &gt; NATゲートウェイ &gt; NATゲートウェイを作成]</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>プライベートサブネット a</th>
+<th>プライベートサブネット c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>名前</td>
+<td>ma-noim-ngw1</td>
+<td>ma-noim-ngw2</td>
+</tr>
+<tr>
+<td>サブネット</td>
+<td>ma-noim-subnet-pub1</td>
+<td>ma-noim-subnet-pub2</td>
+</tr>
+<tr>
+<td>接続タイプ</td>
+<td>パブリック</td>
+<td>パブリック</td>
+</tr>
+<tr>
+<td>Elastic IP</td>
+<td>ma-noim-eip1</td>
+<td>ma-noim-eip2</td>
+</tr>
+</tbody>
+</table>
+<p>接続タイプの「プライベート」はプライベートネットワークの拠点間（対オンプレなど）で使う時に使用する。</p>
+</section>
+<section id="id5">
+<h3>1-6. カスタムルートテーブル作成<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>[VPC &gt; ルートテーブル &gt; ルートテーブルを作成]</p>
+<p>ここまで作成したサブネットはデフォルトのルートテーブルに接続されている。</p>
+<p>デフォルトのルートテーブルはNATゲートウェイのルーティングが有効化されているプライベートサブネット向けであるため、インターネットからアクセス可能としたいパブリックサブネットは、インターネットゲーウェイのルーティングが有効化されているカスタムルートテーブルに紐づける必要がある。</p>
+<p>まずは、カスタムルートテーブルを作成する。</p>
+<ul class="simple">
+<li><p>名前：ma-noim-rtb-pub</p></li>
+<li><p>VPC：ma-noim-vpc</p></li>
+</ul>
+<p>カスタムルートテーブルをサブネットに紐づける。[VPC &gt; ルートテーブル &gt; rtb-ID &gt; サブネットの関連付けを編集]</p>
+<ul class="simple">
+<li><p>関連付け対象①：ma-noim-subnet-pub1</p></li>
+<li><p>関連付け対象②：ma-noim-subnet-pub2</p></li>
+</ul>
+<p>サブネット向けのルートテーブルは、デフォルトのものを利用する事とする。</p>
+</section>
+<section id="id6">
+<h3>1-7. カスタムルートテーブルにルートを追加<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>[VPC &gt; ルートテーブル &gt; rtb-ID &gt; ルートを編集]</p>
+<p>igwの作成ができたら、ルートテーブルの設定を開き、ルートを追加する</p>
+<ul class="simple">
+<li><p>送信先：0.0.0.0/0</p></li>
+<li><p>ターゲット：ma-noim-vpc-igwのインターネットゲートウェイID</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>ma-noim-rtb-pub</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ルート</td>
+<td>送信先：0.0.0.0/0 → ターゲット：ma-noim-igw</td>
+</tr>
+<tr>
+<td>ルート</td>
+<td>送信先：10.2.76.0/24 → ターゲット：local</td>
+</tr>
+<tr>
+<td>サブネットの関連付け</td>
+<td>ma-noim-subnet-pub1, ma-noim-subnet-pub2</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>ma-noim-rtb-pri1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ルート</td>
+<td>送信先：0.0.0.0/0 → ターゲット：ma-noim-ngw1</td>
+</tr>
+<tr>
+<td>ルート</td>
+<td>送信先：10.2.76.0/24 → ターゲット：local</td>
+</tr>
+<tr>
+<td>サブネットの関連付け</td>
+<td>ma-noim-subnet-pri1</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>ma-noim-rtb-pri2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ルート</td>
+<td>送信先：0.0.0.0/0 → ターゲット：ma-noim-ngw2</td>
+</tr>
+<tr>
+<td>ルート</td>
+<td>送信先：10.2.76.0/24 → ターゲット：local</td>
+</tr>
+<tr>
+<td>サブネットの関連付け</td>
+<td>ma-noim-subnet-pri2</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="alb">
+<h2>2. ALB作成<a class="headerlink" href="#alb" title="Link to this heading"></a></h2>
+<p>インターネットからフロントエンドへのアクセスだけでなく、フロントエンドからバックエンドへのアクセスもHTTPを利用した構成であるため、ロードバランサにはアプリケーションロードバランサ（ALB）を利用する。また、パブリックサブネットへのアクセスとプライベートサブネットへのアクセスはアクセス元を制御する（プライベートサブネットへはインターネットからの通信を遮断）必要があるので、publicとprivateはそれぞれ別のALBを用意して、セキュリティグループにてアクセス制御を実施する。</p>
+<section id="id7">
+<h3>2-1. セキュリティグループ作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>[EC2 &gt; セキュリティグループ &gt; セキュリティグループを作成]</p>
+<p>それぞれのALBに適用するセキュリティグループ（通信制御）を作成しておく</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>セキュリティグループ名</td>
+<td>ma-noim-sg-pub</td>
+<td>ma-noim-sg-pri</td>
+</tr>
+<tr>
+<td>説明（任意）</td>
+<td>Internet to public subnet</td>
+<td>Internal VPC to private subnet</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>ma-noim-vpc</td>
+<td>ma-noim-vpc</td>
+</tr>
+<tr>
+<td>インバウンドルール（プロトコル）</td>
+<td>HTTP/80</td>
+<td>全てのトラフィック</td>
+</tr>
+<tr>
+<td>インバウンドルール（送信元）</td>
+<td>0.0.0.0/0</td>
+<td>10.2.76.0/24</td>
+</tr>
+<tr>
+<td>タグ（任意）</td>
+<td>Name=ma-noim-sg-pub</td>
+<td>Name=ma-noim-sg-pri</td>
+</tr>
+</tbody>
+</table>
+<p>パブリックALBには、全ての送信元からのHTTP通信のみを許可。プライベートALBには、VPC内の送信元からのみHTTP通信を許可。</p>
+</section>
+<section id="id8">
+<h3>2-2. ターゲットグループ<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>[EC2 &gt; ターゲットグループ &gt; ターゲットグループの作成]</p>
+<p>ALBで負荷分散された後に転送先となるターゲットグループを作成する。</p>
+<p>ECSで起動タイプでFargateを利用する場合はターゲットタイプは「IPアドレス」。起動タイプをインスタンスとするならば「インスタンス」。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ターゲットタイプ</td>
+<td>IPアドレス</td>
+<td>IPアドレス</td>
+</tr>
+<tr>
+<td>ターゲットグループ名</td>
+<td>ma-noim-tg-pub</td>
+<td>ma-noim-tg-backend-item</td>
+</tr>
+<tr>
+<td>プロトコル/ポート</td>
+<td>HTTP/80</td>
+<td>HTTP/80</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>ma-noim-vpc</td>
+<td>ma-noim-vpc</td>
+</tr>
+<tr>
+<td>ヘルスチェク</td>
+<td>/login.html</td>
+<td>/backend-item/items</td>
+</tr>
+</tbody>
+</table>
+<p>ターゲットを登録する画面は、後にECSサービスを作成する時に指定する（ECSサービス作成時にALBおよびターゲットグループを選択することで、自動で登録される）のでデフォルトのままで作成する。</p>
+</section>
+<section id="id9">
+<h3>2-3. ALB作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>[EC2 &gt; ロードバランサー &gt; ロードバランサータイプの比較と選択]</p>
+<p>まずはALBを作成して、リスナー（どのポートで受け付けて、どこに転送するか）を設定する。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ロードバランサータイプ</td>
+<td>Application Load Balancer</td>
+<td>Application Load Balancer</td>
+</tr>
+<tr>
+<td>ロードバランサー名</td>
+<td>ma-noim-alb-pub</td>
+<td>ma-noim-alb-pri</td>
+</tr>
+<tr>
+<td>スキーム</td>
+<td>インターネット向け</td>
+<td>内部</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>ma-noim-vpc</td>
+<td>ma-noim-vpc</td>
+</tr>
+<tr>
+<td>マッピング</td>
+<td>ma-noim-subnet-pub1, ma-noim-subnet-pub2</td>
+<td>ma-noim-subnet-pri1, ma-noim-subnet-pri2</td>
+</tr>
+<tr>
+<td>セキュリティグループ</td>
+<td>ma-noim-sg-pub</td>
+<td>ma-noim-sg-pri</td>
+</tr>
+<tr>
+<td>リスナー（プロトコル/ポート）</td>
+<td>HTTP/80</td>
+<td>HTTP/80</td>
+</tr>
+<tr>
+<td>リスナー（転送先）</td>
+<td>ma-noim-tg-pub</td>
+<td>ma-noim-tg-backend-item</td>
+</tr>
+<tr>
+<td>後の設定はデフォルトのまま。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>例として、パブリック向けALBの設定は以下のようになる。</p>
+<p><img alt="ALB_pub" src="_images/ALB_pub.png" /></p>
+</section>
+<section id="id10">
+<h3>2-4. パスベースのルーティング設定<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>[EC2 &gt; ロードバランサー &gt; ma-noim-tg-backend-item &gt; HTTP:80 リスナー]</p>
+<p>プライベートサブネットへの転送はパスベースルーティングを利用する。パスベースルーティングを利用することで、「/backend-item/を含むURLはターゲットグループAへ転送する。/backend-xxx/を含むURLはターゲットグループBへ転送する」といったことが可能となる。</p>
+<p>パスベースルーティングの設定は作成したリスナーのルールで設定する。</p>
+<p><img alt="ALB_path" src="_images/ALB_path.png" /></p>
+<ul class="simple">
+<li><p>[ルールを追加] Name：backend-item</p></li>
+<li><p>[ルール条件の定義] ルールの条件タイプ：パス = /backend-item/*</p></li>
+</ul>
+<p><img alt="ALB_path_rule" src="_images/ALB_path_rule.png" /></p>
+<ul class="simple">
+<li><p>[ルールアクションの定義] アクションの種類：ターゲットグループへ転送</p></li>
+<li><p>[ルールアクションの定義] ターゲットグループ：ma-noim-tg-backend-item</p></li>
+<li><p>[ルールの優先度] 優先度：1（デフォルトルールより優先されていればOK）</p></li>
+</ul>
+</section>
+<section id="albfqdn">
+<h3>2-5. ALBのFQDNをアプリケーション構成情報に反映<a class="headerlink" href="#albfqdn" title="Link to this heading"></a></h3>
+<p>作成できたALBに割り当てられたFQDNを確認する。
+<img alt="alb_fqdn" src="_images/alb_fqdn.png" /></p>
+<p>つまり、以下のような経路で動作する事となる。
+<img alt="route" src="_images/route.drawio.svg" /></p>
+<p>フロントエンドからバックエンドを呼び出す時の構成情報を修正する。</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">【frontend-webapp】/resources/application.yml</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">service</span><span class="p">:</span>
+<span class="hll"><span class="w">    </span><span class="nt">backendEndpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://internal-ma-noim-alb-pri-1627874572.ap-northeast-1.elb.amazonaws.com</span>
+</span></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="id11">
+<h2>3. コンテナプッシュ<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://noimasaki.github.io/noimemo/GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a>を参照して、DockerHubへコンテナをアップロードする。次の手順ではECSにてDockerHubからコンテナをダウンロードしてECSタスクを定義する。</p>
+</section>
+<section id="ecs">
+<h2>4. ECS作成<a class="headerlink" href="#ecs" title="Link to this heading"></a></h2>
+<p>https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/</p>
+<section id="id12">
+<h3>4-1. ECSクラスタ作成<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>[Amazon Elastic Container Service &gt; クラスターの作成]</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>クラスタ名</td>
+<td>ma-noim-ecs-cluster-frontend</td>
+<td>ma-noim-ecs-cluster-backend-item</td>
+</tr>
+<tr>
+<td>インフラストラクチャ</td>
+<td>AWS Fargate</td>
+<td>AWS Fargate</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>パブリックサブネット</th>
+<th>プライベートサブネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>クラスタ名</td>
+<td>ma-noim-ecs-cluster-frontend</td>
+<td>ma-noim-ecs-cluster-backend-item</td>
+</tr>
+<tr>
+<td>インフラストラクチャ</td>
+<td>AWS Fargate</td>
+<td>AWS Fargate</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id13">
+<h3>4-2. ECSタスク定義<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>[Amazon Elastic Container Service &gt; 新しいタスク定義の作成]</p>
+<ul class="simple">
+<li><p>タスク定義ファミリー：ma-noim-ecs-task-frontend</p></li>
+<li><p>起動タイプ：AWS Fargate</p></li>
+<li><p>タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）</p></li>
+<li><p>コンテナ 名前：frontend-webapp</p></li>
+<li><p>コンテナ イメージ：noimasaki/frontend-webapp</p></li>
+<li><p>コンテナ 必須コンテナ：はい</p></li>
+<li><p>コンテナ コンテナポート：8080</p></li>
+<li><p>コンテナ プロトコル：TCP</p></li>
+<li><p>ログ収集：有効</p></li>
+<li><p>タスク定義ファミリー：ma-noim-ecs-task-backend-item</p></li>
+<li><p>起動タイプ：AWS Fargate</p></li>
+<li><p>タスクロール：なし（AWSのサービスを利用する場合は適したIAMロールを作成して適用）</p></li>
+<li><p>コンテナ 名前：backend-item</p></li>
+<li><p>コンテナ イメージ：noimasaki/backend-item</p></li>
+<li><p>コンテナ 必須コンテナ：はい</p></li>
+<li><p>コンテナ コンテナポート：8080</p></li>
+<li><p>コンテナ プロトコル：TCP</p></li>
+<li><p>ログ収集：有効</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>4-3. ECSサービス定義<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>[Amazon Elastic Container Service &gt; クラスター &gt; 【クラスターID】 &gt; サービスの作成]</p>
+<ul class="simple">
+<li><p>アプリケーションタイプ：サービス</p></li>
+<li><p>ファミリー：ma-noim-ecs-task-frontend</p></li>
+<li><p>サービス名：ma-noim-ecs-service-frontend</p></li>
+<li><p>VPC：ma-noim-vpc</p></li>
+<li><p>サブネット：ma-noim-subnet-pub1, ma-noim-subnet-pub2</p></li>
+<li><p>セキュリティグループ：ma-noim-sg-pub</p></li>
+<li><p>パブリックIP：有効</p></li>
+<li><p>ロードバランサー：ma-noim-alb-pub</p></li>
+<li><p>ロードバランサー ヘルスチェックの猶予期間：60秒</p></li>
+<li><p>リスナー：80:HTTP</p></li>
+<li><p>ターゲットグループ：ma-noim-tg-pub</p></li>
+<li><p>アプリケーションタイプ：サービス</p></li>
+<li><p>ファミリー：ma-noim-ecs-task-backend-item</p></li>
+<li><p>サービス名：ma-noim-ecs-service-backend-item</p></li>
+<li><p>VPC：ma-noim-vpc</p></li>
+<li><p>サブネット：ma-noim-subnet-pri1, ma-noim-subnet-pri2</p></li>
+<li><p>セキュリティグループ：ma-noim-sg-pri</p></li>
+<li><p>パブリックIP：無効</p></li>
+<li><p>ロードバランサー：ma-noim-alb-pri</p></li>
+<li><p>ロードバランサー ヘルスチェックの猶予期間：60秒</p></li>
+<li><p>リスナー：80:HTTP</p></li>
+<li><p>ターゲットグループ：ma-noim-tg-backend-item</p></li>
+</ul>
+<p>backend-itemのタスクのステータスが「保留中」のままの場合、DockerHubからコンテナをプルできていない可能性がある。ネットワーク設定を確認し、プライベートサブネットからインターネットへの疎通性があるかどうか確認すること。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Microservice_1.html" class="btn btn-neutral float-left" title="マイクロサービス作成①（ローカル環境での開発）" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SpringMicroservice_3.html" class="btn btn-neutral float-right" title="マイクロサービス作成③ （アプリケーション改修）" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
