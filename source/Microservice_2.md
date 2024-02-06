@@ -20,7 +20,7 @@ VPCの要件は以下の通り。
 - Private subnetへはインターネットからのインバウンド通信は不可とするが、Private subnet内からインターネットへのアウトバンド通信は可能とする。（Private subnetにコンテナを配置するが、コンテナレジストリはインターネット上のDocker Hubを利用するため）
 
 VPCの構成は以下の通り。
-![VPC](_static/Microservice_2/VPC.drawio.svg)
+![VPC](a_static/Microservice_2/VPC.drawio.svg)
 
 ### 1-1. VPC作成 [VPC > お使いのVPC > VPC を作成]
   - 作成するリソース：VPCのみ
