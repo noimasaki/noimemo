@@ -272,6 +272,7 @@ https://dev.classmethod.jp/articles/divide-clusters-in-aws-fargate/
  - リスナー：80:HTTP
  - ターゲットグループ：ma-noim-tg-pub
 
+
  - アプリケーションタイプ：サービス
  - ファミリー：ma-noim-ecs-task-backend-item
  - サービス名：ma-noim-ecs-service-backend-item
