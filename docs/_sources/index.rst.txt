@@ -20,5 +20,6 @@
    Microservice_1.md
    Microservice_2.md
    SpringMicroservice_3.md
+   Logging.md
    
    
