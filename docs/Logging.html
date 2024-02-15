@@ -62,7 +62,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#why">Why：なぜログが必要なのか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how">How：どうやってログを集めるか？</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">ログ処理の大枠</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dockerecs">DockerおよびECSのログ出力の仕組み</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker">Dockerのログ出力の仕組み</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ecs">ECSのログ出力の仕組み</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#what">What：何のログを集めるか？</a></li>
@@ -100,7 +101,8 @@
 <p>私の業務環境として「AWSで検証・開発を実施したうえでオンプレミスに移行する」といった開発スタイルが比較的よく行われている。よって、今回のログ出力方式の検討を行うにあたって、以下の前提条件を設定する。</p>
 <ul class="simple">
 <li><p>AWSを利用したマイクロサービスアーキテクチャであること</p></li>
-<li><p>移植性も考慮した構成とすること</p></li>
+<li><p>コンテナベースであること</p></li>
+<li><p>クラウド基盤→オンプレミスへの移植性も考慮した構成とすること</p></li>
 </ul>
 <section id="why">
 <h2>Why：なぜログが必要なのか？<a class="headerlink" href="#why" title="Link to this heading"></a></h2>
@@ -118,10 +120,14 @@
 <h2>How：どうやってログを集めるか？<a class="headerlink" href="#how" title="Link to this heading"></a></h2>
 <section id="id2">
 <h3>ログ処理の大枠<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>収集→加工→解析 というフローでログ処理される</p>
 </section>
-<section id="dockerecs">
-<h3>DockerおよびECSのログ出力の仕組み<a class="headerlink" href="#dockerecs" title="Link to this heading"></a></h3>
+<section id="docker">
+<h3>Dockerのログ出力の仕組み<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
 <p>テストテスト3</p>
+</section>
+<section id="ecs">
+<h3>ECSのログ出力の仕組み<a class="headerlink" href="#ecs" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="what">
