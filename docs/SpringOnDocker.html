@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring BootをDocker上で動かす &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="SpringBootでREST API" href="SpringBoot_REST_API.html" />
+    <link rel="prev" title="GitHub Appsトークンの発行・実装方法" href="GiHubAppsToken.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spring BootをDocker上で動かす</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spring-boot">Spring Bootアプリの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">コンテナイメージ作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#apache-maven-windows">Apache Maven インストール（Windows）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spring BootをDocker上で動かす</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SpringOnDocker.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spring-bootdocker">
+<h1>Spring BootをDocker上で動かす<a class="headerlink" href="#spring-bootdocker" title="Link to this heading"></a></h1>
+<p>Spring Bootで作成したHello WorldをJarファイルにビルドして、コンテナイメージ化する。</p>
+<p>↓ディレクトリ構成（一部省略）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SpringDocker
+├── Dockerfile
+└── hello           // Spring Boot プロジェクディレクトリ
+    ├── pom.xml
+    ├── src
+    │   ├── main    // Javaファイル、htmlファイルはここに作成
+    │   │   ├── java/com/example/hello
+    │   │   │   ├── HelloApplication.java
+    │   │   │   └── HelloController.java
+    │   │   └── resources/templates
+    │   │       └── Hello.html
+    │   └── test
+    └── target      // ビルドしたjarファイルはここに格納される
+        └── hello-0.0.1-SNAPSHOT.jar
+</pre></div>
+</div>
+<section id="spring-boot">
+<h2>Spring Bootアプリの作成<a class="headerlink" href="#spring-boot" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Spring InitializrからMavenプロジェクトを作成
+<img alt="VS Code" src="_images/1_init.png" /></p></li>
+</ol>
+<ul class="simple">
+<li><p>Spring Boot version: 3.15</p></li>
+<li><p>project language: Java</p></li>
+<li><p>Group Id: com.example</p></li>
+<li><p>Artifact Id: hello</p></li>
+<li><p>packaging type: Jar</p></li>
+<li><p>Java version: 17  ※Dockerイメージ作成するときに合わせる必要があるので注意</p></li>
+<li><p>dependencies: Tymeleaf、Spring Web、Lombok、Spring Boot DevTools</p></li>
+</ul>
+<p>上記は例なので適宜変更すること</p>
+<p>完了するとプロジェクトが作成される</p>
+<p><img alt="VS Code" src="_images/2_init.png" /></p>
+<ol class="arabic simple" start="2">
+<li><p>Controller、htmlの作成</p></li>
+</ol>
+<p>HelloController.javaを新規作成する</p>
+<p><img alt="VS Code" src="_images/3_controller.png" /></p>
+<p>HelloController.java</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">hello</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+
+<span class="nd">@Controller</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">HelloController</span> <span class="p">{</span>
+    <span class="nd">@GetMapping</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">)</span>       <span class="c1"># localhost:8080/hello でアクセス来たらhelloworld()を実行</span>
+    <span class="n">public</span> <span class="n">String</span> <span class="n">helloworld</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>        <span class="c1"># ~src/main/resources/templates/Hello.html をreturn</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Hello.htmlを新規作成する</p>
+<p><img alt="VS Code" src="_images/4_html.png" /></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sample&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>動作確認</p></li>
+</ol>
+<p>HelloApprication.javaを実行</p>
+<p><img alt="VS Code" src="_images/5_test.png" /></p>
+<p>ブラウザからアクセスして確認</p>
+<p><img alt="test" src="_images/6_test.png" /></p>
+<ol class="arabic simple" start="4">
+<li><p>Mavenでビルド
+SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">package</span> <span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">repackage</span>
+</pre></div>
+</div>
+<p>targetフォルダに<code class="docutils literal notranslate"><span class="pre">.jar</span></code>ファイルが生成される</p>
+<p><img alt="jar" src="_images/7_jar.png" /></p>
+</section>
+<section id="id1">
+<h2>コンテナイメージ作成<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Dockerfileを作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># FROM：ベースイメージの指定</span>
+<span class="c1">#  Spring InitializrでJava17を指定したので合わせる</span>
+<span class="n">FROM</span> <span class="n">openjdk</span><span class="p">:</span><span class="mi">17</span><span class="o">-</span><span class="n">jdk</span><span class="o">-</span><span class="n">slim</span>
+
+<span class="c1"># RUN：イメージ作成時に実行されるコマンド</span>
+<span class="c1">#  AP格納ディレクトリを作成</span>
+<span class="n">RUN</span> <span class="n">mkdir</span> <span class="n">hello</span>
+
+<span class="c1"># WRKDIR：この命令以降は、指定したディレクトリで操作される</span>
+<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">hello</span>
+
+<span class="c1"># COPY：コンテナ内にファイルコピー</span>
+<span class="c1">#  ビルドした.jarをapp.jarというファイルでコピー</span>
+<span class="n">COPY</span> <span class="o">./</span><span class="n">hello</span><span class="o">/</span><span class="n">target</span><span class="o">/*.</span><span class="n">jar</span> <span class="n">app</span><span class="o">.</span><span class="n">jar</span>
+
+<span class="c1"># EXPOSE：コンテナが特定ポートをlistenしている事をDockerに通知</span>
+<span class="n">EXPOSE</span> <span class="mi">8080</span>
+
+<span class="c1"># ENTRYPOINT：コンテナ実行時に実行するコマンド</span>
+<span class="c1">#  ※複数行書いても一番最後の行しか実行されない</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span><span class="s2">&quot;-jar&quot;</span><span class="p">,</span><span class="s2">&quot;app.jar&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ENTRYPOINT</span></code>は2種類の記載方法があり、exec形式が推奨されている</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># シェル形式</span>
+<span class="n">ENTRYPOINT</span> <span class="n">command</span> <span class="n">param1</span> <span class="n">param2</span>
+
+<span class="c1"># exec形式</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">,</span> <span class="s2">&quot;param1&quot;</span><span class="p">,</span> <span class="s2">&quot;param2&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>exec形式とすることで、コマンドがシェルによって解釈される事なく直接実行されるため、
+コマンドがシェルの環境変数やエイリアスに影響されずに実行可能</p>
+<ol class="arabic simple" start="2">
+<li><p>ビルドの実行</p></li>
+</ol>
+<p>次のビルドコマンドは<code class="docutils literal notranslate"><span class="pre">.(カレントディレクトリ)</span></code>を指定しているため、
+作成したDockerfileと同ディレクトリで実行すること</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ビルド</span>
+<span class="n">docker</span> <span class="n">build</span> \
+    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span> \
+    <span class="o">--</span><span class="n">tag</span> <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+
+<span class="c1"># イメージの確認</span>
+<span class="n">docker</span> <span class="n">images</span>
+<span class="o">-----------------</span>
+<span class="n">REPOSITORY</span>              <span class="n">TAG</span>       <span class="n">IMAGE</span> <span class="n">ID</span>       <span class="n">CREATED</span>              <span class="n">SIZE</span>
+<span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>   <span class="n">latest</span>    <span class="mi">96</span><span class="n">f90e7c2bfe</span>   <span class="n">About</span> <span class="n">a</span> <span class="n">minute</span> <span class="n">ago</span>   <span class="mi">408</span><span class="n">MB</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>コンテナ起動確認</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> \
+    <span class="o">--</span><span class="n">publish</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">8080</span> \
+    <span class="o">--</span><span class="n">name</span> <span class="n">app</span><span class="o">-</span><span class="n">local</span> \
+    <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--rm</span></code>オプション：コンテナ停止時にコンテナ削除してくれるので便利（imageは消えない）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span></code>オプション：バックグラウンドで実行してくれる</p></li>
+</ul>
+<p>ブラウザで<a class="reference external" href="http://localhost:8080/hello">http://localhost:8080/hello</a>にアクセスしてhello worldが表示できることを確認</p>
+<p><code class="docutils literal notranslate"><span class="pre">-d</span></code>オプションを指定しなかった場合は<code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code>で終了</p>
+</section>
+<section id="id2">
+<h2>参考<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="apache-maven-windows">
+<h3>Apache Maven インストール（Windows）<a class="headerlink" href="#apache-maven-windows" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://maven.apache.org/">Apache Maven サイト</a>から、<code class="docutils literal notranslate"><span class="pre">Binary</span> <span class="pre">zip</span> <span class="pre">archive</span></code>をダウンロード&amp;展開し、C:\直下に配置
+<img alt="MavenInstall" src="_images/99_MavenInstall.png" /></p></li>
+<li><p>システム環境変数Pathに<code class="docutils literal notranslate"><span class="pre">C:\apache-maven-3.9.5\bin</span></code>を追加</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">-v</span></code>コマンドを実行してインストールされていることを確認</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="GiHubAppsToken.html" class="btn btn-neutral float-left" title="GitHub Appsトークンの発行・実装方法" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SpringBoot_REST_API.html" class="btn btn-neutral float-right" title="SpringBootでREST API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
