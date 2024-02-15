@@ -87,7 +87,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">ログ出力方式ベストプラクティス</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/Logging.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Logging.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -107,14 +107,12 @@
 <section id="why">
 <h2>Why：なぜログが必要なのか？<a class="headerlink" href="#why" title="Link to this heading"></a></h2>
 <p>「ログは実行中のアプリケーションの挙動を可視化する」</p>
-<p><a class="reference external" href="https://12factor.net/ja/logs">12factor</a>の冒頭文がログ出力としての目的を端的に示している。
+<p>[12factor](<a class="reference external" href="https://12factor.net/ja/logs">https://12factor.net/ja/logs</a>)の冒頭文がログ出力としての目的を端的に示している。
 システム開発時には開発者はこのログをイベントストリームとしてターミナルのフォアグラウンドで見ることで、システムの挙動を確認する。</p>
-<p>サービス提供中においても、長期にわたってシステムの挙動を確認することができる。</p>
-<ul class="simple">
-<li><p>過去の特定のイベントを見つける</p></li>
-<li><p>大きなスケールの傾向をグラフ化する。（1分あたりのリクエスト数など）</p></li>
-<li><p>ユーザー定義のヒューリスティクスに基づいて素早くアラートを出す。（1分あたりのエラー数がある閾値を超えた場合にアラートを出すなど）</p></li>
-</ul>
+<p>サービス提供中においても、長期にわたってシステムの挙動を確認することができる。
+- 過去の特定のイベントを見つける
+- 大きなスケールの傾向をグラフ化する。（1分あたりのリクエスト数など）
+- ユーザー定義のヒューリスティクスに基づいて素早くアラートを出す。（1分あたりのエラー数がある閾値を超えた場合にアラートを出すなど）</p>
 </section>
 <section id="how">
 <h2>How：どうやってログを集めるか？<a class="headerlink" href="#how" title="Link to this heading"></a></h2>
@@ -124,7 +122,7 @@
 </section>
 <section id="docker">
 <h3>Dockerのログ出力の仕組み<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
-<p>テストテスト3</p>
+<p><a class="reference external" href="https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers">ロギングドライバー</a></p>
 </section>
 <section id="ecs">
 <h3>ECSのログ出力の仕組み<a class="headerlink" href="#ecs" title="Link to this heading"></a></h3>
