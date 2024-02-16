@@ -59,9 +59,9 @@
 <li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ログ出力方式ベストプラクティス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">前提条件</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why">Why：なぜログが必要なのか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how">How：どうやってログを集めるか？</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">ログ処理の大枠</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#docker">Dockerのログ出力の仕組み</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ecs">ECSのログ出力の仕組み</a></li>
 </ul>
@@ -97,13 +97,19 @@
              
   <section id="id1">
 <h1>ログ出力方式ベストプラクティス<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<p>なぜログが必要で、どうやってログを集め、なんのログを集めるべきかを整理する。</p>
-<p>私の業務環境として「AWSで検証・開発を実施したうえでオンプレミスに移行する」といった開発スタイルが比較的よく行われている。よって、今回のログ出力方式の検討を行うにあたって、以下の前提条件を設定する。</p>
+<p>ログ出力方式のベストプラクティスを整理する。</p>
+<section id="id2">
+<h2>前提条件<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>私の業務環境として「AWSで検証・開発を実施したうえでオンプレミスに移行する」といった開発スタイルが比較的よく行われている。
+よって、今回のログ出力方式の検討を行うにあたって、以下の前提条件を設定する。</p>
 <ul class="simple">
 <li><p>AWSを利用したマイクロサービスアーキテクチャであること</p></li>
 <li><p>コンテナベースであること</p></li>
 <li><p>クラウド基盤→オンプレミスへの移植性も考慮した構成とすること</p></li>
 </ul>
+<p>また、ログ処理フローのうち、下記の部分に着目する。</p>
+<img alt="_images/LoggingFlow.drawio.svg" src="_images/LoggingFlow.drawio.svg" /><p><a class="reference external" href="https://www.slideshare.net/AmazonWebServicesJapan/black-belt-online-seminar-aws-69708255">[Black Belt Online Seminar] AWS上でのログ管理</a></p>
+</section>
 <section id="why">
 <h2>Why：なぜログが必要なのか？<a class="headerlink" href="#why" title="Link to this heading"></a></h2>
 <p>「ログは実行中のアプリケーションの挙動を可視化する」</p>
@@ -116,10 +122,6 @@
 </section>
 <section id="how">
 <h2>How：どうやってログを集めるか？<a class="headerlink" href="#how" title="Link to this heading"></a></h2>
-<section id="id2">
-<h3>ログ処理の大枠<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>収集→加工→解析 というフローでログ処理される</p>
-</section>
 <section id="docker">
 <h3>Dockerのログ出力の仕組み<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
 <p><a class="reference external" href="https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers">ロギングドライバー</a></p>
