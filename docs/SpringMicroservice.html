@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpringBootでマイクロサービス &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="認証機能の実装" href="SpringSecurity.html" />
+    <link rel="prev" title="MySQL環境構築" href="MySQL.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SpringBootでマイクロサービス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spring-initializr">1. Spring Initializr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2. ディレクトリ構成変更</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#securityconfig-java">3. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SpringBootでマイクロサービス</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SpringMicroservice.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="springboot">
+<h1>SpringBootでマイクロサービス<a class="headerlink" href="#springboot" title="Link to this heading"></a></h1>
+<p>以下を参考に、マイクロサービスを作成する。</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://news.mynavi.jp/techplus/article/techp5131/">https://news.mynavi.jp/techplus/article/techp5131/</a></p></li>
+<li><p><a class="reference external" href="https://github.com/debugroom/mynavi-sample-aws-microservice/tree/feature_1-frontend-webapp">https://github.com/debugroom/mynavi-sample-aws-microservice/tree/feature_1-frontend-webapp</a></p></li>
+</ul>
+<section id="spring-initializr">
+<h2>1. Spring Initializr<a class="headerlink" href="#spring-initializr" title="Link to this heading"></a></h2>
+<p>動作環境</p>
+<ul class="simple">
+<li><p>Java: 17</p></li>
+<li><p>SpringBoot: 3.2.0</p></li>
+</ul>
+<p>dependencies</p>
+<ul class="simple">
+<li><p>spring-boot-starter-security</p></li>
+<li><p>spring-boot-starter-thymeleaf</p></li>
+<li><p>spring-boot-starter-web</p></li>
+</ul>
+</section>
+<section id="id1">
+<h2>2. ディレクトリ構成変更<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>configディレクトリを作成し、起動クラスと設定クラスをまとめて格納する。設定クラスが散らばることがないので良い。</p>
+<p>なお、設定クラスは<code class="docutils literal notranslate"><span class="pre">&#64;Configuration</span></code>アノテーションを付与することで、設定クラスとして読み込まれる。
+<img alt="config dir" src="_static/SpringMicroservice/1_configdir.png" /></p>
+</section>
+<section id="securityconfig-java">
+<h2>3. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>作成<a class="headerlink" href="#securityconfig-java" title="Link to this heading"></a></h2>
+<p>SpringSecurity設定クラスを作成する。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="login-html">
+<h1>1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成<a class="headerlink" href="#login-html" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">resources/templates/login.html</span></code>にログインページを作成</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;ログインページ | 課題管理アプリケーション&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;課題管理アプリケーション&lt;/h1&gt;
+    &lt;div th:if=&quot;${param.error}&quot;&gt;
+        &lt;p&gt;ユーザー名もしくはパスワードが違います&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;form action=&quot;#&quot; th:action=&quot;@{/login}&quot; method=&quot;post&quot;&gt;
+        &lt;div&gt;
+            &lt;label for=&quot;usernameInput&quot; class=&quot;form-label&quot;&gt;ユーザ名&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;usernameInput&quot; name=&quot;username&quot; class=&quot;form-control&quot;&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;label for=&quot;passwordInput&quot; class=&quot;form-label&quot;&gt;パスワード&lt;/label&gt;
+            &lt;input type=&quot;password&quot; id=&quot;passwordInput&quot; name=&quot;password&quot; class=&quot;form-control&quot;&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;ログイン&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;html</span> <span class="pre">xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;</span></code>：Thymeleafを有効化する記述</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;form</span> <span class="pre">action=&quot;#&quot;</span> <span class="pre">th:action=&quot;&#64;{/login}&quot;</span> <span class="pre">method=&quot;post&quot;&gt;</span></code>：form内のsubmitボタンを押下した時のactionとmethodを定義。&quot;#&quot;はThymeleafによる書き換え対象で、書き換える内容は<code class="docutils literal notranslate"><span class="pre">th</span></code>で始まる箇所で、<code class="docutils literal notranslate"><span class="pre">/login</span></code>というURLパス(<code class="docutils literal notranslate"><span class="pre">&#64;</span></code>はThymeleafのリンク記法)にpostメソッドを飛ばす。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name=&quot;username&quot;</span></code>と<code class="docutils literal notranslate"><span class="pre">name=&quot;password&quot;</span></code>はIDとPW情報をサーバに送信するときに、フィールド名を指定している。ここではSpringBootのデフォルト値、<code class="docutils literal notranslate"><span class="pre">username</span></code>と<code class="docutils literal notranslate"><span class="pre">password</span></code>を利用している。なお、変更も可能で<code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>で以下のように指定することで変更可能。</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http
+    .formLogin((form) -&gt; form    // 認証方式はformログイン
+    .usernameParameter(&quot;USERNAME&quot;)  // デフォルト値`username`から変更
+    .passwordParameter(&quot;USER_PW&quot;)   // デフォルト値`password`から変更
+    .loginPage(&quot;/login&quot;)    // 認証ページは&quot;/login&quot;
+    .permitAll()
+    )
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;div</span> <span class="pre">th:if=&quot;${param.error}&quot;&gt;</span></code>：ログインに失敗すると、SpringBootのデフォルトではURLパラメータに<code class="docutils literal notranslate"><span class="pre">/login?error</span></code>がつくため、Tymeleafの条件分岐機能を利用して、パラメータに<code class="docutils literal notranslate"><span class="pre">error</span></code>があった場合は「ユーザー名もしくはパスワードが違います」といったメッセージを表示させる。</p></li>
+</ul>
+</section>
+<section id="id2">
+<h1>2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package com.example.frontendwebapp.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    @Bean   // 戻り値がBeanに登録される。BeanとはDIコンテナに登録されるオブジェクトのこと。結果として任意の場所でAutowiredできる。
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((requests) -&gt; requests
+            .requestMatchers(&quot;/login/*&quot;).permitAll()    // &quot;/login&quot;は認証不要
+            .anyRequest().authenticated()   // その他のリクエストは認証が必要
+            )
+            .formLogin((form) -&gt; form    // 認証方式はformログイン
+            .loginPage(&quot;/login&quot;)    // 認証ページは&quot;/login&quot;
+            .permitAll()
+            )
+            .logout((logout) -&gt; logout.permitAll());    // ログアウト機能を有効化し、すべてのユーザがログアウト可能
+
+        return http.build();
+    }
+
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new Pbkdf2PasswordEncoder();
+    // }
+
+    // userDetailsServiceやpasswordEncoderについてはAutowiredできるものがあれば、自動でAutowiredして利用してくれるので不要。
+    // userDetailsServiceはCustomUserDetailsServiceの中で@ServiceアノテーションをつけてServiceとしてDIコンテナに登録しているので、Springは勝手に読み取って使ってくれる
+    // passwordEncoderについても同様に、PasswordEncoderConfigの中で@BeanをつけてDIコンテナに登録しているので、Pbkdf2PasswordEncoderを自動で使ってくれる
+
+
+}
+
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MySQL.html" class="btn btn-neutral float-left" title="MySQL環境構築" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SpringSecurity.html" class="btn btn-neutral float-right" title="認証機能の実装" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
