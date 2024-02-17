@@ -18,7 +18,6 @@
 
 `[Black Belt Online Seminar] AWS上でのログ管理 <https://www.slideshare.net/AmazonWebServicesJapan/black-belt-online-seminar-aws-69708255>`_
 
-テストfromrhel9
 
 Why：なぜログが必要なのか？
 ============================
