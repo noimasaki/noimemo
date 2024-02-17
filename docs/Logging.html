@@ -62,11 +62,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#id2">前提条件</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why">Why：なぜログが必要なのか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how">How：どうやってログを集めるか？</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#docker">Dockerのログ出力の仕組み</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker">Dockerのログ出力の方法</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ecs">ECSのログ出力の仕組み</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#what">What：何のログを集めるか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">ここまでのまとめ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">実装例</a></li>
 </ul>
 </li>
 </ul>
@@ -122,8 +124,17 @@
 </section>
 <section id="how">
 <h2>How：どうやってログを集めるか？<a class="headerlink" href="#how" title="Link to this heading"></a></h2>
-<section id="docker">
-<h3>Dockerのログ出力の仕組み<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<p>ログ収集はPush型とPull型に大別される。</p>
+<dl class="simple">
+<dt>Push型</dt><dd><p>監視対象に配置したエージェントからログ収集基盤に対してデータを送信</p>
+</dd>
+<dt>Pull型</dt><dd><p>監視対象はローカル等の適当な場所にログを溜め、定期的にログ収集基盤が回収する</p>
+</dd>
+</dl>
+<p>コンテナは短いライフサイクルが前提とされており、
+コンテナ内部にデータ保管するとデータロストにつながることから、今回はPush型に着目する。</p>
+<img alt="_images/PushPull.drawio.svg" src="_images/PushPull.drawio.svg" /><section id="docker">
+<h3>Dockerのログ出力の方法<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
 <p><a class="reference external" href="https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers">ロギングドライバー</a></p>
 </section>
 <section id="ecs">
@@ -132,6 +143,12 @@
 </section>
 <section id="what">
 <h2>What：何のログを集めるか？<a class="headerlink" href="#what" title="Link to this heading"></a></h2>
+</section>
+<section id="id4">
+<h2>ここまでのまとめ<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+</section>
+<section id="id5">
+<h2>実装例<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
 </section>
 </section>
 
