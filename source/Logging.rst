@@ -19,6 +19,9 @@
 
 `[Black Belt Online Seminar] AWS上でのログ管理 <https://www.slideshare.net/AmazonWebServicesJapan/black-belt-online-seminar-aws-69708255>`_
 
+.. todo:: オーバービューを入れても良いかも
+    https://speakerdeck.com/hainet50b/spring-boot-3-dot-0-obuzababiriteituagaido
+
 
 Why：なぜログが必要なのか？
 ============================
