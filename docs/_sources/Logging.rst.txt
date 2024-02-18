@@ -74,6 +74,7 @@ Fargateではログ収集機能をデフォルトで提供しており、下記�
 What：何のログを集めるか？
 ===================================
 https://debugroom.github.io/doc/convention/app-infra/logging.html
+に準拠する。
 
 登場人物
     人
@@ -90,8 +91,10 @@ https://debugroom.github.io/doc/convention/app-infra/logging.html
     システム終了
     メンテナンス
 
+
 ここまでのまとめと目指すもの
 ===================================
+
 
 
 実装例
