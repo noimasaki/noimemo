@@ -107,6 +107,54 @@
 <img alt="_images/architecture.drawio2.svg" src="_images/architecture.drawio2.svg" /><section id="id2">
 <h2>ログサーバ用コンテナの準備<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>まず、ローカル検証環境で準備する。</p>
+<p>ローカル検証環境で、fluent.confを作成して、fluentdの設定ファイルを作成する。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">source</span><span class="o">&gt;</span>
+<span class="nd">@type</span> <span class="n">http</span>
+<span class="n">port</span> <span class="mi">9880</span>
+<span class="n">bind</span> <span class="mf">0.0.0.0</span>
+<span class="o">&lt;/</span><span class="n">source</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">match</span> <span class="o">**&gt;</span>
+<span class="nd">@type</span> <span class="n">stdout</span>
+<span class="o">&lt;/</span><span class="n">match</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>fluentdの最新コンテナイメージを利用して、コンテナを起動する。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># コンテナ起動
+podman run -d --name fluentd -p 9880:9880 -v .:/fluentd/etc -e FLUENTD_CONF=fluent.conf fluent/fluentd:edge
+
+# テストログ送信
+curl -X POST -d &#39;json={&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:&quot;example&quot;}&#39; http://localhost:9880/sample.log
+
+# ログ確認
+[noim@rhel9 test_fluentd]$ podman logs fluentd
+2024-02-18 15:30:12 +0000 [info]: init supervisor logger path=nil rotate_age=nil rotate_size=nil
+2024-02-18 15:30:12 +0000 [info]: parsing config file is succeeded path=&quot;/fluentd/etc/fluent.conf&quot;
+2024-02-18 15:30:12 +0000 [info]: gem &#39;fluentd&#39; version &#39;1.16.3&#39;
+2024-02-18 15:30:12 +0000 [warn]: define &lt;match fluent.**&gt; to capture fluentd logs in top level is deprecated. Use &lt;label @FLUENT_LOG&gt; instead
+2024-02-18 15:30:12 +0000 [info]: using configuration file: &lt;ROOT&gt;
+&lt;source&gt;
+    @type http
+    port 9880
+    bind &quot;0.0.0.0&quot;
+&lt;/source&gt;
+&lt;match **&gt;
+    @type stdout
+&lt;/match&gt;
+&lt;/ROOT&gt;
+2024-02-18 15:30:12 +0000 [info]: starting fluentd-1.16.3 pid=2 ruby=&quot;3.2.2&quot;
+2024-02-18 15:30:12 +0000 [info]: spawn command to main:  cmdline=[&quot;/usr/bin/ruby&quot;, &quot;-Eascii-8bit:ascii-8bit&quot;, &quot;/usr/bin/fluentd&quot;, &quot;--config&quot;, &quot;/fluentd/etc/fluent.conf&quot;, &quot;--plugin&quot;, &quot;/fluentd/plugins&quot;, &quot;--under-supervisor&quot;]
+2024-02-18 15:30:13 +0000 [info]: #0 init worker0 logger path=nil rotate_age=nil rotate_size=nil
+2024-02-18 15:30:13 +0000 [info]: adding match pattern=&quot;**&quot; type=&quot;stdout&quot;
+2024-02-18 15:30:13 +0000 [info]: adding source type=&quot;http&quot;
+2024-02-18 15:30:13 +0000 [warn]: #0 define &lt;match fluent.**&gt; to capture fluentd logs in top level is deprecated. Use &lt;label @FLUENT_LOG&gt; instead
+2024-02-18 15:30:13 +0000 [info]: #0 starting fluentd worker pid=11 ppid=2 worker=0
+2024-02-18 15:30:13 +0000 [info]: #0 fluentd worker is now running worker=0
+2024-02-18 15:30:13.192837127 +0000 fluent.info: {&quot;pid&quot;:11,&quot;ppid&quot;:2,&quot;worker&quot;:0,&quot;message&quot;:&quot;starting fluentd worker pid=11 ppid=2 worker=0&quot;}
+2024-02-18 15:30:13.193745831 +0000 fluent.info: {&quot;worker&quot;:0,&quot;message&quot;:&quot;fluentd worker is now running worker=0&quot;}
+2024-02-18 15:31:03.719726481 +0000 sample.log: {&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:&quot;example&quot;}
+</pre></div>
+</div>
 </section>
 </section>
 
