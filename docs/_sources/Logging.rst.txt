@@ -106,6 +106,7 @@ https://debugroom.github.io/doc/convention/app-infra/logging.html
 実装例
 ===================================
 
+:doc:`Microservice_Logging.rst` に示す。
 
 成果のまとめ
 ===================================
