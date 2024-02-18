@@ -60,6 +60,7 @@ Dockerのログ出力の方法
 Fargateのログ出力の仕組み
 -------------------------
 Fargateではログ収集機能をデフォルトで提供しており、下記から選択できる。
+
 - `awslogs <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html?icmpid=docs_ecs_hp-task-definition>`_ ： ログドライバーを利用してstdoutとstderrはCloudWathchへログが転送される
 - `splunk <https://docs.docker.com/config/containers/logging/splunk/>`_ ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能
 - `firelens <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition>`_ ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能
