@@ -68,7 +68,7 @@ Fargateではログ収集機能をデフォルトで提供しており、下記�
 - `splunk <https://docs.docker.com/config/containers/logging/splunk/>`_ ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能
 - `firelens <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition>`_ ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能
 
-ログ基盤変更においても柔軟に対応できるように、firelensに着目する。
+ログ基盤変更においても柔軟に対応できるように、firelensでも利用されているサイドカー方式に着目する。
 
 
 What：何のログを集めるか？
@@ -92,9 +92,15 @@ https://debugroom.github.io/doc/convention/app-infra/logging.html
     メンテナンス
 
 
+マイクロサービスにおいて気をつけるべきこと
+===================================
+マイクロサービスアーキテクチャにおいては、複数のマイクロサービスが連動して処理を行うことから、1つの通信に対するログをトレースすることが困難となる。
+
+そこで、リクエストIDを付与したログを出力することでログトレースを可能とする。
+
 ここまでのまとめと目指すもの
 ===================================
-
+サイドカー方式でログ収集サーバにログを飛ばす。
 
 
 実装例

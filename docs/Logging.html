@@ -67,9 +67,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#what">What：何のログを集めるか？</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">ここまでのまとめと目指すもの</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">実装例</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">成果のまとめ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">マイクロサービスにおいて気をつけるべきこと</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">ここまでのまとめと目指すもの</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">実装例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">成果のまとめ</a></li>
 </ul>
 </li>
 </ul>
@@ -153,7 +154,7 @@
 <li><p><a class="reference external" href="https://docs.docker.com/config/containers/logging/splunk/">splunk</a> ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能</p></li>
 <li><p><a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition">firelens</a> ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能</p></li>
 </ul>
-<p>ログ基盤変更においても柔軟に対応できるように、firelensに着目する。</p>
+<p>ログ基盤変更においても柔軟に対応できるように、firelensでも利用されているサイドカー方式に着目する。</p>
 </section>
 </section>
 <section id="what">
@@ -179,13 +180,19 @@
 </dl>
 </section>
 <section id="id4">
-<h2>ここまでのまとめと目指すもの<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<h2>マイクロサービスにおいて気をつけるべきこと<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>マイクロサービスアーキテクチャにおいては、複数のマイクロサービスが連動して処理を行うことから、1つの通信に対するログをトレースすることが困難となる。</p>
+<p>そこで、リクエストIDを付与したログを出力することでログトレースを可能とする。</p>
 </section>
 <section id="id5">
-<h2>実装例<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<h2>ここまでのまとめと目指すもの<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>サイドカー方式でログ収集サーバにログを飛ばす。</p>
 </section>
 <section id="id6">
-<h2>成果のまとめ<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<h2>実装例<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+</section>
+<section id="id7">
+<h2>成果のまとめ<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
 </section>
 </section>
 
