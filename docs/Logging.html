@@ -147,10 +147,12 @@
 </section>
 <section id="fargate">
 <h3>Fargateのログ出力の仕組み<a class="headerlink" href="#fargate" title="Link to this heading"></a></h3>
-<p>Fargateではログ収集機能をデフォルトで提供しており、下記から選択できる。
-- <a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html?icmpid=docs_ecs_hp-task-definition">awslogs</a> ： ログドライバーを利用してstdoutとstderrはCloudWathchへログが転送される
-- <a class="reference external" href="https://docs.docker.com/config/containers/logging/splunk/">splunk</a> ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能
-- <a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition">firelens</a> ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能</p>
+<p>Fargateではログ収集機能をデフォルトで提供しており、下記から選択できる。</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html?icmpid=docs_ecs_hp-task-definition">awslogs</a> ： ログドライバーを利用してstdoutとstderrはCloudWathchへログが転送される</p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/config/containers/logging/splunk/">splunk</a> ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能</p></li>
+<li><p><a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition">firelens</a> ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能</p></li>
+</ul>
 <p>ログ基盤変更においても柔軟に対応できるように、firelensに着目する。</p>
 </section>
 </section>
