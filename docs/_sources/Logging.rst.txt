@@ -11,6 +11,7 @@
 - AWSを利用したマイクロサービスアーキテクチャであること
 - コンテナベースであること
 - クラウド基盤→オンプレミスへの移植性も考慮した構成とすること
+- ログ基盤の変更に対してアプリケーションへの影響が少ないこと
 
 また、ログ処理フローのうち、下記の部分に着目する。
 
@@ -49,20 +50,28 @@ Pull型
 
 Dockerのログ出力の方法
 -------------------------
-
-
+- ホストマシンのデータ領域をマウントしてログを書き込む：「アプリケーションは標準出力にログを吐けばいい」という 12Twelve-Factor App の世界観を満たさなくなってしまう = インフラレイヤ変更がアプリケーションにも影響を及ぼす
+- ログドライバーの利用： 候補としてあり
+- サイドカーコンテナの利用： 候補としてあり
+- アプリコンテナでロガーライブラリ等を利用して直接ログ基盤にログ出力：「アプリケーションは標準出力にログを吐けばいい」という 12Twelve-Factor App の世界観を満たさなくなってしまう = インフラレイヤ変更がアプリケーションにも影響を及ぼす
 
 `ロギングドライバー <https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers>`_
 
-ECSのログ出力の仕組み
+Fargateのログ出力の仕組み
 -------------------------
+Fargateではログ収集機能をデフォルトで提供しており、下記から選択できる。
+- `awslogs <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html?icmpid=docs_ecs_hp-task-definition>`_ ： ログドライバーを利用してstdoutとstderrはCloudWathchへログが転送される
+- `splunk <https://docs.docker.com/config/containers/logging/splunk/>`_ ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能
+- `firelens <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition>`_ ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能
+
+ログ基盤変更においても柔軟に対応できるように、firelensに着目する。
 
 
 What：何のログを集めるか？
 ===================================
 
 
-ここまでのまとめ
+ここまでのまとめと目指すもの
 ===================================
 
 
@@ -70,3 +79,7 @@ What：何のログを集めるか？
 ===================================
 
 
+成果のまとめ
+===================================
+
+.. todo:: `ここ <https://engineering.dena.com/blog/2022/08/firelens/>`_ のまとめを参考に総括する。

@@ -63,12 +63,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#why">Why：なぜログが必要なのか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how">How：どうやってログを集めるか？</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#docker">Dockerのログ出力の方法</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ecs">ECSのログ出力の仕組み</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fargate">Fargateのログ出力の仕組み</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#what">What：何のログを集めるか？</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">ここまでのまとめ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">ここまでのまとめと目指すもの</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id5">実装例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">成果のまとめ</a></li>
 </ul>
 </li>
 </ul>
@@ -108,6 +109,7 @@
 <li><p>AWSを利用したマイクロサービスアーキテクチャであること</p></li>
 <li><p>コンテナベースであること</p></li>
 <li><p>クラウド基盤→オンプレミスへの移植性も考慮した構成とすること</p></li>
+<li><p>ログ基盤の変更に対してアプリケーションへの影響が少ないこと</p></li>
 </ul>
 <p>また、ログ処理フローのうち、下記の部分に着目する。</p>
 <img alt="_images/LoggingFlow.drawio.svg" src="_images/LoggingFlow.drawio.svg" /><p><a class="reference external" href="https://www.slideshare.net/AmazonWebServicesJapan/black-belt-online-seminar-aws-69708255">[Black Belt Online Seminar] AWS上でのログ管理</a></p>
@@ -135,20 +137,34 @@
 コンテナ内部にデータ保管するとデータロストにつながることから、今回はPush型に着目する。</p>
 <img alt="_images/PushPull.drawio.svg" src="_images/PushPull.drawio.svg" /><section id="docker">
 <h3>Dockerのログ出力の方法<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>ホストマシンのデータ領域をマウントしてログを書き込む：「アプリケーションは標準出力にログを吐けばいい」という 12Twelve-Factor App の世界観を満たさなくなってしまう = インフラレイヤ変更がアプリケーションにも影響を及ぼす</p></li>
+<li><p>ログドライバーの利用： 候補としてあり</p></li>
+<li><p>サイドカーコンテナの利用： 候補としてあり</p></li>
+<li><p>アプリコンテナでロガーライブラリ等を利用して直接ログ基盤にログ出力：「アプリケーションは標準出力にログを吐けばいい」という 12Twelve-Factor App の世界観を満たさなくなってしまう = インフラレイヤ変更がアプリケーションにも影響を及ぼす</p></li>
+</ul>
 <p><a class="reference external" href="https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers">ロギングドライバー</a></p>
 </section>
-<section id="ecs">
-<h3>ECSのログ出力の仕組み<a class="headerlink" href="#ecs" title="Link to this heading"></a></h3>
+<section id="fargate">
+<h3>Fargateのログ出力の仕組み<a class="headerlink" href="#fargate" title="Link to this heading"></a></h3>
+<p>Fargateではログ収集機能をデフォルトで提供しており、下記から選択できる。
+- <a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html?icmpid=docs_ecs_hp-task-definition">awslogs</a> ： ログドライバーを利用してstdoutとstderrはCloudWathchへログが転送される
+- <a class="reference external" href="https://docs.docker.com/config/containers/logging/splunk/">splunk</a> ：awslogsと同様にログドライバーを利用して、splunkにログを転送可能
+- <a class="reference external" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html?icmpid=docs_ecs_hp-task-definition">firelens</a> ：ログドライバーとサイドカーを利用して柔軟度の高いログ転送が可能</p>
+<p>ログ基盤変更においても柔軟に対応できるように、firelensに着目する。</p>
 </section>
 </section>
 <section id="what">
 <h2>What：何のログを集めるか？<a class="headerlink" href="#what" title="Link to this heading"></a></h2>
 </section>
 <section id="id4">
-<h2>ここまでのまとめ<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<h2>ここまでのまとめと目指すもの<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
 </section>
 <section id="id5">
 <h2>実装例<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+</section>
+<section id="id6">
+<h2>成果のまとめ<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
 </section>
 </section>
 
