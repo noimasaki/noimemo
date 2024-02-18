@@ -106,7 +106,8 @@ https://debugroom.github.io/doc/convention/app-infra/logging.html
 実装例
 ===================================
 
-:doc:`Microservice_Logging.rst` に示す。
+.. toctree::
+    Microservice_Logging.rst
 
 成果のまとめ
 ===================================
