@@ -17,6 +17,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "myst_parser",
     "sphinx_markdown_tables",
+    "sphinxcontrib.mermaid",
 ]
 
 templates_path = ['_templates']
