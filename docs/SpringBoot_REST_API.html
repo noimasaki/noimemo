@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpringBootでREST API &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="MySQL環境構築" href="MySQL.html" />
+    <link rel="prev" title="Spring BootをDocker上で動かす" href="SpringOnDocker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Sphinx.html">Sphinx導入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SpringBootでREST API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">1. 環境構築</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">1-1. プロジェクト作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1-2. モデル作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1-3. サービス作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1-4. コントローラ作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get">2. GET（参照）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post">3. POST（登録）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#put">4. PUT(更新)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#delete">5. DELETE (削除)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mysql">データベース（MySQL）を利用する</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">データベース作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">プロジェクト作成</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SpringBootでREST API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SpringBoot_REST_API.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="springbootrest-api">
+<h1>SpringBootでREST API<a class="headerlink" href="#springbootrest-api" title="Link to this heading"></a></h1>
+<p>SpringBootを利用した簡単なREST APIを作成する。</p>
+<section id="id1">
+<h2>1. 環境構築<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Visual Studio Codeを利用してSpringBootを開始する。</p>
+<section id="id2">
+<h3>1-1. プロジェクト作成<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>VS Codeのコマンドパレットから新しくプロジェクトを作成
+<img alt="Create Project" src="_images/CreatePJ.png" /></p>
+<ul class="simple">
+<li><p>Spring Boot version: 3.15</p></li>
+<li><p>project language: Java</p></li>
+<li><p>Group Id: com.example</p></li>
+<li><p>Artifact Id: item</p></li>
+<li><p>packaging type: Jar</p></li>
+<li><p>Java version: 17  ※ 実行環境のJavaバージョンと合わせる必要がある</p></li>
+<li><p>dependencies: Spring Web</p></li>
+</ul>
+<p>作成されたディレクトリに、<code class="docutils literal notranslate"><span class="pre">Controller</span></code>フォルダ、<code class="docutils literal notranslate"><span class="pre">Model</span></code>フォルダ、<code class="docutils literal notranslate"><span class="pre">Service</span></code>フォルダを作成する</p>
+<p>以下のようなフォルダ構成となる</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>item           // Spring Boot プロジェクディレクトリ
+├── pom.xml
+├── src
+│   ├── main    // Javaファイルはここに作成
+│   │   └── java/com/example/item
+│   │       ├── ItemApplication.java
+│   │       ├── Controller  // Controllerクラス用ディレクトリ
+│   │       ├── Model       // Modelクラス用ディレクトリ
+│   │       └── Service     // Serviceクラス用ディレクトリ
+│   └── test
+└── target      // ビルドしたjarファイルはここに格納される
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>1-2. モデル作成<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>ItemApplication.javaと同ディレクトリにモデル（Item.java）を作成し、次のオブジェクト作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">private</span> <span class="n">String</span> <span class="n">itemId</span><span class="p">;</span>          <span class="o">//</span><span class="n">商品ID</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">itemName</span><span class="p">;</span>        <span class="o">//</span><span class="n">商品名</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">itemCategory</span><span class="p">;</span>    <span class="o">//</span><span class="n">商品カテゴリー</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>GetterとSetterを作成
+コードを記載してももちろんOKだが、右クリックから
+<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Getters</span> <span class="pre">and</span> <span class="pre">Setters...</span></code>
+を選択すると自動で作って便利</p></li>
+</ol>
+<p><img alt="VScode" src="_images/VScode1.png" />
+↓ GetterとSetterを作成したい対象を選択してあげると
+<img alt="VScode" src="image.png" /></p>
+<ol class="arabic simple" start="3">
+<li><p>コンストラクタを作成
+こちらも<code class="docutils literal notranslate"><span class="pre">ソースアクション</span> <span class="pre">&gt;</span> <span class="pre">Generate</span> <span class="pre">Constructors...</span></code>から作成すると便利</p></li>
+</ol>
+<p>Item.java</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span>
+
+<span class="n">public</span> <span class="k">class</span> <span class="nc">Item</span> <span class="p">{</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">itemId</span><span class="p">;</span>          <span class="o">//</span><span class="n">商品ID</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">itemName</span><span class="p">;</span>        <span class="o">//</span><span class="n">商品名</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">itemCategory</span><span class="p">;</span>    <span class="o">//</span><span class="n">商品カテゴリー</span>
+
+    <span class="o">//</span> <span class="n">コンストラクタ</span>
+    <span class="n">public</span> <span class="n">Item</span><span class="p">(</span><span class="n">String</span> <span class="n">itemId</span><span class="p">,</span> <span class="n">String</span> <span class="n">itemName</span><span class="p">,</span> <span class="n">String</span> <span class="n">itemCategory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemId</span> <span class="o">=</span> <span class="n">itemId</span><span class="p">;</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemName</span> <span class="o">=</span> <span class="n">itemName</span><span class="p">;</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemCategory</span> <span class="o">=</span> <span class="n">itemCategory</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">//</span> <span class="n">GetterとSetter</span>
+    <span class="n">public</span> <span class="n">String</span> <span class="n">getItemId</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">itemId</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">setItemId</span><span class="p">(</span><span class="n">String</span> <span class="n">itemId</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemId</span> <span class="o">=</span> <span class="n">itemId</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">public</span> <span class="n">String</span> <span class="n">getItemName</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">itemName</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">setItemName</span><span class="p">(</span><span class="n">String</span> <span class="n">itemName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemName</span> <span class="o">=</span> <span class="n">itemName</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">public</span> <span class="n">String</span> <span class="n">getItemCategory</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">itemCategory</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">setItemCategory</span><span class="p">(</span><span class="n">String</span> <span class="n">itemCategory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">itemCategory</span> <span class="o">=</span> <span class="n">itemCategory</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>1-3. サービス作成<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>コントローラから呼ばれるビジネスロジックであるItemService.javaを作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">Service</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">com.example.item.Model.Item</span><span class="p">;</span>
+
+<span class="nd">@Service</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">ItemService</span> <span class="p">{</span>
+        <span class="n">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">allItems</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10001&quot;</span><span class="p">,</span> <span class="s2">&quot;ネックレス&quot;</span><span class="p">,</span> <span class="s2">&quot;ジュエリ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10002&quot;</span><span class="p">,</span> <span class="s2">&quot;パーカー&quot;</span><span class="p">,</span> <span class="s2">&quot;ファッション&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10003&quot;</span><span class="p">,</span> <span class="s2">&quot;フェイスクリーム&quot;</span><span class="p">,</span> <span class="s2">&quot;ビューティ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10004&quot;</span><span class="p">,</span> <span class="s2">&quot;サプリメント&quot;</span><span class="p">,</span> <span class="s2">&quot;ヘルス&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10005&quot;</span><span class="p">,</span> <span class="s2">&quot;ブルーベリー&quot;</span><span class="p">,</span> <span class="s2">&quot;フード&quot;</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="o">//</span> <span class="n">全てのItemリストを返すメソッド</span>
+        <span class="n">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">getAllItems</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">allItems</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="o">//</span> <span class="n">個別のItemを返すメソッド</span>
+        <span class="n">public</span> <span class="n">Item</span> <span class="n">getItem</span><span class="p">(</span><span class="n">String</span> <span class="n">itemId</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">allItems</span><span class="o">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">allItems</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">getItemId</span><span class="p">()</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">itemId</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">allItems</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">null</span><span class="p">;</span>    <span class="o">//</span> <span class="n">itemIdが見つからなかったらnullを返す</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>1-4. コントローラ作成<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>ItemController.javaを作成</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package com.example.item.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.item.Model.Item;
+import com.example.item.Service.ItemService;
+
+@RestController
+public class ItemController {
+    
+    // @Autowiredでインスタンス化は自動化
+    @Autowired
+    private ItemService itemService;
+
+    // @GetMappingで&quot;/items&quot;へアクセスしたときにgetAllItems()を実行
+    @GetMapping(&quot;/items&quot;)
+    public List&lt;Item&gt; getAllItems() {
+        return itemService.getAllItems();
+    }
+
+    // 全てのitemではなく、itemIdで個別の情報を返す
+    @GetMapping(&quot;/items/{id}&quot;)
+    public Item getItem(@PathVariable(&quot;id&quot;) String id){
+        return itemService.getItem(id);
+    }
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="get">
+<h2>2. GET（参照）<a class="headerlink" href="#get" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">1.</span> <span class="pre">環境構築</span></code>が完了していれば、GETは実装できたことになる。</p>
+<ol class="arabic simple">
+<li><p>SpringBootを起動する
+<img alt="Run SpringBoot" src="_images/VScode3.png" /></p></li>
+<li><p>ブラウザで<a class="reference external" href="http://localhost:8080/items">http://localhost:8080/items</a>にアクセスして、JSON形式で表示されればOK
+<img alt="Run SpringBoot" src="_images/GET_1.png" /></p></li>
+<li><p>個別のitem情報も取得できるか確認<a class="reference external" href="http://localhost:8080/items/10001">http://localhost:8080/items/10001</a>
+<img alt="Run SpringBoot" src="_images/GET_2.png" /></p></li>
+</ol>
+<p>確認できたらSpringBootは停止する</p>
+</section>
+<section id="post">
+<h2>3. POST（登録）<a class="headerlink" href="#post" title="Link to this heading"></a></h2>
+<p><img alt="POST" src="_images/POST.drawio.svg" /></p>
+<p>ポイント</p>
+<ul class="simple">
+<li><p>サービスクラスに記述しているArrayにaddしようとするとエラーが発生するので、ArrayList&lt;&gt;でnewしてあげる必要がある</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">ItemService</span> <span class="p">{</span>
+        <span class="n">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">allItems</span> <span class="o">=</span> <span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span> <span class="p">(</span><span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10001&quot;</span><span class="p">,</span> <span class="s2">&quot;ネックレス&quot;</span><span class="p">,</span> <span class="s2">&quot;ジュエリ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10002&quot;</span><span class="p">,</span> <span class="s2">&quot;パーカー&quot;</span><span class="p">,</span> <span class="s2">&quot;ファッション&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10003&quot;</span><span class="p">,</span> <span class="s2">&quot;フェイスクリーム&quot;</span><span class="p">,</span> <span class="s2">&quot;ビューティ&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10004&quot;</span><span class="p">,</span> <span class="s2">&quot;サプリメント&quot;</span><span class="p">,</span> <span class="s2">&quot;ヘルス&quot;</span><span class="p">),</span>
+            <span class="n">new</span> <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;10005&quot;</span><span class="p">,</span> <span class="s2">&quot;ブルーベリー&quot;</span><span class="p">,</span> <span class="s2">&quot;フード&quot;</span><span class="p">)</span>
+        <span class="p">));</span>
+</pre></div>
+</div>
+<p>PostmanでPOSTして確認してみる
+<img alt="Postman" src="_images/POST_1.png" /></p>
+</section>
+<section id="put">
+<h2>4. PUT(更新)<a class="headerlink" href="#put" title="Link to this heading"></a></h2>
+<p><img alt="PUT" src="_images/PUT.drawio.svg" /></p>
+</section>
+<section id="delete">
+<h2>5. DELETE (削除)<a class="headerlink" href="#delete" title="Link to this heading"></a></h2>
+<p><img alt="DELETE" src="_images/DELETE.drawio.svg" /></p>
+</section>
+<section id="mysql">
+<h2>データベース（MySQL）を利用する<a class="headerlink" href="#mysql" title="Link to this heading"></a></h2>
+<p><img alt="DatabBase" src="_images/figure.drawio.png" /></p>
+<section id="id6">
+<h3>データベース作成<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>MySQL Workbenchからデータベースを作成
+<img alt="Opne MySQL Workbench" src="_images/DB_1.png" />
+<img alt="Create DB" src="_images/DB_2.png" /></p>
+</section>
+<section id="id7">
+<h3>プロジェクト作成<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>VS Codeのコマンドから新しくプロジェクトを作成
+<img alt="Create Project" src="_images/CreatePJ.png" /></p></li>
+</ol>
+<ul class="simple">
+<li><p>Spring Boot Version : 3.1.5 （一番上のやつ）</p></li>
+<li><p>project language : Java</p></li>
+<li><p>Group</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="SpringOnDocker.html" class="btn btn-neutral float-left" title="Spring BootをDocker上で動かす" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MySQL.html" class="btn btn-neutral float-right" title="MySQL環境構築" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

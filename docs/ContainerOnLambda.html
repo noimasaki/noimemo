@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lambdaでコンテナを動かす &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Sphinx.html">Sphinx導入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lambdaでコンテナを動かす</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ContainerOnLambda.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lambda">
+<h1>Lambdaでコンテナを動かす<a class="headerlink" href="#lambda" title="Link to this heading"></a></h1>
+<p>コンテナイメージの作成は「Spring BootをDocker上で動かす」を参照</p>
+<section id="id1">
+<h2>前提<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>AWS Lambdaでコンテナを実行する場合、</p>
+</section>
+<section id="ecr">
+<h2>ECRへコンテナアップロード<a class="headerlink" href="#ecr" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>AWSのコンソールからECRを開き、リポジトリを作成</p></li>
+</ol>
+<p><img alt="ECR" src="_images/1_ECR.png" /></p>
+<p>リポジトリの設定は以下</p>
+<ul class="simple">
+<li><p>可視性設定：プライベート</p></li>
+<li><p>リポジトリ名：任意</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p><a class="reference external" href="https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/getting-started-install.html">AWS CLIインストール</a></p></li>
+<li><p>AWSコンソールの<code class="docutils literal notranslate"><span class="pre">プッシュコマンドの表示</span></code>に記されたコマンドを実行する</p></li>
+</ol>
+<p><img alt="ECR" src="_images/2_ECR.png" /></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">aws</span> <span class="n">ecr</span> <span class="n">get</span><span class="o">-</span><span class="n">login</span><span class="o">-</span><span class="n">password</span> <span class="o">--</span><span class="n">region</span> <span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mi">1</span> <span class="o">|</span> <span class="n">docker</span> <span class="n">login</span> <span class="o">--</span><span class="n">username</span> <span class="n">AWS</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">stdin</span> <span class="n">XXXX</span><span class="o">.</span><span class="n">dkr</span><span class="o">.</span><span class="n">ecr</span><span class="o">.</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span>
+<span class="n">Login</span> <span class="n">Succeeded</span>
+
+<span class="o">%</span> <span class="n">docker</span> <span class="n">tag</span> <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">latest</span> <span class="n">XXXX</span><span class="o">.</span><span class="n">dkr</span><span class="o">.</span><span class="n">ecr</span><span class="o">.</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">noirepo</span><span class="p">:</span><span class="n">latest</span>
+<span class="n">docker</span> <span class="n">tag</span> <span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="p">:</span><span class="n">latest</span> <span class="mf">891393919774.</span><span class="n">dkr</span><span class="o">.</span><span class="n">ecr</span><span class="o">.</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">noirepo</span><span class="p">:</span><span class="n">latest</span>
+
+<span class="o">%</span> <span class="n">docker</span> <span class="n">images</span>
+<span class="n">REPOSITORY</span>                                          <span class="n">TAG</span>       <span class="n">IMAGE</span> <span class="n">ID</span>       <span class="n">CREATED</span>       <span class="n">SIZE</span>
+<span class="n">XXXX</span><span class="o">.</span><span class="n">dkr</span><span class="o">.</span><span class="n">ecr</span><span class="o">.</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">noirepo</span>   <span class="n">latest</span>    <span class="mi">991</span><span class="n">d27fbc07a</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>   <span class="mi">428</span><span class="n">MB</span>
+<span class="n">app</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span>                               <span class="n">latest</span>    <span class="mi">991</span><span class="n">d27fbc07a</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>   <span class="mi">428</span><span class="n">MB</span>
+
+<span class="o">%</span> <span class="n">docker</span> <span class="n">push</span> <span class="n">XXXX</span><span class="o">.</span><span class="n">dkr</span><span class="o">.</span><span class="n">ecr</span><span class="o">.</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">noirepo</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+<p>AWSコンソールを確認するとコンテナイメージが登録されていることが確認できる</p>
+<p><img alt="ECR" src="_images/3_ECR.png" /></p>
+</section>
+<section id="api-gateway">
+<h2>API Gatewayの構築<a class="headerlink" href="#api-gateway" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>AWSコンソールからAPI Gatewayを開き、APIを作成する</p></li>
+</ol>
+<ul class="simple">
+<li><p>APIタイプを選択：HTTP API</p></li>
+<li><p>統合：Lambda &gt; コンテナイメージをデプロイしたLambda関数を指定</p></li>
+<li><p>ルートを設定</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>Lambdaへデプロイ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
