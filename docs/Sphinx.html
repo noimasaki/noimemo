@@ -53,6 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#id3">2. プロジェクト作成</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id4">3. 記事作成・ビルド</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mermaid">4. [拡張機能] Mermaid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fontawesome">5. [拡張機能] FontAwesome</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
@@ -173,6 +174,29 @@
         テスト（モジュールB） :crit, b3, after a3 b2  , 2d
         テスト（モジュールC） :crit, b4, after a4 b3  , 2d
         </div></section>
+<section id="fontawesome">
+<h2>5. [拡張機能] FontAwesome<a class="headerlink" href="#fontawesome" title="Link to this heading"></a></h2>
+<p>フォントアイコン <a class="reference external" href="https://github.com/fraoustin/sphinx_fontawesome">Font Awesome</a> を利用できるようにする。</p>
+<ol class="arabic">
+<li><p>sphinx_fontawesome インストール</p>
+<blockquote>
+<div><p>pip install sphinx_fontawesome</p>
+</div></blockquote>
+</li>
+<li><p>conf.pyに追記</p>
+<blockquote>
+<div><p>import sphinx_fontawesome
+extensions = [</p>
+<blockquote>
+<div><p>...,
+'sphinx_fontawesome'</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+</li>
+<li><p>記載例</p></li>
+</ol>
+</section>
 </section>
 
 
