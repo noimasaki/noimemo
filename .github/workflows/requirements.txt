@@ -3,3 +3,4 @@ sphinx_rtd_theme    #拡張テーマ
 myst_parser         #Markdown用プラグイン
 sphinx_markdown_tables  #Markdown用のテーブルを使えるようにする
 sphinxcontrib-mermaid   #Mermaid
+sphinx_fontawesome  #fontawesome

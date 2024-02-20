@@ -80,3 +80,22 @@ GUIで生成する`Mermaid Live <https://mermaid.live/>`_ も存在する。
             テスト（モジュールA） :crit, active, b2, after a2 b1  , 2d
             テスト（モジュールB） :crit, b3, after a3 b2  , 2d
             テスト（モジュールC） :crit, b4, after a4 b3  , 2d
+
+
+5. [拡張機能] FontAwesome
+============================
+フォントアイコン `Font Awesome <https://github.com/fraoustin/sphinx_fontawesome>`_ を利用できるようにする。
+
+#. sphinx_fontawesome インストール
+
+    pip install sphinx_fontawesome
+
+#. conf.pyに追記
+
+    import sphinx_fontawesome
+    extensions = [
+        ...,
+        'sphinx_fontawesome'
+    ]
+
+#. 記載例
