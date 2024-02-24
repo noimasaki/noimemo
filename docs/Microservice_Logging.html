@@ -64,16 +64,18 @@
 <li class="toctree-l2"><a class="reference internal" href="Logging.html#why">Why：なぜログが必要なのか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Logging.html#how">How：どうやってログを集めるか？</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Logging.html#what">What：何のログを集めるか？</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Logging.html#id4">マイクロサービスにおいて気をつけるべきこと</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Logging.html#id5">ここまでのまとめと目指すもの</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="Logging.html#id6">実装例</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Logging.html#id4">ここまでのまとめと目指すもの</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Logging.html#id5">実装例</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ログ出力を試す</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id2">ログサーバ用コンテナの準備</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">アクセスログ実装</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#s3">ロギングドライバーを利用してS3にログを転送する</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rhel">RHELでも動かしてみる</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Logging.html#id7">成果のまとめ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html#id6">成果のまとめ</a></li>
 </ul>
 </li>
 </ul>
@@ -156,6 +158,17 @@ curl -X POST -d &#39;json={&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:
 2024-02-18 15:31:03.719726481 +0000 sample.log: {&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:&quot;example&quot;}
 </pre></div>
 </div>
+</section>
+<section id="id3">
+<h2>アクセスログ実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>アクセスログを実装して標準出力に出力させる。</p>
+</section>
+<section id="s3">
+<h2>ロギングドライバーを利用してS3にログを転送する<a class="headerlink" href="#s3" title="Link to this heading"></a></h2>
+</section>
+<section id="rhel">
+<h2>RHELでも動かしてみる<a class="headerlink" href="#rhel" title="Link to this heading"></a></h2>
+<p>ALBの代わりにKongを利用する。</p>
 </section>
 </section>
 
