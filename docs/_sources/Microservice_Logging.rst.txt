@@ -102,29 +102,7 @@ fluentdの最新コンテナイメージを利用して、コンテナを起動�
             return "home";      // home.htmlをreturn
         }
 
-        // http://<ホスト名>:<ポート番号>/login
-        @GetMapping("/login")
-        public String login(){
-            return "login";     // login.htmlをreturn
-        }
-
-        // http://<ホスト名>:<ポート番号>/logout
-        @GetMapping("/logout")
-        public String logout(){
-            return "logout";    // logout.htmlをreturn
-        }
-
-        // backend-item呼び出し
-        // http://<ホスト名>:<ポート番号>/items
-        @Autowired
-        private itemService itemService;
-
-        @GetMapping("/items")
-        @ResponseBody
-        public String items(){
-            // @ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn
-            return itemService.getAllItems();
-        }
+        // 省略..
 
     }
 
