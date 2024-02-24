@@ -162,6 +162,8 @@ curl -X POST -d &#39;json={&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:
 <section id="id3">
 <h2>アクセスログ実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <p>アクセスログを実装して標準出力に出力させる。</p>
+<p>Springを起動して、ログイン後、アクセスログが出力されていることを確認する。</p>
+<p>ただ、アクセスログで言えば送信元のIPアドレスや、ログインユーザ名も知りたいところだが、それらを実装していくと本来のControllerとしてのコードが見づらくなってしまう。そこで、SpringBootではAOPを利用してログ出力する。</p>
 </section>
 <section id="s3">
 <h2>ロギングドライバーを利用してS3にログを転送する<a class="headerlink" href="#s3" title="Link to this heading"></a></h2>
