@@ -93,6 +93,7 @@ What：何のログを集めるか？
     :encoding: utf-8
     :header-rows: 1
 
+
 SLF4JやLogbackのログレベルの順番は、 TRACE < DEBUG < INFO < WARN < ERROR であり、FATALは存在しない。
 
 (c) トレーサビリティ
