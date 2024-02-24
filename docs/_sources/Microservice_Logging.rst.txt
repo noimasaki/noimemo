@@ -69,7 +69,7 @@ fluentdの最新コンテナイメージを利用して、コンテナを起動�
 アクセスログを実装して標準出力に出力させる。
 
 
-``` code-block:: java
+.. code-block:: java
     :lineos:
 
     package com.example.frontendwebapp.app;
