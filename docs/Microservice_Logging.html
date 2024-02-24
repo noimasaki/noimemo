@@ -162,6 +162,68 @@ curl -X POST -d &#39;json={&quot;action&quot;:&quot;test&quot;,&quot;user&quot;:
 <section id="id3">
 <h2>アクセスログ実装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <p>アクセスログを実装して標準出力に出力させる。</p>
+<dl>
+<dt><a href="#id4"><span class="problematic" id="id5">``</span></a>` code-block:: java</dt><dd><dl class="field-list simple">
+<dt class="field-odd">lineos<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>package com.example.frontendwebapp.app;</p>
+<p>import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;</p>
+<p>import com.example.frontendwebapp.domain.itemService;</p>
+<p>&#64;Controller
+public class frontController {</p>
+<blockquote>
+<div><p>// Logger生成
+// getLoggerの引数にClassオブジェクトを指定するとロガー名はそのクラスのFQDNとなる
+private static final Logger logger = LoggerFactory</p>
+<blockquote>
+<div><p>.getLogger(frontController.class);</p>
+</div></blockquote>
+<p>// 引数なしの場合はアプリケーションのコンテキストルート
+// <a class="reference external" href="http:/">http:/</a>/&lt;ホスト名&gt;:&lt;ポート番号&gt;/ へのGET時に呼び出される
+&#64;GetMapping
+public String home(){</p>
+<blockquote>
+<div><p>// ログ出力
+logger.info(&quot;アクセスログ&quot;);</p>
+<p>return &quot;home&quot;;      // home.htmlをreturn</p>
+</div></blockquote>
+<p>}</p>
+<p>// <a class="reference external" href="http:/">http:/</a>/&lt;ホスト名&gt;:&lt;ポート番号&gt;/login
+&#64;GetMapping(&quot;/login&quot;)
+public String login(){</p>
+<blockquote>
+<div><p>return &quot;login&quot;;     // login.htmlをreturn</p>
+</div></blockquote>
+<p>}</p>
+<p>// <a class="reference external" href="http:/">http:/</a>/&lt;ホスト名&gt;:&lt;ポート番号&gt;/logout
+&#64;GetMapping(&quot;/logout&quot;)
+public String logout(){</p>
+<blockquote>
+<div><p>return &quot;logout&quot;;    // logout.htmlをreturn</p>
+</div></blockquote>
+<p>}</p>
+<p>// backend-item呼び出し
+// <a class="reference external" href="http:/">http:/</a>/&lt;ホスト名&gt;:&lt;ポート番号&gt;/items
+&#64;Autowired
+private itemService itemService;</p>
+<p>&#64;GetMapping(&quot;/items&quot;)
+&#64;ResponseBody
+public String items(){</p>
+<blockquote>
+<div><p>// &#64;ResponseBodyアノテーションにより、バックエンドから返却した戻り値をそのまま文字情報としてreturn
+return itemService.getAllItems();</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
 </section>
 <section id="s3">
 <h2>ロギングドライバーを利用してS3にログを転送する<a class="headerlink" href="#s3" title="Link to this heading"></a></h2>
