@@ -73,24 +73,25 @@ Fargateではログ収集機能をデフォルトで提供しており、下記�
 
 What：何のログを集めるか？
 ===================================
-https://debugroom.github.io/doc/convention/app-infra/logging.html
-に準拠する。
+以下を参考として整理する。
+- https://terasolunaorg.github.io/guideline/5.4.2.RELEASE/ja/ArchitectureInDetail/GeneralFuncDetail/Logging.html#id2
+- https://www.dataset.com/blog/the-10-commandments-of-logging/
 
-登場人物
-    人
-        利用者
-        管理者
-    システム
-        アプリケーション
-        インフラ
-        ：
+(a) ログ種類
 
-時間軸
-    システム起動
-    稼働中
-    システム終了
-    メンテナンス
+.. csv-table::
+    :file: _static/Logging/Log_list.csv
+    :encoding: utf-8
+    :header-rows: 1
+    
 
+(b) ログレベル
+
+
+
+
+
+https://www.dataset.com/blog/the-10-commandments-of-logging/
 
 マイクロサービスにおいて気をつけるべきこと
 ===================================
