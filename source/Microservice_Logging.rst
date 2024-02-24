@@ -71,6 +71,7 @@ fluentdの最新コンテナイメージを利用して、コンテナを起動�
 
 .. code-block:: java
     :lineos:
+    :emphasize-lines: 3-4, 15-18, 24-25
 
     package com.example.frontendwebapp.app;
 
