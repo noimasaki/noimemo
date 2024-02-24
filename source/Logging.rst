@@ -79,6 +79,7 @@ What：何のログを集めるか？
 - https://www.dataset.com/blog/the-10-commandments-of-logging/
 
 (a) ログ種類
+--------------
 
 .. csv-table::
     :file: _static/Logging/Log_list.csv
@@ -87,6 +88,7 @@ What：何のログを集めるか？
 
 
 (b) ログレベル
+--------------
 
 .. csv-table::
     :file: _static/Logging/Log_level.csv
