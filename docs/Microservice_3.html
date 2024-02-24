@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>マイクロサービス作成③ （アプリケーション改修） &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Sphinx.html">Sphinx導入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">マイクロサービス作成③ （アプリケーション改修）</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Microservice_3.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>マイクロサービス作成③ （アプリケーション改修）<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="id2">
+<h2>実施すること<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>アプリケーションを改修し、ログ出力を実装する。</p>
+</section>
+<section id="id3">
+<h2>作成の流れ<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>テストユーザPW固定</p></li>
+</ol>
+</section>
+<section id="pw">
+<h2>1. テストユーザPW固定<a class="headerlink" href="#pw" title="Link to this heading"></a></h2>
+<p>現在はSpringSecurityによるデフォルトのPWを利用しているため、起動するごとにPWが変更されてしまう。そこで、テストユーザのID/PWを固定化する。以下のように追記するだけ。</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">【frontend-webapp】/resources/application.yml</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">service</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">backendEndpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://internal-ma-noim-alb-pri-1627874572.ap-northeast-1.elb.amazonaws.com</span>
+
+<span class="hll"><span class="nt">spring</span><span class="p">:</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">security</span><span class="p">:</span>
+</span><span class="hll"><span class="w">        </span><span class="nt">user</span><span class="p">:</span>
+</span><span class="hll"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+</span><span class="hll"><span class="w">            </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1qaz&quot;WSX</span>
+</span></pre></div>
+</div>
+</div>
+<p>コードを修正したらcommitして、GitHub Actionにて自動ビルドしてDockerHubへアップロードする。</p>
+<p>その後、ECSのfrontendのサービスを更新から「新しいデプロイの強制」にチェックをつけて更新するだけ。</p>
+<p><img alt="update_ECS" src="_/static/Microservice_3/update_ECS.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

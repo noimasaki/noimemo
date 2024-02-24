@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sphinx導入 &mdash; noimemo  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c033477b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=4dbe4bdc"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Sphinx導入とGitHubページ作成" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html" />
+    <link rel="prev" title="技術メモ" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            noimemo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sphinx導入</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">1. Sphinxインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">2. プロジェクト作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">3. 記事作成・ビルド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mermaid">4. [拡張機能] Mermaid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fontawesome">5. [拡張機能] FontAwesome</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html">Sphinx導入とGitHubページ作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GiHubAppsToken.html">GitHub Appsトークンの発行・実装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringOnDocker.html">Spring BootをDocker上で動かす</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringBoot_REST_API.html">SpringBootでREST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL環境構築</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html">SpringBootでマイクロサービス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#login-html">1. <code class="docutils literal notranslate"><span class="pre">login.html</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice.html#id2">2. <code class="docutils literal notranslate"><span class="pre">SecurityConfig.java</span></code>を作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringSecurity.html">認証機能の実装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GitHubAction_DockerPush.html">GitHubActionsを利用した自動ビルド</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_1.html">マイクロサービス作成①（ローカル環境での開発）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice_2.html">マイクロサービス作成② （AWS環境の構築）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpringMicroservice_3.html">マイクロサービス作成③ （アプリケーション改修）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">ログ出力方式ベストプラクティス</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">noimemo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Sphinx導入</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Sphinx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sphinx">
+<h1>Sphinx導入<a class="headerlink" href="#sphinx" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://www.sphinx-doc.org/ja/master/">Sphinx</a> をHTMLビルダーとして利用し、ドキュメンテーションする。</p>
+<section id="id2">
+<h2>1. Sphinxインストール<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+</section>
+<section id="id3">
+<h2>2. プロジェクト作成<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+</section>
+<section id="id4">
+<h2>3. 記事作成・ビルド<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+</section>
+<section id="mermaid">
+<h2>4. [拡張機能] Mermaid<a class="headerlink" href="#mermaid" title="Link to this heading"></a></h2>
+<p>ガントチャートやシーケンス図を簡単に生成できる`ツール &lt;<a class="reference external" href="https://github.com/mgaitan/sphinxcontrib-mermaid?tab=readme-ov-file#installation">https://github.com/mgaitan/sphinxcontrib-mermaid?tab=readme-ov-file#installation</a>&gt;`_</p>
+<p>GUIで生成する`Mermaid Live &lt;<a class="reference external" href="https://mermaid.live/">https://mermaid.live/</a>&gt;`_ も存在する。</p>
+<ol class="arabic">
+<li><p>Mermaidインストール</p>
+<blockquote>
+<div><p>pip install sphinxcontrib-mermaid</p>
+</div></blockquote>
+</li>
+<li><p>conf.pyに追記</p>
+<blockquote>
+<div><dl class="simple">
+<dt>extensions = [</dt><dd><p>...,
+'sphinxcontrib.mermaid'</p>
+</dd>
+</dl>
+<p>]</p>
+</div></blockquote>
+</li>
+<li><p>記載例（ガントチャート）</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.. mermaid::
+
+    gantt
+        title プロジェクトA
+        dateFormat  YYYY-MM-DD
+        excludes    weekends
+        section  概要
+            プロジェクト開始 : milestone, m1, 2023-02-01, 0d
+            開発開始 : milestone, m2, after a1, 0d
+            開発完了 : milestone, m3, after a4, 0d
+            テスト完了 : milestone, m3, after b4, 0d
+        section 開発
+            開発準備 :done,a1, 2023-02-06, 2d
+            開発（モジュールA） :done,a2, after a1, 2d
+            開発（モジュールB） :active, a3, after a2, 3d
+            開発（モジュールC） :a4, after a3, 5d
+        section テスト
+            テスト準備 :done, b1, 2023-02-10  , 2d
+            テスト（モジュールA） :crit, active, b2, after a2 b1  , 2d
+            テスト（モジュールB） :crit, b3, after a3 b2  , 2d
+            テスト（モジュールC） :crit, b4, after a4 b3  , 2d
+</pre></div>
+</div>
+<div class="mermaid">
+            gantt
+    title プロジェクトA
+    dateFormat  YYYY-MM-DD
+    excludes    weekends
+    section  概要
+        プロジェクト開始 : milestone, m1, 2023-02-01, 0d
+        開発開始 : milestone, m2, after a1, 0d
+        開発完了 : milestone, m3, after a4, 0d
+        テスト完了 : milestone, m3, after b4, 0d
+    section 開発
+        開発準備 :done,a1, 2023-02-06, 2d
+        開発（モジュールA） :done,a2, after a1, 2d
+        開発（モジュールB） :active, a3, after a2, 3d
+        開発（モジュールC） :a4, after a3, 5d
+    section テスト
+        テスト準備 :done, b1, 2023-02-10  , 2d
+        テスト（モジュールA） :crit, active, b2, after a2 b1  , 2d
+        テスト（モジュールB） :crit, b3, after a3 b2  , 2d
+        テスト（モジュールC） :crit, b4, after a4 b3  , 2d
+        </div></section>
+<section id="fontawesome">
+<h2>5. [拡張機能] FontAwesome<a class="headerlink" href="#fontawesome" title="Link to this heading"></a></h2>
+<p>フォントアイコン <a class="reference external" href="https://github.com/fraoustin/sphinx_fontawesome">Font Awesome</a> を利用できるようにする。</p>
+<ol class="arabic">
+<li><p>sphinx_fontawesome インストール</p>
+<blockquote>
+<div><p>pip install sphinx_fontawesome</p>
+</div></blockquote>
+</li>
+<li><p>conf.pyに追記</p>
+<blockquote>
+<div><p>import sphinx_fontawesome
+extensions = [</p>
+<blockquote>
+<div><p>...,
+'sphinx_fontawesome'</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+</li>
+<li><p>記載例</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="技術メモ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Shpinx%E5%B0%8E%E5%85%A5%E3%81%A8GiHub%E3%83%9A%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90.html" class="btn btn-neutral float-right" title="Sphinx導入とGitHubページ作成" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, noim.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
