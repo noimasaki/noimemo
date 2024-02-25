@@ -111,6 +111,104 @@ Springを起動して、ログイン後、アクセスログが出力されて�
 
 ただ、アクセスログで言えば送信元のIPアドレスや、ログインユーザ名も知りたいところだが、それらを実装していくと本来のControllerとしてのコードが見づらくなってしまう。そこで、SpringBootではAOPを利用してログ出力する。
 
+シンプルな記述例としては以下となる。これは、ログを出力したいController側には何もコードを記述する必要がなく、frontController内の各メソッドが呼び出された後（After）にログが出力される。
+
+.. code-block:: java
+
+    package com.example.frontendwebapp.app;
+
+    import org.aspectj.lang.JoinPoint;
+    import org.aspectj.lang.annotation.After;
+    import org.aspectj.lang.annotation.Aspect;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.stereotype.Component;
+
+    @Aspect
+    @Component
+    public class loggingAspect {
+        
+        private static final Logger logger = LoggerFactory.getLogger(loggingAspect.class);
+
+        @After("within(com.example.frontendwebapp.app.frontController)")
+        public void logAfterReturning(JoinPoint joinPoint) {
+            // メソッド実行後のログ出力
+            logger.info("after: メソッド {} が正常に実行されました。", joinPoint.getSignature().getName());
+        }
+        
+    }
+
+
+その他、アクセス元IPやユーザ情報を追記したものは下記。
+
+.. code-block:: java
+
+    package com.example.frontendwebapp.aspect;
+
+    import java.net.InetAddress;
+    import java.net.UnknownHostException;
+
+    import org.aspectj.lang.JoinPoint;
+    import org.aspectj.lang.annotation.After;
+    import org.aspectj.lang.annotation.Aspect;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.core.Authentication;
+    import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.stereotype.Component;
+    import org.springframework.web.context.request.RequestContextHolder;
+    import org.springframework.web.context.request.ServletRequestAttributes;
+
+    import jakarta.servlet.http.HttpServletRequest;
+
+
+    @Aspect
+    @Component
+    public class LoggingAspect {
+        
+        private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+
+        @Autowired
+        private HttpServletRequest request;
+
+        @After("within(com.example.frontendwebapp.app.frontController)")
+        public void logAfterReturning(JoinPoint joinPoint) {
+            // ログ要素
+            String ipAddress = request.getRemoteAddr();
+            String method = joinPoint.getSignature().getName();
+            String userId = getUserId();
+            String host = getServerName();
+            String sessionId = getSessionId();
+
+            // ログのフォーマット
+            String logMessage = String.format("Method: %s, IP: %s, User: %s, Host: %s, SessionId: %s", method , ipAddress, userId, host, sessionId);
+
+            // メソッド実行後のログ出力
+            logger.info(logMessage);
+        }
+        
+        private String getUserId() {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return (authentication != null) ? authentication.getName() : "Anonymous";
+        }
+
+        private String getServerName() {
+            try {
+                return InetAddress.getLocalHost().getHostName();
+            } catch (UnknownHostException e) {
+                return "Unknown";
+            }
+        }
+
+        private String getSessionId() {
+            return RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes
+                    ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession().getId()
+                    : "No session";
+        }
+    }
+
+
 
 
 
