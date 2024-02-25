@@ -218,18 +218,68 @@ The HTML pages are in build\html.
 1. GitHub Actionでは`.github/workflows`配下にYAMLファイルで定義する必要がある。以下のように作成する。
 
 ```
-yamlファイル
+# 名前
+name: "Build html and Deploy to GitHub Pages"
+
+# onセクション：jobsの実行トリガーを記載
+on:
+  push:
+    branches:
+      - main  # mainブランチへのpushで実行
+
+# jobsセクション：実際のジョブを記載
+jobs:
+# jobセクション配下に1つ以上のjobIDを定義し、各jobIDは並列に処理される
+  build_html: #jobID
+    name: Build HTML
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: SetupPython
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+        architecture: x64
+    
+    - name: Install requirements.txt
+      run: |
+        pip install -U -r .github/workflows/requirements.txt
+    
+    - name: Build html
+      run: |
+        make html
+    
+    # - name: Commit and push html
+    #   run: |
+    #     git config user.name "GitHub Actions Bot"
+    #     git add -A
+    #     git commit -m "Converted MD files to HTML" || echo "No changes to commit"
+    #     git push
+
+    - name: Upload Artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: docs
+  
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build_html  # 'build_html'ジョブが完了するのを待つ
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write  # GitHub Pagesへの書き込み権限
+      id-token: write
+    environment:
+      name: github-pages  # 使用する環境を指定
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1  # GitHub Pagesにデプロイ
 ```
-
-1. パーソナルアクセストークンの作成
-今回つくるワークフローではGitHub Actionsがリポジトリにpushするというjobが必要なため、パーソナルアクセストークンを作成し、トークンをGitHub Actions Secretsに追加する必要がある。
-
-`Settings > Secrets and variables > Actions > New repository secret`
-
-から、新しいシークレットを作成する。
-![secret](_static/test/secret.png)
-- Name: 任意の名前（MY_GITHUBACTIONS_SECRET）
-- Secret: パスフレーズ
 
 
 ## Shpinxにおけるmarkdown

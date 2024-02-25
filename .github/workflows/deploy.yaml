@@ -4,6 +4,8 @@ name: "Build html and Deploy to GitHub Pages"
 # onセクション：jobsの実行トリガーを記載
 on:
   push:
+    branches:
+      - main  # mainブランチへのpushで実行
 
 # jobsセクション：実際のジョブを記載
 jobs:
