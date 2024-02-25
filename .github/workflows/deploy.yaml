@@ -8,13 +8,11 @@ on:
 # jobsセクション：実際のジョブを記載
 jobs:
 # jobセクション配下に1つ以上のjobIDを定義し、各jobIDは並列に処理される
-  deploy_html: #jobID
-    name: deploy_html
-    permissions:
-      actions: write
-      checks: write
-      contents: write
+  build_html: #jobID
+    name: Build HTML
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
     - name: Checkout
@@ -34,18 +32,28 @@ jobs:
       run: |
         make html
     
-    # - name: Generate GitHub Apps token
-    #   id: generate-token
-    #   uses: tibdex/github-app-token@v1
-    #   with:
-    #     app_id: ${{ secrets.APP_ID }}
-    #     private_key: ${{ secrets.PRIVATE_KEY }}
-    
-    - name: Commit and push html
-      # env:
-      #   GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git add -A
-        git commit -m "Converted MD files to HTML" || echo "No changes to commit"
-        git push
+    # - name: Commit and push html
+    #   run: |
+    #     git config user.name "GitHub Actions Bot"
+    #     git add -A
+    #     git commit -m "Converted MD files to HTML" || echo "No changes to commit"
+    #     git push
+
+    - name: Upload Artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: docs
+  
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build_html  # 'build_html'ジョブが完了するのを待つ
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write  # GitHub Pagesへの書き込み権限
+      id-token: write
+    environment:
+      name: github-pages  # 使用する環境を指定
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1  # GitHub Pagesにデプロイ
