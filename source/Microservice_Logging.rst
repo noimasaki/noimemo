@@ -214,11 +214,24 @@ Springを起動して、ログイン後、アクセスログが出力されて�
 
 ロギングドライバーを利用してS3にログを転送する
 ==============================================
-
-
-RHELでも動かしてみる
-=======================================
-ALBの代わりにKongを利用する。
+1. S3バケット作成（ma-noim-bucket）
+2. ロールの作成
+    - 信頼されたエンティティタイプ：AWSのサービス
+    - ユースケース：Elastic Container Service Task
+    - 許可ポリシー：AmazonECSTaskExecutionRolePolicy
+    - 許可ポリシー：AmazonS3FullAccess
+    - ロール名：ma-noim-role-ecs
+3. 新しいタスク定義
+    - 基本はこれまでのコピー
+    - ログ収集の使用：AWS FireLens 経由でS3にログをエクスポートする
+        Name：S3（デフォルト）
+        region：ap-northeast-1（デフォルト）
+        bucket：ma-noim-bucket
+        total_file_size：1M（デフォルト）
+        upload_timeout：1m（デフォルト）
+        use_put_object：On（デフォルト）
+4. サービスのデプロイ
+    - 新しいデプロイの強制にチェックをつけて、デプロイする
 
 
 
