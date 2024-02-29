@@ -209,6 +209,86 @@ Springを起動して、ログイン後、アクセスログが出力されて�
     }
 
 
+トラッキングID
+================================================
+マイクロサービスアーキテクチャでは、複数のマイクロサービスが連携して処理を実行する為、処理のトレースを可視化することが重要である。
+
+そこで、各処理毎にトレースを可能とするIDを付与してログ出力する。
+
+(a) フロントエンド
+------------------------------
+トラッキングIDを生成して、バックエンドにたいしてHTTPリクエストヘッダーに`X-Tracking-ID`というヘッダー名でリクエストを投げる
+
+.. code-block:: java
+    :linenos:
+    :emphasize-lines: 26-28, 32
+
+    package com.example.frontendwebapp.domain;
+
+    import java.util.UUID;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Service;
+    import org.springframework.web.reactive.function.client.WebClient;
+
+    @Service
+    public class itemService {
+        @Autowired
+        WebClient webClient;
+
+        public String getAllItems(){
+            // トラッキングID生成
+            String trackingId;
+            trackingId = UUID.randomUUID().toString();
+
+            return webClient.get()
+                    .uri("/backend-item/items")
+                    .header("X-Tracking-ID", trackingId)    // ヘッダーにトラッキングIDを設定
+                    .retrieve()                 // retrieveの後にレスポンスを抽出する方法を記述する
+                    .bodyToMono(String.class)   // String型で受け取る
+                    .block();                   // ブロッキング
+        }
+    }
+
+
+(b) バックエンド
+------------------------------
+フロントエンドから受信したHTTPリクエストからトラックIDを取得して、ログに出力する。
+
+.. code-block:: java
+    :lineos:
+
+    package com.example.backenditem.app;
+
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.stereotype.Component;
+    import org.springframework.web.servlet.HandlerInterceptor;
+
+    import jakarta.servlet.http.HttpServletRequest;
+    import jakarta.servlet.http.HttpServletResponse;
+
+    @Component
+    public class TrackingInterceptor implements HandlerInterceptor{
+
+        private static final Logger logger = LoggerFactory.getLogger(TrackingInterceptor.class);
+
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+            // リクエストヘッダーからトラッキングIDを取得
+            String trackingId = request.getHeader("X-Tracking-ID");
+
+            // トラッキングIDが存在する場合、それをログに記録
+            if (trackingId != null) {
+                logger.info("Handling request with Tracking ID: {}", trackingId);
+            } else {
+                logger.info("Handling request without Tracking ID");
+            }
+
+            return true;
+        }
+        
+    }
 
 
 
@@ -234,5 +314,79 @@ Springを起動して、ログイン後、アクセスログが出力されて�
     - 新しいデプロイの強制にチェックをつけて、デプロイする
 
 
+
+
+FilterでX-IDを生成する。
+===================================================
+
+.. code-block:: java
+
+    package com.example.frontendwebapp.app;
+
+    import java.io.IOException;
+    import java.util.UUID;
+
+    import jakarta.servlet.Filter;
+    import jakarta.servlet.FilterChain;
+    import jakarta.servlet.FilterConfig;
+    import jakarta.servlet.ServletException;
+    import jakarta.servlet.ServletRequest;
+    import jakarta.servlet.ServletResponse;
+    import jakarta.servlet.http.HttpServletRequest;
+
+    public class TrackingFilter implements Filter{
+
+        @Override
+        public void init(FilterConfig filterConfig) throws ServletException{
+
+        }
+        
+        @Override
+        public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException{
+            // HTTPリクエストを扱うために、ServletRequestをHttpServletRequestにキャスト
+            HttpServletRequest request = (HttpServletRequest) servletRequest;
+
+            // トラッキングIDをUUIDを使って生成
+            String trackingId = UUID.randomUUID().toString();
+
+            // 生成したトラッキングIDをリクエストの属性にセット
+            request.setAttribute("X-Tracking-ID", trackingId);
+
+            // コンソールにトラッキングIDを出力（本番環境ではLoggerを使用すること）
+            System.out.println("Generated Tracking ID: " + trackingId + " for request to " + request.getRequestURI());
+
+            // リクエスト処理を次のフィルターまたは最終的な目的地（コントローラー）に渡す
+            filterChain.doFilter(request, servletResponse);
+        }
+    }
+
+
+このフィルターをWebConfig.javaで適用してあげる必要がある。
+
+.. code-block:: java
+
+    package com.example.frontendwebapp.config;
+
+    import org.springframework.boot.web.servlet.FilterRegistrationBean;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+
+    import com.example.frontendwebapp.app.TrackingFilter;
+
+    @Configuration
+    public class WebConfig {
+
+        @Bean
+        public FilterRegistrationBean<TrackingFilter> trackingFilter() {
+            FilterRegistrationBean<TrackingFilter> registrationBean = new FilterRegistrationBean<>();
+            registrationBean.setFilter(new TrackingFilter());
+            registrationBean.addUrlPatterns("/*"); // すべてのURLパターンに適用
+            return registrationBean;
+        }
+
+    }
+
+ただし、この方法ではHTTPでバックエンドを呼んだときにうまくリクエストヘッダーに入れることができなかった。（複雑になってしまう）
 
 
