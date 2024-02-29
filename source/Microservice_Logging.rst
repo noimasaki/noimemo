@@ -259,7 +259,7 @@ Springを起動して、ログイン後、アクセスログが出力されて�
 フロントエンドから受信したHTTPリクエストからトラックIDを取得して、ログに出力する。
 
 .. code-block:: java
-    :lineos:
+    :linenos:
 
     package com.example.backenditem.app;
 
