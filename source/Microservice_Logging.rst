@@ -224,7 +224,7 @@ Springを起動して、ログイン後、アクセスログが出力されて�
 
 .. code-block:: java
     :linenos:
-    :emphasize-lines: 26-28, 32
+    :emphasize-lines: 15-17, 21
 
     package com.example.frontendwebapp.domain;
 
