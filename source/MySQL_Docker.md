@@ -2,21 +2,13 @@
 - 参考：https://zenn.dev/ryo7/articles/create-mysql-on-docker
 - 参考：https://qiita.com/taniann/items/ed9ec892d91e5af962c6
 
-
-
-## MySQL起動（Docker Compose不使用）
-ひとまずお試しする場合。データの永続化を実施しないとDBに書き込んだデータがコンテナ削除に伴って消えてしまうので、後述のDocker Composeを利用すること。
-
+## MySQL起動
 ```
-# Docker-hubからMySQLのイメージをインストールする
-$ docker pull mysql
-
-# インストールしたイメージから、コンテナを起動･作成する
-# MYSQL_ROOT_PASSWORDにログインする際のパスワードを設定する
-$ docker run -it --name test-wolrd-mysql -e MYSQL_ROOT_PASSWORD=mysql -d mysql:latest
+# コンテナ起動
+docker run -it --name my-mysql -e MYSQL_ROOT_PASSWORD=mysql -d -p 3306:3306 --mount type=volume,source=mysql-data,target=/var/lib/mysql  mysql:latest
 
 # 起動したMySQLコンテナにログインする
-$ docker exec -it test-wolrd-mysql bash -p
+$ docker exec -it my-mysql bash -p
 
 # コンテナ上で動作するMySQLにログインする
 $ mysql -u root -p -h 127.0.0.1
@@ -36,50 +28,6 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 > mysql
 ```
 
-## MySQL起動（Docker Compose）
-フォルダ構成は以下
-
-```
-.
-├── docker-compose.yml
-└── mysql
-    ├── Dockerfile
-    ├── db　：永続化のための空領域
-    ├── initdb.d
-    │   └── init.sql
-    └── my.cnf
-```
-
-Docerfileの記載（デフォルトのままなので作成する意味はない）
-```
-#使うDockerイメージ
-FROM mysql
-
-#ポートの設定
-EXPOSE 3306
-
-#docker run時の実行コマンド
-CMD ["mysqld"]
-```
-
-docker-compose.yml
-```
-version: "3"
-
-services:
-  mysql:
-    image: mysql:latest
-    container_name: test-world-mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=mysql
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysql/db:/var/lib/mysql #ここにデータ永続化するためのファイルが入る。
-
-volumes:
-  mysql-data:
-```
 
 
 
