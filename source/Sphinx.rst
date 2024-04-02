@@ -4,15 +4,82 @@ Sphinx導入
 
 `Sphinx <https://www.sphinx-doc.org/ja/master/>`_ をHTMLビルダーとして利用し、ドキュメンテーションする。
 
+既にPythonがインストールされていることを前提とする。
+
 
 1. Sphinxインストール
 ========================
+1. コマンドプロンプトを起動して、Pythonがインストールされていることを確認する
+
+.. code-block::
+
+    C:\Users\masak>python --version
+    Python 3.11.4
+
+2. pipコマンドでSphinxインストール
+
+.. code-block::
+
+    C:\Users\masak>pip install -U sphinx
+
+3. インストールされたことを確認
+
+.. code-block::
+
+    C:\Users\masak>sphinx-build --version
+    sphinx-build 7.2.6
 
 
 2. プロジェクト作成
 ========================
+1. プロジェクトを作成したい任意のディレクトリで、プロジェクトを作成
 
-3. 記事作成・ビルド
+.. code-block::
+
+    C:\Users\masak\ドキュメント\noimemo>sphinx-quickstart
+    Welcome to the Sphinx 7.2.6 quickstart utility.
+
+    Please enter values for the following settings (just press Enter to
+    accept a default value, if one is given in brackets).
+
+    Selected root path: .
+
+    You have two options for placing the build directory for Sphinx output.
+    Either, you use a directory "_build" within the root path, or you separate
+    "source" and "build" directories within the root path.
+    > Separate source and build directories (y/n) [n]: y
+
+    The project name will occur in several places in the built documentation.
+    > Project name: noimemo
+    > Author name(s): noim
+    > Project release []:
+
+    If the documents are to be written in a language other than English,
+    you can select a language here by its language code. Sphinx will then
+    translate text that it generates into that language.
+
+    For a list of supported codes, see
+    https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+    > Project language [en]: ja
+
+    Creating file C:\Users\masak\ドキュメント\noimemo\source\conf.py.
+    Creating file C:\Users\masak\ドキュメント\noimemo\source\index.rst.
+    Creating file C:\Users\masak\ドキュメント\noimemo\Makefile.
+    Creating file C:\Users\masak\ドキュメント\noimemo\make.bat.
+
+    Finished: An initial directory structure has been created.
+
+    You should now populate your master file C:\Users\masak\ドキュメント\noimemo\source\index.rst and create other documentation
+    source files. Use the Makefile to build the docs, like so:
+    make builder
+    where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
+
+
+2. Sphinxの拡張テーマ（sphinx_rtd_theme）をインストール
+
+
+
+1. 記事作成・ビルド
 ========================
 
 4. [拡張機能] Mermaid
