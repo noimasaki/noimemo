@@ -82,20 +82,19 @@ GUIで生成する`Mermaid Live <https://mermaid.live/>`_ も存在する。
             テスト（モジュールC） :crit, b4, after a4 b3  , 2d
 
 
-5. [拡張機能] FontAwesome
+5. [拡張機能] コピーボタン
 ============================
-フォントアイコン `Font Awesome <https://github.com/fraoustin/sphinx_fontawesome>`_ を利用できるようにする。
+コードブロックにコピーボタンを追加する。
 
-#. sphinx_fontawesome インストール
+#. sphinx-copybutton インストール
 
-    pip install sphinx_fontawesome
+    pip install sphinx-copybutton
 
 #. conf.pyに追記
 
-    import sphinx_fontawesome
     extensions = [
         ...,
-        'sphinx_fontawesome'
+        'sphinx_copybutton',
     ]
 
-#. 記載例
+コードブロックをそのままビルドすれば、コピーボタンが追加されている。

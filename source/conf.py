@@ -13,14 +13,12 @@ author = 'noim'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-import sphinx_fontawesome
-
 extensions = [
     "sphinx.ext.githubpages",
     "myst_parser",
     "sphinx_markdown_tables",
     "sphinxcontrib.mermaid",
-    "sphinx_fontawesome",
+    'sphinx_copybutton',
 ]
 
 templates_path = ['_templates']
