@@ -9,6 +9,7 @@
 .. toctree::
    :maxdepth: 2
 
+   ./Spring/index_Spring.rst
    Sphinx.rst
    Shpinx導入とGiHubページ作成.md
    GiHubAppsToken.md
@@ -27,5 +28,5 @@
    MySQL_Docker.md
    PostgreSQL_Docker.md
 
-   ./Spring/index_Spring.rst
+
    
