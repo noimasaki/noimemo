@@ -26,4 +26,6 @@
    Keycloak.md
    MySQL_Docker.md
    PostgreSQL_Docker.md
+
+   ./Spring/index_Spring.rst
    
