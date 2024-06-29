@@ -32,7 +32,7 @@ mrs         # プロジェクトフォルダ
             └── MrsApplicationTests.java
 ```
 
-## 2. データベース作成
+## 2. データベース
 Dockerで[PostgreSQLコンテナ](https://hub.docker.com/_/postgres)を立てる。
 
 ### 2-1. PostgreSQLコンテナ起動
@@ -113,7 +113,26 @@ CREATE DATABASE mrs
 # 【Ctrl+D】でコンテナから抜ける
 ```
 
-### 
+## 3. プロパティファイルの設定
+データベースへの接続情報を`qpplication.properties`に記載する。
+```
+# DB接続情報
+spring.jpa.database=POSTGRESQL
+spring.datasource.url=jdbc:postgresql://localhost:5432/mrs
+spring.datasource.username=mrs
+spring.datasource.password=mrs
+# Hibernateの機能でDDLの自動生成はせず、エンティティの設計が実際の列属性と合っているかチェックするのみ
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.properties.hibernate.format_sql=true
+# 後に作成するDDLのフォーマット
+spring.sql.init.encoding=UTF-8
+# Hibernateが実行するSQLがログに出力されるようにDEBUGとする
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+# SpringBoot起動時にクラスパス直下に含まれるschema.sqlを常に実行する
+# → src/main/resources/schema.sql を後に作成する
+spring.sql.init.mode=always
+```
 
 ## DB接続
 
