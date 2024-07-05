@@ -50,10 +50,26 @@ CMD ["/bin/bash"]
 
 ビルド
 ```
+# ビルド
 podman build -t teraia-container .
+# 確認
+podman images
 ```
 
-起動
+コンテナ起動
 ```
 podman run --rm -it teraia-container
 ```
+
+特定のディレクトリをマウントしてコンテナ起動
+```
+# ディレクトリ作成
+mkdir -p /tmp/TERA_IA
+# 権限付与
+chmod -R 777 /tmp/TERA_IA
+
+# 起動
+podman run --rm -it --userns=keep-id -v /tmp/TERA_IA:/TERA_IA:Z teraia-container
+```
+- `--userns=keep-id`：ホストのユーザーIDとグループIDを保持するオプション。このオプションを使用することで、ホストOSのディレクトリの所有者と同じIDをコンテナ内で使用します。
+- `-v /tmp/TERA_IA:/TERA_IA:Z`：ホストの/tmp/TERA_IAディレクトリをコンテナの/TERA_IAディレクトリにマウントし、SELinuxのセキュリティコンテキストを適切に設定します。（Zオプションが必要）
