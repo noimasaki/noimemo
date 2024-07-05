@@ -56,7 +56,7 @@ podman build -t teraia-container .
 podman images
 ```
 
-コンテナ起動
+コンテナ起動（終了はCtrl+D）
 ```
 podman run --rm -it teraia-container
 ```
@@ -73,3 +73,14 @@ podman run --rm -it --userns=keep-id -v /tmp/TERA_IA:/TERA_IA:Z teraia-container
 ```
 - `--userns=keep-id`：ホストのユーザーIDとグループIDを保持するオプション。このオプションを使用することで、ホストOSのディレクトリの所有者と同じIDをコンテナ内で使用します。
 - `-v /tmp/TERA_IA:/TERA_IA:Z`：ホストの/tmp/TERA_IAディレクトリをコンテナの/TERA_IAディレクトリにマウントし、SELinuxのセキュリティコンテキストを適切に設定します。（Zオプションが必要）
+
+コンテナイメージを保存してファイルにする。
+```
+# エクスポートしてファイルに保存
+podman save -o teraia_container.tar localhost/teraia-container
+
+# インポート
+podman load -i teraia_container.tar
+```
+
+
