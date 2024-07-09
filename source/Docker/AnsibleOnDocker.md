@@ -163,3 +163,54 @@ gsutil cp teraia_container.tar gs://【バケット名】
 └── site.yml
 ```
 
+## 鍵生成・登録
+```
+# Ansibleサーバで公開鍵・秘密鍵を作成
+chmod 700 /TERA_IA/key
+ssh-keygen -t rsa -f /TERA_IA/key/setup-key -N ""
+
+# Ansibleサーバから構築対象サーバに公開鍵を転送
+ssh-copy-id -i /TERA_IA/key/setup-key.pub cloud-user@【構築対象サーバ】
+
+# Ansibleサーバ自身にも公開鍵を登録
+cat /TERA_IA/key/setup-key.pub >> /root/.ssh/authorized_keys
+```
+
+
+## /etc/hosts編集
+名前解決したいサーバを追記する。
+```
+172.19.232.90   Playbook-rhel
+```
+
+
+
+## コンテナ起動
+ルートユーザで実行する。
+```
+# インポート
+podman load -i teraia_container.tar
+
+podman run --rm -it -v /TERA_IA:/TERA_IA:Z teraia-container
+```
+
+## hostsファイル生成
+```
+cd /TERA_IA/playbooks/RHEL8
+/opt/coralis_tools/ansible/sdf2ansiblefiles.sh ./sdfs/conf/ENV.conf
+```
+
+## 実行
+```
+cd /var/TERA_IA/playbooks/RHEL8
+
+# 構文チェック
+ansible-playbook -i ./inventories/hosts ./site.yml --check
+
+# 実行
+ansible-playbook -i ./inventories/hosts ./site.yml
+```
+
+
+
+
