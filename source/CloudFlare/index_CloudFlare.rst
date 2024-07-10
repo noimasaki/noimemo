@@ -5,3 +5,5 @@ CloudFlare
    :maxdepth: 2
 
    DDNS.md
+   CloudFlareTunnel.md
+   
