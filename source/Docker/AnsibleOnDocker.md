@@ -212,5 +212,149 @@ ansible-playbook -i ./inventories/hosts ./site.yml
 ```
 
 
+## host.listの作成
 
+
+
+## Serverspecによる試験
+
+
+```{code-block}
+:caption: 失敗したとき
+
+[root@480fedb352f6 spec_files]# rake spec
+#############################################################################
+   Target host: Playbook-rhel
+#############################################################################
+/usr/bin/ruby -I/usr/local/share/gems/gems/rspec-support-3.13.1/lib:/usr/local/share/gems/gems/rspec-core-3.13.0/lib /usr/local/share/gems/gems/rspec-core-3.13.0/exe/rspec ./spec/Linux/code/spec_file/begin_test_spec.rb
+=============================================================================
+ Test target: directories
+=============================================================================
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be owned by "root" (FAILED - 1)
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be grouped into "root" (FAILED - 2)
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be mode 755 (FAILED - 3)
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be owned by "root" (FAILED - 4)
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be grouped into "root" (FAILED - 5)
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be mode 700 (FAILED - 6)
+
+Failures:
+
+  1) <<< File_ATTRIBUTE >>> File "/root/work" is expected to be owned by "root"
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_owned_by     value } if key == 'owner'
+       expected `File "/root/work".owned_by?("root")` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%U\ /root/work\ \|\ grep\ --\ \\\^root\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:169:in `block (3 levels) in File_ATTRIBUTE'
+
+  2) <<< File_ATTRIBUTE >>> File "/root/work" is expected to be grouped into "root"
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_grouped_into value } if key == 'group'
+       expected `File "/root/work".grouped_into?("root")` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%G\ /root/work\ \|\ grep\ --\ \\\^root\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:170:in `block (3 levels) in File_ATTRIBUTE'
+
+  3) <<< File_ATTRIBUTE >>> File "/root/work" is expected to be mode 755
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_mode         value } if key == 'mode'
+       expected `File "/root/work".mode?(755)` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%a\ /root/work\ \|\ grep\ --\ \\\^755\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:171:in `block (3 levels) in File_ATTRIBUTE'
+
+  4) <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be owned by "root"
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_owned_by     value } if key == 'owner'
+       expected `File "/root/work2".owned_by?("root")` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%U\ /root/work2\ \|\ grep\ --\ \\\^root\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:169:in `block (3 levels) in File_ATTRIBUTE'
+
+  5) <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be grouped into "root"
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_grouped_into value } if key == 'group'
+       expected `File "/root/work2".grouped_into?("root")` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%G\ /root/work2\ \|\ grep\ --\ \\\^root\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:170:in `block (3 levels) in File_ATTRIBUTE'
+
+  6) <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be mode 700
+     On host `Playbook-rhel'
+     Failure/Error: it { should be_mode         value } if key == 'mode'
+       expected `File "/root/work2".mode?(700)` to be truthy, got false
+       /bin/sh -c stat\ -c\ \%a\ /root/work2\ \|\ grep\ --\ \\\^700\\\$
+
+     # ./spec/Linux/code/test_pattern/common.rb:171:in `block (3 levels) in File_ATTRIBUTE'
+
+Finished in 2.1 seconds (files took 0.68981 seconds to load)
+6 examples, 6 failures
+
+Failed examples:
+
+rspec './spec/Linux/code/test_pattern/common.rb[1:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work" is expected to be owned by "root"
+rspec './spec/Linux/code/test_pattern/common.rb[2:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work" is expected to be grouped into "root"
+rspec './spec/Linux/code/test_pattern/common.rb[3:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work" is expected to be mode 755
+rspec './spec/Linux/code/test_pattern/common.rb[4:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be owned by "root"
+rspec './spec/Linux/code/test_pattern/common.rb[5:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be grouped into "root"
+rspec './spec/Linux/code/test_pattern/common.rb[6:1:1]' # <<< File_ATTRIBUTE >>> File "/root/work2" is expected to be mode 700
+```
+
+```{code-block}
+:caption: 成功したとき
+
+[root@480fedb352f6 spec_files]# rake spec
+#############################################################################
+   Target host: Playbook-rhel
+#############################################################################
+/usr/bin/ruby -I/usr/local/share/gems/gems/rspec-support-3.13.1/lib:/usr/local/share/gems/gems/rspec-core-3.13.0/lib /usr/local/share/gems                                                                                                          /gems/rspec-core-3.13.0/exe/rspec ./spec/Linux/code/spec_file/begin_test_spec.rb
+=============================================================================
+ Test target: directories
+=============================================================================
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be owned by "root"
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be grouped into "root"
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work"
+    is expected to be mode 755
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be owned by "root"
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be grouped into "root"
+
+<<< File_ATTRIBUTE >>>
+  File "/root/work2"
+    is expected to be mode 700
+
+Finished in 1.98 seconds (files took 0.64302 seconds to load)
+6 examples, 0 failures
+```
 
