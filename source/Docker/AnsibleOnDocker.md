@@ -1,14 +1,14 @@
 # Ansible+Serverspecコンテナを作成
+サーバ構築およびパラメータ確認を目的とした自動化コンテナを作成する。
 
-
-## podmanインストール
+## 1. podmanインストール
 rootでpodmanをインストールする。
 ```
 dnf install -y podman
 ```
 
 
-## TERAIAコンテナを作成する
+## 2. TERAIAコンテナを作成する
 ディレクトリ構成
 ```
 TERAIA_container
