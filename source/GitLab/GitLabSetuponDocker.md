@@ -99,4 +99,42 @@ podman exec gitlab_gitlab_1 cat /etc/gitlab/initial_root_password
 ```
 
 
+## [option] URL変更
+`docker-compose.yml`で起動したコンテナにおいて、URLつまり`external_url`を変更したくなったときは以下の手順を実施する。
+
+1. コンテナログイン
+
+```
+podman exec -it gitlab_gitlab_1 bash
+```
+
+1. 設定ファイル修正
+
+```
+vi /etc/gitlab/gitlab.rb
+```
+
+```
+★編集前
+## GitLab URL
+# external_url 'GENERATED_EXTERNAL_URL'
+
+★編集後
+## GitLab URL
+external_url 'http://gitlab.noimk.com'
+```
+
+1. gitlab再構成
+
+```
+gitlab-ctl reconfigure
+```
+
+
+## [option] Cloudflare tunnelでアクセスする場合
+
+![cloudflare tunnel](./GitLabSetuponDocker/cloudflare.drawio.svg)
+
+
+
 
