@@ -3,6 +3,10 @@ GitLab Community Edition（CE版はMITライセンス、EE版は商用ライセ�
 
 [公式サイト](https://docs.gitlab.com/ee/install/docker.html)を参考にする。
 
+## 前提条件
+- podmanがインストールされていること（`dnf install podman`）
+- podman-composeがインストールされていること（`dnf install podman-compose`）
+
 ## 1. マウント用ディレクトリ作成
 ```
 # GitLab用
@@ -28,13 +32,11 @@ vi /srv/gitlab/docker-compose.yml
 version: '3.6'
 services:
   gitlab:
-    image: 'gitlab/gitlab-ce:latest'
-	container_name: gitlab
+    image: 'docker.io/gitlab/gitlab-ce:latest'
     restart: always
     hostname: 'gitlab.example.com'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-		# Add any other gitlab.rb configuration here, each on its own line
         external_url 'https://gitlab.example.com'
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
     ports:
@@ -47,8 +49,7 @@ services:
       - '/srv/gitlab/data:/var/opt/gitlab'
     shm_size: '256m'
   gitlab-runner:
-    image: gitlab/gitlab-runner:latest
-    container_name: gitlab_runner
+    image: 'docker.io/gitlab/gitlab-runner:latest'
     restart: always
     volumes:
       - /srv/gitlab-runner/config:/etc/gitlab-runner
@@ -59,14 +60,43 @@ services:
 ## 3. コンテナ作成
 ```
 cd /srv/gitlab/
-docker-compose up -d
+podman-compose up -d
 ```
 
 構築中のログは、`docker logs -f gitlab-web-1`で確認できる。
 
 STATUSがstartingはまだコンテナの構築中。STATUSはhealthyになったら構築完了
+
+```{code-block}
+:caption: まだ構築中
+
+CONTAINER ID  IMAGE                                  COMMAND               CREATED         STATUS                    PORTS
+e76e46a7ee37  docker.io/gitlab/gitlab-ce:latest      /assets/wrapper       24 seconds ago  Up 24 seconds (starting)  （略）
+3386d2c537de  docker.io/gitlab/gitlab-runner:latest  run --user=gitlab...  5 seconds ago   Up 5 seconds
+```
+
+```{code-block}
+:caption: 完了
+
+CONTAINER ID  IMAGE                                  COMMAND               CREATED        STATUS                  PORTS
+e76e46a7ee37  docker.io/gitlab/gitlab-ce:latest      /assets/wrapper       3 minutes ago  Up 3 minutes (healthy)  （略）
+3386d2c537de  docker.io/gitlab/gitlab-runner:latest  run --user=gitlab...  2 minutes ago  Up 2 minutes
+```
+
+## GitLabへアクセス
+`https://【サーバのIPアドレス】/`でアクセス可能。ローカルから行く場合は[https://localhost/](https://localhost/)
+
+![Login](./GitLabSetuponDocker/Login.png)
+
+
+GitLabの初期ユーザ（root）のパスワードは以下のいずれかで確認できる。catしているファイルは同一
+```
+# ホストOS上のファイルを直アクセス
+cat /srv/gitlab/config/initial_root_password
+
+# コンテナ経由でホストOS上のファイルへアクセス
+podman exec gitlab_gitlab_1 cat /etc/gitlab/initial_root_password
 ```
 
 
-```
-## 
+
