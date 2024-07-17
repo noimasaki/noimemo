@@ -83,7 +83,7 @@ e76e46a7ee37  docker.io/gitlab/gitlab-ce:latest      /assets/wrapper       3 min
 3386d2c537de  docker.io/gitlab/gitlab-runner:latest  run --user=gitlab...  2 minutes ago  Up 2 minutes
 ```
 
-## GitLabへアクセス
+## 4. GitLabへアクセス
 `https://【サーバのIPアドレス】/`でアクセス可能。ローカルから行く場合は[https://localhost/](https://localhost/)
 
 ![Login](./GitLabSetuponDocker/Login.png)
