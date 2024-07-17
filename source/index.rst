@@ -12,6 +12,7 @@
    ./Spring/index_Spring.rst
    ./Docker/index_Docker.rst
    ./CloudFlare/index_CloudFlare.rst
+   ./GitLab/index_GitLab.rst
    Sphinx.rst
    Shpinx導入とGiHubページ作成.md
    GiHubAppsToken.md
