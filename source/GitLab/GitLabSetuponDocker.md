@@ -130,8 +130,7 @@ external_url 'http://gitlab.noimk.com'
 gitlab-ctl reconfigure
 ```
 
-
-## [option] Cloudflare tunnelでアクセスする場合
+Cloudflare tunnelでアクセスする場合は、このような構成でCloudflare tunnelの設定を実施する
 
 ![cloudflare tunnel](./GitLabSetuponDocker/cloudflare.drawio.svg)
 
