@@ -57,6 +57,43 @@ services:
 ```
 
 
+
+```{code-block}
+:caption: /srv/gitlab/docker-compose.yml
+
+version: '3.6'
+services:
+  gitlab:
+    image: 'docker.io/gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'gitlab.example.com'
+    container_name: gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.example.com'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        gitlab_rails['initial_root_password'] = '1qaz"WSX'
+        gitlab_rails['locale'] = 'ja'
+
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2224:22'
+    volumes:
+      - '/srv/gitlab/config:/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+  gitlab-runner:
+    image: 'docker.io/gitlab/gitlab-runner:latest'
+    restart: always
+    container_name: gitlab-runner
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+```
+
+
 ## 3. コンテナ作成
 ```
 cd /srv/gitlab/
@@ -95,7 +132,41 @@ GitLabの初期ユーザ（root）のパスワードは以下のいずれかで�
 cat /srv/gitlab/config/initial_root_password
 
 # コンテナ経由でホストOS上のファイルへアクセス
-podman exec gitlab_gitlab_1 cat /etc/gitlab/initial_root_password
+podman exec gitlab cat /etc/gitlab/initial_root_password
+```
+
+## 5. デーモン化
+ホストOS起動時に、コンテナも自動起動されるようにコンテナをsystemdに登録する。podmanの場合はserviceファイルを生成するコマンドが用意されている。
+
+```
+# 対象コンテナ確認
+# podman ps -a
+CONTAINER ID  IMAGE                                  STATUS                       NAMES
+ace56cd29adf  docker.io/gitlab/gitlab-ce:latest      Up About a minute (healthy)  gitlab
+7a9fdc677732  docker.io/gitlab/gitlab-runner:latest  Up 5 seconds                 gitlab-runner
+
+# serviceファイル生成
+podman generate systemd --new --files --name gitlab
+podman generate systemd --new --files --name gitlab-runner
+```
+
+実行したディレクトリにserviceファイルが生成されるので、`/etc/systemd/system`にユニットファイルをコピーしてrootユーザとしてインストールする。
+```
+cp -Z container-gitlab.service /etc/systemd/system
+cp -Z container-gitlab-runner.service /etc/systemd/system
+```
+
+有効化する
+```
+systemctl daemon-reload
+systemctl enable --now container-gitlab.service
+systemctl enable --now container-gitlab-runner.service
+```
+
+状態確認
+```
+systemctl status container-gitlab.service
+systemctl status container-gitlab-runner.service
 ```
 
 
@@ -105,7 +176,7 @@ podman exec gitlab_gitlab_1 cat /etc/gitlab/initial_root_password
 1. コンテナログイン
 
 ```
-podman exec -it gitlab_gitlab_1 bash
+podman exec -it gitlab bash
 ```
 
 1. 設定ファイル修正
@@ -136,4 +207,11 @@ Cloudflare tunnelでアクセスする場合は、このような構成でCloudf
 
 
 
+
+
+```{note}
+https://sky-joker.tech/2024/03/30/gitlab-runner%E3%81%A6%E3%82%99podman%E3%82%92%E4%BD%BF%E3%81%86%E3%83%A1%E3%83%A2/
+
+https://qiita.com/masa2223/items/d287a2f2b6f6a9367a51
+```
 

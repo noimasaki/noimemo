@@ -41,3 +41,5 @@ services:
   - '/srv/gitlab/logs:/var/log/gitlab'
   - '/srv/gitlab/data:/var/opt/gitlab'
   - /srv/gitlab-runner/config:/etc/gitlab-runner
+
+
