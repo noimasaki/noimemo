@@ -25,38 +25,6 @@ vi /srv/gitlab/docker-compose.yml
 - `gitlab-ce`で構築
 - `GITLAB_OMNIBUS_CONFIG`で設定を変更することができる
 - 22番ポートはホストOSのsshdで使われているので2224ポートに変更
-  
-```{code-block}
-:caption: /srv/gitlab/docker-compose.yml
-
-version: '3.6'
-services:
-  gitlab:
-    image: 'docker.io/gitlab/gitlab-ce:latest'
-    restart: always
-    hostname: 'gitlab.example.com'
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://gitlab.example.com'
-        gitlab_rails['gitlab_shell_ssh_port'] = 2224
-    ports:
-      - '80:80'
-      - '443:443'
-      - '2224:22'
-    volumes:
-      - '/srv/gitlab/config:/etc/gitlab'
-      - '/srv/gitlab/logs:/var/log/gitlab'
-      - '/srv/gitlab/data:/var/opt/gitlab'
-    shm_size: '256m'
-  gitlab-runner:
-    image: 'docker.io/gitlab/gitlab-runner:latest'
-    restart: always
-    volumes:
-      - /srv/gitlab-runner/config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-```
-
-
 
 ```{code-block}
 :caption: /srv/gitlab/docker-compose.yml
@@ -100,7 +68,7 @@ cd /srv/gitlab/
 podman-compose up -d
 ```
 
-構築中のログは、`docker logs -f gitlab-web-1`で確認できる。
+構築中のログは、`podman logs -f gitlab`で確認できる。
 
 STATUSがstartingはまだコンテナの構築中。STATUSはhealthyになったら構築完了
 
