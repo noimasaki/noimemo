@@ -13,11 +13,11 @@ GitHubActionsを利用してSpringBootプロジェクトのビルド→コンテ
 
 任意の名前と、[Access permissions]を選択して、[Generate]
 
-![Generate Access Token](_static/GitHubAction_DockerPush/Generate_Access_Token.png)
+![Generate Access Token](./GitHubAction_DockerPush/Generate_Access_Token.png)
 
 トークンが表示されるので、手元に控えておく
 
-![AccessToken](_static/GitHubAction_DockerPush/AccessToken.png)
+![AccessToken](./GitHubAction_DockerPush/AccessToken.png)
 
 
 
@@ -25,15 +25,15 @@ GitHubActionsを利用してSpringBootプロジェクトのビルド→コンテ
 ## 2. GitHubへトークン情報の登録
 自動化したいリポジトリで[Settings > Secrets and variables > Actions]から[New repository secret]を選択
 
-![NewRepositorySecret](_static/GitHubAction_DockerPush/NewRepositorySecret.png)
+![NewRepositorySecret](./GitHubAction_DockerPush/NewRepositorySecret.png)
 
 `DOCKERHUB_TOKEN`をNameに設定して、DockerHubで取得したアクセストークンをValueに設定して、[Add secret]する
 
-![AddSecret](_static/GitHubAction_DockerPush/AddSecret.png)
+![AddSecret](./GitHubAction_DockerPush/AddSecret.png)
 
 同様にして、`DOCKERHUB_USERNAME`としてDocker Hubのユーザ名を作成する。
 
-![AddSecret2](_static/GitHubAction_DockerPush/AddSecret2.png)
+![AddSecret2](./GitHubAction_DockerPush/AddSecret2.png)
 
 ## 3. GitHub Actionsの設定
 実現したい要件は以下

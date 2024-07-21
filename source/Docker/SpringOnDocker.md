@@ -22,7 +22,7 @@ SpringDocker
 
 ## Spring Bootアプリの作成
 1. Spring InitializrからMavenプロジェクトを作成
-![VS Code](_static/SpringOnDocker/1_init.png)
+![VS Code](./SpringOnDocker/1_init.png)
 
 - Spring Boot version: 3.15
 - project language: Java
@@ -36,13 +36,13 @@ SpringDocker
 
 完了するとプロジェクトが作成される
 
-![VS Code](_static/SpringOnDocker/2_init.png)
+![VS Code](./SpringOnDocker/2_init.png)
 
 2. Controller、htmlの作成
 
 HelloController.javaを新規作成する
 
-![VS Code](_static/SpringOnDocker/3_controller.png)
+![VS Code](./SpringOnDocker/3_controller.png)
 
 HelloController.java
 ```
@@ -62,7 +62,7 @@ public class HelloController {
 
 Hello.htmlを新規作成する
 
-![VS Code](_static/SpringOnDocker/4_html.png)
+![VS Code](./SpringOnDocker/4_html.png)
 
 ```
 <!DOCTYPE html>
@@ -81,11 +81,11 @@ Hello.htmlを新規作成する
 
 HelloApprication.javaを実行
 
-![VS Code](_static/SpringOnDocker/5_test.png)
+![VS Code](./SpringOnDocker/5_test.png)
 
 ブラウザからアクセスして確認
 
-![test](_static/SpringOnDocker/6_test.png)
+![test](./SpringOnDocker/6_test.png)
 
 4. Mavenでビルド
 SpringBootのソースディレクトリ（pom.xmlがあるところ）でビルドコマンド実行
@@ -95,7 +95,7 @@ mvn package spring-boot:repackage
 
 targetフォルダに`.jar`ファイルが生成される
 
-![jar](_static/SpringOnDocker/7_jar.png)
+![jar](./SpringOnDocker/7_jar.png)
 
 
 ## コンテナイメージ作成
@@ -171,7 +171,7 @@ docker run --rm \
 ## 参考
 ### Apache Maven インストール（Windows）
 1. [Apache Maven サイト](https://maven.apache.org/)から、`Binary zip archive`をダウンロード&展開し、C:\直下に配置
-![MavenInstall](_static/SpringOnDocker/99_MavenInstall.png)
+![MavenInstall](./SpringOnDocker/99_MavenInstall.png)
 
 2. システム環境変数Pathに`C:\apache-maven-3.9.5\bin`を追加
 

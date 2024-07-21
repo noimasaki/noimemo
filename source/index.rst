@@ -13,15 +13,14 @@
    ./Docker/index_Docker.rst
    ./CloudFlare/index_CloudFlare.rst
    ./GitLab/index_GitLab.rst
+   ./GitHub/index_GitHub.rst
    Sphinx.rst
    Shpinx導入とGiHubページ作成.md
-   GiHubAppsToken.md
    SpringOnDocker.md
    SpringBoot_REST_API.md
    MySQL.md
    SpringMicroservice.md
    SpringSecurity.md
-   GitHubAction_DockerPush.md
    Microservice_1.md
    Microservice_2.md
    SpringMicroservice_3.md

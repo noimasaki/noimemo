@@ -20,29 +20,29 @@ Organizationsではなく、個人アカウントの場合はここにアクセ�
 - Description : 任意のDescription
 - Homepage URL(*) : 適当なダミー値でもOK（例えば`https://example.com`）
 
-![name & URL](_static/GitHubAppsToken/setting1.png)
+![name & URL](./GitHubAppsToken/setting1.png)
 
 Webhookは不要なのでチェックを外す
 
-![Webhook](_static/GitHubAppsToken/setting2.png)
+![Webhook](./GitHubAppsToken/setting2.png)
 
 Permissionsには権限を設定する。
 今回はリポジトリ内のファイル（つまりContents）を書き換えたいので、次のように設定する。
 - Repository permissions > Contents > Read and write
 
-![Permissions](_static/GitHubAppsToken/setting3.png)
+![Permissions](./GitHubAppsToken/setting3.png)
 
 プライベート運用のため、「Only on this account」へチェックが入っていることを確認して「Greate GitHub App」をクリックすれば完了。
 
 管理画面が表示される。
 ここで確認できる「APP ID」は後程利用するのでメモする。
 
-![General](_static/GitHubAppsToken/setting4.png)
+![General](./GitHubAppsToken/setting4.png)
 
 ### 2. 署名用秘密鍵の生成
 トークンの払い出しに使用する、署名用秘密鍵を生成する。
 
-![GenPrivateKey](_static/GitHubAppsToken/setting5.png)
+![GenPrivateKey](./GitHubAppsToken/setting5.png)
 
 自動で`<App名>.<作成日>.private-key`というファイルがローカルにダウンロードされる。
 これを後にGitHubのSeacretsへ登録し、ローカルからも削除する。
@@ -50,7 +50,7 @@ Permissionsには権限を設定する。
 ### 3. GitHub Appsをアカウントへインストール
 GitHub Appsは作成しただけでは使えず、アカウントにインストールする必要がある。「Install」をクリック。
 
-![InstallGitHubApps](_static/GitHubAppsToken/setting6.png)
+![InstallGitHubApps](./GitHubAppsToken/setting6.png)
 
 どのリポジトリにインストールするか聞かれるので、選択する。
 - All repositories（全リポジトリを許可）: 運用は楽だがセキュリティ的にイマイチ
@@ -58,7 +58,7 @@ GitHub Appsは作成しただけでは使えず、アカウントにインスト
 
 今回は「Only select repositories」選択した。
 
-![ChooseRepo](_static/GitHubAppsToken/setting7.png)
+![ChooseRepo](./GitHubAppsToken/setting7.png)
 
 ### 4. SecretsにApp IDと秘密鍵を登録
 App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登録する。
@@ -71,7 +71,7 @@ App IDと秘密鍵をGitHub Actionsから参照できるよう、Secretsへ登�
 - Name(*): APP_ID
 - Secret(*): GitHub Apps作成時に生成されたIDを記載
 
-![RegiPrivateKey](_static/GitHubAppsToken/setting8.png)
+![RegiPrivateKey](./GitHubAppsToken/setting8.png)
 
 ## GitHub ActionsでGitHub Appsトークンを利用する方法
 例として下記のように記載する。（動作確認していないので
