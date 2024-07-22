@@ -152,4 +152,8 @@ podman run -d \
   docker.io/gitlab/gitlab-ce:latest
 ```
 
+```{note}
+HTTPS化のカスタマイズ
 
+https://zenn.dev/uchidaryo/articles/setup-gitlab-https
+```
