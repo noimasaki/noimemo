@@ -134,5 +134,22 @@ cd /svr/gitlab
 podman-compose up -d
 ```
 
+```{note}
+podman-composeが利用できない環境であれば、以下コマンドでも起動できる。
+
+```{code-block}
+# GitLabコンテナ
+podman run -d \
+  --name gitlab \
+  --hostname gitlab.example.com \
+  -p 80:80 \
+  -p 443:443 \
+  -p 2224:22 \
+  -v /srv/gitlab/config:/etc/gitlab:Z \
+  -v /srv/gitlab/logs:/var/log/gitlab:Z \
+  -v /srv/gitlab/data:/var/opt/gitlab:Z \
+  --shm-size 256m \
+  docker.io/gitlab/gitlab-ce:latest
+```
 
 
