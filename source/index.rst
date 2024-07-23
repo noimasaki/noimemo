@@ -15,12 +15,8 @@
    ./GitLab/index_GitLab.rst
    ./GitHub/index_GitHub.rst
    ./Microservice/index_Microservice.rst
-   Sphinx.rst
-   Shpinx導入とGiHubページ作成.md
-   SpringOnDocker.md
-   SpringBoot_REST_API.md
+   ./Sphinx/index_Sphinx.rst
    MySQL.md
-   SpringSecurity.md
    Keycloak.md
    MySQL_Docker.md
    PostgreSQL_Docker.md
