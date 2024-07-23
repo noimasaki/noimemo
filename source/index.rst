@@ -14,18 +14,13 @@
    ./CloudFlare/index_CloudFlare.rst
    ./GitLab/index_GitLab.rst
    ./GitHub/index_GitHub.rst
+   ./Microservice/index_Microservice.rst
    Sphinx.rst
    Shpinx導入とGiHubページ作成.md
    SpringOnDocker.md
    SpringBoot_REST_API.md
    MySQL.md
-   SpringMicroservice.md
    SpringSecurity.md
-   Microservice_1.md
-   Microservice_2.md
-   SpringMicroservice_3.md
-   Logging.rst
-   Microservice.rst
    Keycloak.md
    MySQL_Docker.md
    PostgreSQL_Docker.md
