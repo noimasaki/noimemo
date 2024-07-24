@@ -28,9 +28,57 @@ tar -czvf gitlab_offline.tar.gz ./gitlab_offline/
 tar -xzvf gitlab_offline.tar.gz
 ```
 
-インストール
+ローカルリポジトリ作成
 ```
+# createrepoツールインストール
+dnf install createrepo
+
+# ローカルリポジトリ作成
 cd ./gitlab_offline/
-EXTERNAL_URL="http://gitlab.example.com" dnf install -y gitlab-ce
+createrepo .
 ```
 
+```{code-block}
+:caption: /etc/yum.repos.d/local.repo
+
+[local]
+name=Local Repository
+baseurl=file:///tmp/gitlab_offline
+enabled=1
+gpgcheck=0
+```
+
+リポジトリキャッシュ更新
+```
+dnf clean all
+dnf makecache
+```
+
+インストール
+```
+dnf install -y gitlab-ce
+```
+
+## 3. 起動
+まず、初期ユーザであるrootユーザのパスワードを設定する
+```{code-block}
+:caption: /etc/gitlab/gitlab.rb
+
+[修正前①]
+# gitlab_rails['initial_root_password'] = "password"
+
+[修正後①]
+gitlab_rails['initial_root_password'] = "password"
+
+[修正前②]
+external_url 'http://gitlab.example.com'
+
+[修正後②]
+external_url 'http://【自サーバのIP】`
+```
+
+その後、gitlab-ce再設定&再起動
+```
+gitlab-ctl reconfigure
+gitlab-ctl restart
+```
