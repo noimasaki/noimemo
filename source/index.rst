@@ -16,6 +16,7 @@
    ./GitHub/index_GitHub.rst
    ./Microservice/index_Microservice.rst
    ./Sphinx/index_Sphinx.rst
+   ./VSCode/index_VSCode.rst
    MySQL.md
    Keycloak.md
    MySQL_Docker.md
