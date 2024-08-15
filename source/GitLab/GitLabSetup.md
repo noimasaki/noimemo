@@ -37,10 +37,10 @@ gitlab-ctl reconfigure
 
 ```bash
 gitlab-ctl stop
- sudo systemctl stop gitlab-runsvdir
- sudo systemctl disable gitlab-runsvdir
- sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
- sudo systemctl daemon-reload
- sudo systemctl reset-failed
-  sudo gitlab-ctl cleanse && sudo rm -r /opt/gitlab
+systemctl stop gitlab-runsvdir
+systemctl disable gitlab-runsvdir
+rm /usr/lib/systemd/system/gitlab-runsvdir.service
+systemctl daemon-reload
+systemctl reset-failed
+gitlab-ctl cleanse && sudo rm -r /opt/gitlab
 ```
