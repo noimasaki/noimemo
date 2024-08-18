@@ -4,7 +4,7 @@
 
 ユーザはブラウザからFrontendにアクセスし、認証成功後にBackendにアクセスすることができる。
 
-![Architecture](_static/Microservice_1/architecture.drawio.svg)
+![Architecture](./Microservice_1/architecture.drawio.svg)
 
 ## 作成の流れ
 1. バックエンド作成
@@ -490,28 +490,28 @@ public class SecurityConfig {
 ### 2-9. 動作確認
 ここまで作成することで、認証認可機能を持ったフロントエンドが動作する。
 
-![Spring起動](_static/Microservice_1/1.png)
+![Spring起動](./Microservice_1/1.png)
 
 ログイン画面
 
-![login](_static/Microservice_1/2.png)
+![login](./Microservice_1/2.png)
 
 ログイン成功→ホームページが表示
 
-![home](_static/Microservice_1/3.png)
+![home](./Microservice_1/3.png)
 
 ログアウトリンク押下→ログアウト画面
 
-![logout](_static/Microservice_1/4.png)
+![logout](./Microservice_1/4.png)
 
 ID/PWが異なる場合にはログイン出来ずにメッセージ出力される
 
-![error](_static/Microservice_1/5.png)
+![error](./Microservice_1/5.png)
 
 ## 3. フロント→バックエンド呼び出し
 ここまでの実装で、フロントエンドからバックエンドを呼び出すことが可能となっており、最終的なAWS環境では下記のように動作する。
 
-![routing](_static/Microservice_1/routing.drawio.svg)
+![routing](./Microservice_1/routing.drawio.svg)
 
 ここでは、SpringBootを起動して動作確認を実施する。ローカル環境上で動作させるため、リッスンポートの重複がない状態に一時的にした後に動作確認を実施する。
 
@@ -580,7 +580,7 @@ mvn package spring-boot:repackage -DskipTests
 ```
 ビルド実行後、下記のように`.jar`が作成される。
 
-![BFF jar build](_static/Microservice_1/BFF_jar.png)
+![BFF jar build](./Microservice_1/BFF_jar.png)
 
 #### バックエンド（backend-item）
 フロントエンドと同様にバックエンドも、バックエンドのSpringBootプロジェクトのソースディレクトリにてビルドコマンドを実行する。

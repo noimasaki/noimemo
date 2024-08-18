@@ -17,7 +17,7 @@ dependencies
 configディレクトリを作成し、起動クラスと設定クラスをまとめて格納する。設定クラスが散らばることがないので良い。
 
 なお、設定クラスは`@Configuration`アノテーションを付与することで、設定クラスとして読み込まれる。
-![config dir](_static/SpringMicroservice/1_configdir.png)
+![config dir](./SpringMicroservice/1_configdir.png)
 
 ## 3. `SecurityConfig.java`作成
 SpringSecurity設定クラスを作成する。

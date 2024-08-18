@@ -27,5 +27,5 @@ spring:
 
 その後、ECSのfrontendのサービスを更新から「新しいデプロイの強制」にチェックをつけて更新するだけ。
 
-![update_ECS](_/static/Microservice_3/update_ECS.png)
+![update_ECS](./Microservice_3/update_ECS.png)
 

@@ -15,7 +15,7 @@
 
 また、ログ処理フローのうち、下記の部分に着目する。
 
-.. image:: ./_static/Logging/LoggingFlow.drawio.svg
+.. image:: ./Logging/LoggingFlow.drawio.svg
 
 `[Black Belt Online Seminar] AWS上でのログ管理 <https://www.slideshare.net/AmazonWebServicesJapan/black-belt-online-seminar-aws-69708255>`_
 
@@ -49,7 +49,7 @@ Pull型
 コンテナは短いライフサイクルが前提とされており、
 コンテナ内部にデータ保管するとデータロストにつながることから、今回はPush型に着目する。
 
-.. image:: ./_static/Logging/PushPull.drawio.svg
+.. image:: ./Logging/PushPull.drawio.svg
 
 Dockerのログ出力の方法
 -------------------------

@@ -16,13 +16,13 @@ configディレクトリを作成し、起動クラスと設定クラスをま�
 
 以下のようなフォルダ構成でファイルを作成していく
 
-![3_dir](./_static/SpringSecurity/3_dir.png)
+![3_dir](./SpringSecurity/3_dir.png)
 
 ## 3. ログイン・ログアウト機能の実装
 ### 3-1. ログインページを表示してみる
 dependenciesにて`spring-boot-starter-security`を指定していれば、そのまま起動するだけでログイン・ログアウト機能が使える。
 
-![Please sign in](./_static/SpringSecurity/1_defaultAuth.png)
+![Please sign in](./SpringSecurity/1_defaultAuth.png)
 - ユーザ名：`user`
 - パスワード：起動ログの中に記載されている。以下のようなログが出力されている。
 ```
@@ -30,7 +30,7 @@ Using generated security password: 827bc10f-d2e7-426a-9bca-71a10e399f74
 ```
 
 ただし、ログインしてもログイン後のページがないので、`Whitelabel Error Page`が表示されるだけ。
-![Whitelabel Error Page](./_static/SpringSecurity/2_error.png)
+![Whitelabel Error Page](./SpringSecurity/2_error.png)
 
 ### 3-2. `.html`作成
 ログインページ、ログイン後のページ、ログアウトページを作成する。

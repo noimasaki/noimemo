@@ -4,7 +4,7 @@
 
 アーキテクチャは以下のように作成する。
 
-![aws](_static/Microservice_2/architecture.drawio.svg)
+![aws](./Microservice_2/architecture.drawio.svg)
 
 ## 作成の流れ
 1. VPC作成
@@ -20,7 +20,7 @@ VPCの要件は以下の通り。
 - Private subnetへはインターネットからのインバウンド通信は不可とするが、Private subnet内からインターネットへのアウトバンド通信は可能とする。（Private subnetにコンテナを配置するが、コンテナレジストリはインターネット上のDocker Hubを利用するため）
 
 VPCの構成は以下の通り。
-![VPC](_static/Microservice_2/VPC.drawio.svg)
+![VPC](./Microservice_2/VPC.drawio.svg)
 
 ### 1-1. VPC作成 [VPC > お使いのVPC > VPC を作成]
   - 作成するリソース：VPCのみ
@@ -175,7 +175,7 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 
 例として、パブリック向けALBの設定は以下のようになる。
 
-![ALB_pub](_static/Microservice_2/ALB_pub.png)
+![ALB_pub](./Microservice_2/ALB_pub.png)
 
 ### 2-4. パスベースのルーティング設定
 [EC2 > ロードバランサー > ma-noim-tg-backend-item > HTTP:80 リスナー]
@@ -184,12 +184,12 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 
 パスベースルーティングの設定は作成したリスナーのルールで設定する。
 
-![ALB_path](_static/Microservice_2/ALB_path.png)
+![ALB_path](./Microservice_2/ALB_path.png)
 
 - [ルールを追加] Name：backend-item
 - [ルール条件の定義] ルールの条件タイプ：パス = /backend-item/*
 
-![ALB_path_rule](_static/Microservice_2/ALB_path_rule.png)
+![ALB_path_rule](./Microservice_2/ALB_path_rule.png)
 
 - [ルールアクションの定義] アクションの種類：ターゲットグループへ転送
 - [ルールアクションの定義] ターゲットグループ：ma-noim-tg-backend-item
@@ -198,10 +198,10 @@ ECSで起動タイプでFargateを利用する場合はターゲットタイプ�
 
 ### 2-5. ALBのFQDNをアプリケーション構成情報に反映
 作成できたALBに割り当てられたFQDNを確認する。
-![alb_fqdn](_static/Microservice_2/alb_fqdn.png)
+![alb_fqdn](./Microservice_2/alb_fqdn.png)
 
 つまり、以下のような経路で動作する事となる。
-![route](_static/Microservice_2/route.drawio.svg)
+![route](./Microservice_2/route.drawio.svg)
 
 フロントエンドからバックエンドを呼び出す時の構成情報を修正する。
 ```{code-block} yaml

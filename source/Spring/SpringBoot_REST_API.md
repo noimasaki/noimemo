@@ -6,7 +6,7 @@ Visual Studio Codeを利用してSpringBootを開始する。
 
 ### 1-1. プロジェクト作成
 VS Codeのコマンドパレットから新しくプロジェクトを作成
-![Create Project](_static/SpringBoot_REST_API/CreatePJ.png)
+![Create Project](./SpringBoot_REST_API/CreatePJ.png)
 - Spring Boot version: 3.15
 - project language: Java
 - Group Id: com.example
@@ -44,7 +44,7 @@ item           // Spring Boot プロジェクディレクトリ
 `ソースアクション > Generate Getters and Setters...`
 を選択すると自動で作って便利
 
-![VScode](_static/SpringBoot_REST_API/VScode1.png)
+![VScode](./SpringBoot_REST_API/VScode1.png)
 ↓ GetterとSetterを作成したい対象を選択してあげると
 ![VScode](image.png)
 
@@ -169,22 +169,22 @@ public class ItemController {
 `1. 環境構築`が完了していれば、GETは実装できたことになる。
 
 1. SpringBootを起動する
-![Run SpringBoot](_static/SpringBoot_REST_API/VScode3.png)
+![Run SpringBoot](./SpringBoot_REST_API/VScode3.png)
 
 
 2. ブラウザで[http://localhost:8080/items](http://localhost:8080/items)にアクセスして、JSON形式で表示されればOK
-![Run SpringBoot](_static/SpringBoot_REST_API/GET_1.png)
+![Run SpringBoot](./SpringBoot_REST_API/GET_1.png)
 
 
 3. 個別のitem情報も取得できるか確認[http://localhost:8080/items/10001](http://localhost:8080/items/10001)
-![Run SpringBoot](_static/SpringBoot_REST_API/GET_2.png)
+![Run SpringBoot](./SpringBoot_REST_API/GET_2.png)
 
 
 確認できたらSpringBootは停止する
 
 
 ## 3. POST（登録）
-![POST](_static/SpringBoot_REST_API/POST.drawio.svg)
+![POST](./SpringBoot_REST_API/POST.drawio.svg)
 
 ポイント
 - サービスクラスに記述しているArrayにaddしようとするとエラーが発生するので、ArrayList<>でnewしてあげる必要がある
@@ -200,25 +200,25 @@ public class ItemService {
 ```
 
 PostmanでPOSTして確認してみる
-![Postman](_static/SpringBoot_REST_API/POST_1.png)
+![Postman](./SpringBoot_REST_API/POST_1.png)
 
 ## 4. PUT(更新)
-![PUT](_static/SpringBoot_REST_API/PUT.drawio.svg)
+![PUT](./SpringBoot_REST_API/PUT.drawio.svg)
 
 ## 5. DELETE (削除)
-![DELETE](_static/SpringBoot_REST_API/DELETE.drawio.svg)
+![DELETE](./SpringBoot_REST_API/DELETE.drawio.svg)
 
 ## データベース（MySQL）を利用する
-![DatabBase](_static/SpringBoot_REST_API/figure.drawio.png)
+![DatabBase](./SpringBoot_REST_API/figure.drawio.png)
 
 ### データベース作成
 MySQL Workbenchからデータベースを作成
-![Opne MySQL Workbench](_static/SpringBoot_REST_API/DB_1.png)
-![Create DB](_static/SpringBoot_REST_API/DB_2.png)
+![Opne MySQL Workbench](./SpringBoot_REST_API/DB_1.png)
+![Create DB](./SpringBoot_REST_API/DB_2.png)
 
 ### プロジェクト作成
 1. VS Codeのコマンドから新しくプロジェクトを作成
-![Create Project](_static/SpringBoot_REST_API/CreatePJ.png)
+![Create Project](./SpringBoot_REST_API/CreatePJ.png)
 - Spring Boot Version : 3.1.5 （一番上のやつ）
 - project language : Java
 - Group 
