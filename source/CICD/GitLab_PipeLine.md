@@ -95,12 +95,30 @@ dockerをexecutorとしてGitLab Runnerを登録した後に、`/etc/gitlab-runn
 
 ```
 [[runners]]
-  environment = ["FF_NETWORK_PER_BUILD=1"]
   clone_url = "http://gitlab.noimk.com"
   [runners.docker]
+    network_mode = "host"
     host = "unix:///run/user/969/podman/podman.sock"
-    pull_policy = "never"
+    pull_policy = ["if-not-present"]
 ```
+
+- network_mode = "host" について
+docker executoを利用する上での注意点として、gitlabを`localhost`や`127.0.0.1`で指定したい場合に
+コンテナのネットワークモードをデフォルトのbrigeモードだと`localhost`はそのコンテナ自身を示すものとなるため、gitlabサーバに到達できない。
+そこで、`/etc/gitlab-runner/config.toml`でコンテナのネットワークモードをHostモードに指定してあげる必要がある。
+
+- pull_policy = ["if-not-present"] について
+指定のコンテナイメージがローカルにない場合にのみ、取得する
+
+
+
+
+なお、`gitlab.noimk.com`を名前解決できるように`/etc/hosts`に記載する。
+```
+127.0.0.1   gitlab.noimk.com
+```
+
+
 
 
 Podmanはルートレスモードで動作するため、ユーザー名前空間を使用してコンテナを実行します。このため、/etc/subuidと/etc/subgidファイルに適切なエントリが必要です。これらのファイルは、ユーザーが使用できるUIDとGIDの範囲を定義します。
