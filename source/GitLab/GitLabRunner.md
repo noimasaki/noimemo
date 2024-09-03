@@ -8,4 +8,17 @@ GitLab Runnerとは、GitLab CI/CD（継続的インテグレーション/継続
 - GitLabのリポジトリのソースコードをビルドして、同一サーバ上のPodmanにデプロイ
 - ソースコードのビルド環境はGコンテナ（docker executoを利用する）
 
-## 1. 
+## 1. GitLab Runnerインストール
+```bash
+# リポジトリ有効化
+curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+# インストール
+sudo dnf install gitlab-runner
+```
+
+任意のホスト名で、自サーバを名前解決できるように、`/etc/hosts`に追記
+```bash
+127.0.0.1   gitlab.noimk.com
+```
+
+
