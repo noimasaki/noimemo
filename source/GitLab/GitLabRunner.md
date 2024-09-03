@@ -133,8 +133,82 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 | host = "unix:///run/user/969/podman/podman.sock" | gitlab-runnerユーザのpodmanソケットを指定することで、Runnerコンテナが該当ユーザのpodman上で動作する                                                                                       |
 | pull_policy = ["if-not-present"]                 | Runnerコンテナイメージが、"もしローカルに存在しない場合はDockerHubからpullする"                                                                                                           |
 
+設定変更が完了したら、設定反映のためgitlab-runnerをrestartする
+```
+sudo gitlab-runner restart
+```
+
+## 5. CI/CDパイプライン作成（
+リポジトリのルートに`.gitlab-ci.yml`を作成して、パイプラインを定義する。
+
+```yaml
+stages:
+  - build
+  - deploy
+
+before_script:
+  - echo "全てのジョブの前に実行される"
+
+build-job:
+  stage: build
+  tags:
+    - podman-runner
+  script:
+    - echo "hello gitlab runner" > hello.txt
+  artifacts:
+    paths:
+      - hello.txt
+
+deploy-job:
+  stage: deploy
+  tags:
+    - shell-runner  # Shell Runnerを使用
+  script:
+    - cat hello.txt  # 確認用
+    - |
+      podman build -t hello-gitlab-runner - <<EOF
+      FROM alpine:latest
+      COPY hello.txt /hello.txt
+      CMD ["cat", "/hello.txt"]
+      EOF
+    - podman run --name hello-gitlab-runner-container hello-gitlab-runner
+  dependencies:
+    - build-job  # build-jobで作成されたアーティファクトを依存関係として指定
+```
 
 
+
+```bash
+# 各stageの実行順序を記載
+#  -> stageはjob(=タスク)をグループ化したもの
+#  -> build→deployの順に実施
+stages:
+  - build
+  - deploy
+
+# job名
+build-job:
+  stage: build      # このjobをbuildステージに設定
+  script:           # 実際のjobで実行するスクリプト
+    - echo "Compiling the code"
+    - mkdir ./build
+    - echo "This is Build File!!" >> ./build/output.txt
+  artifacts:        # 生成されたファイルはstage間で共有されない -> artifactsで指定されたファイルは共有できる
+    paths:
+      - "build/"    # buildディレクトリ配下のファイルをartifactsとして指定
+
+# job名
+deploy-job:
+  stage: deploy  # このjobをdeployステージに設定
+  script:
+    - mv build/ public/
+  artifacts:
+    paths:
+      - "public/"
+
+
+```
+リポジトリにコミットすればジョブは実行される。
 
 
 
@@ -172,7 +246,12 @@ deploy:
     - podman rm ${CONTAINER_NAME} || true
     - podman run -d --name ${CONTAINER_NAME} -p 8080:8080 ${REGISTRY}/${PROJECT_NAME}:latest
 
-``
+```
 
 
-https://qiita.com/kamina/items/bc4b20c6bbc47b98557c
+
+## 参考
+- [CI/CDを使ったアプリケーションの構築](https://gitlab-docs.creationline.com/ee/topics/build_your_application.html)
+- [podman](https://gitlab-docs.creationline.com/runner/executors/docker.html#podman%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6docker%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%BE%E3%81%99)
+-  [qiita](https://qiita.com/masa2223/items/d287a2f2b6f6a9367a51)
+-  [qiita](https://qiita.com/kamina/items/bc4b20c6bbc47b98557c)

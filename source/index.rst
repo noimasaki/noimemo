@@ -17,7 +17,6 @@
    ./Microservice/index_Microservice.rst
    ./Sphinx/index_Sphinx.rst
    ./VSCode/index_VSCode.rst
-   ./CICD/index_CICD.rst
    MySQL.md
    Keycloak.md
    MySQL_Docker.md
