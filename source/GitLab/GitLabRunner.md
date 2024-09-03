@@ -114,6 +114,10 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
 ```
 
+```{note}
+同様に、executorをshellとしたものも作成しておく。
+```
+
 ## 4. Runner設定変更
 設定ファイルである、`/etc/gitlab-runner/config.toml`に下記を追記する
 
