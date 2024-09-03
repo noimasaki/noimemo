@@ -90,8 +90,6 @@ podman system migrate
 
 プラットフォームはLinuxを選択し、`ステップ1`で表示されたコマンドを実行
 
-![2](./GitLabRunner/2.png)
-
 | 項目                 | 設定内容 | 説明                               |
 | -------------------- | -------- | ---------------------------------- |
 | GitLab instance URL  | 空欄     |                                    |
@@ -131,7 +129,7 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 | 設定値                                           | 説明                                                                                                                                                                                      |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | clone_url = "http://gitlab.noimk.com"            | cloneするリポジトリ                                                                                                                                                                       |
-| network_mode = "host"                            | RunnerコンテナのNWモード。"gitlab.noimk.com"はhostsにより"127.0.0.1"となるが、デフォルトのBrigeモードだとコンテナ自身を指し示すため、GitLabへ到達できない。そこで、Hostモードへ変更する。 |
+| network_mode = "host"                            | RunnerコンテナのNWモード。<br>"gitlab.noimk.com"はhostsにより"127.0.0.1"となるが、デフォルトのBrigeモードだとコンテナ自身を指し示すため、<br>GitLabへ到達できない。そこで、Hostモードへ変更する。 |
 | host = "unix:///run/user/969/podman/podman.sock" | gitlab-runnerユーザのpodmanソケットを指定することで、Runnerコンテナが該当ユーザのpodman上で動作する                                                                                       |
 | pull_policy = ["if-not-present"]                 | Runnerコンテナイメージが、"もしローカルに存在しない場合はDockerHubからpullする"                                                                                                           |
 
