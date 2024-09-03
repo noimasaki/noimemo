@@ -8,3 +8,4 @@ GitLab
    GitLabOffline.md
    GitLabSetuponDocker.md
    MigrationGitLabContainer.md
+   GitLabRunner.md
