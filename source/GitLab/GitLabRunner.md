@@ -142,113 +142,70 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 sudo gitlab-runner restart
 ```
 
-## 5. CI/CDパイプライン作成（
+## 5. CI/CDパイプライン作成
 リポジトリのルートに`.gitlab-ci.yml`を作成して、パイプラインを定義する。
 
 ```yaml
-stages:
-  - build
-  - deploy
-
-before_script:
-  - echo "全てのジョブの前に実行される"
-
-build-job:
-  stage: build
-  tags:
-    - podman-runner
-  script:
-    - echo "hello gitlab runner" > hello.txt
-  artifacts:
-    paths:
-      - hello.txt
-
-deploy-job:
-  stage: deploy
-  tags:
-    - shell-runner  # Shell Runnerを使用
-  script:
-    - cat hello.txt  # 確認用
-    - |
-      podman build -t hello-gitlab-runner - <<EOF
-      FROM alpine:latest
-      COPY hello.txt /hello.txt
-      CMD ["cat", "/hello.txt"]
-      EOF
-    - podman run --name hello-gitlab-runner-container hello-gitlab-runner
-  dependencies:
-    - build-job  # build-jobで作成されたアーティファクトを依存関係として指定
-```
-
-
-
-```bash
-# 各stageの実行順序を記載
-#  -> stageはjob(=タスク)をグループ化したもの
-#  -> build→deployの順に実施
-stages:
-  - build
-  - deploy
-
-# job名
-build-job:
-  stage: build      # このjobをbuildステージに設定
-  script:           # 実際のjobで実行するスクリプト
-    - echo "Compiling the code"
-    - mkdir ./build
-    - echo "This is Build File!!" >> ./build/output.txt
-  artifacts:        # 生成されたファイルはstage間で共有されない -> artifactsで指定されたファイルは共有できる
-    paths:
-      - "build/"    # buildディレクトリ配下のファイルをartifactsとして指定
-
-# job名
-deploy-job:
-  stage: deploy  # このjobをdeployステージに設定
-  script:
-    - mv build/ public/
-  artifacts:
-    paths:
-      - "public/"
-
-
-```
-リポジトリにコミットすればジョブは実行される。
-
-
-
-
-
-
-## 3. CI/CDパイプラインの設定
-SpringBootプロジェクトのリポジトリのルートに`.gitlab-ci.yml`ファイルを作成
-
-```yaml
-image: registry.access.redhat.com/ubi8/openjdk-11
+image: maven:3.8-eclipse-temurin-17
 
 stages:
   - build
   - deploy
 
 variables:
-  PROJECT_NAME: "my-springboot-app"
-  JAR_NAME: "my-springboot-app.jar"
-  REGISTRY: "localhost:5000"
-  CONTAINER_NAME: "my-springboot-app-container"
+  SPRING_ARTIFACT_ID: "todo"
+  CONTAINER_PORT: "8080"
+  BIND_PORT: "8081"
+  CONTAINER_IMAGE_NAME: "${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}-image"
+  CONTAINER_NAME: "${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}"
+
+before_script:
+  - echo "Container image name is <Repository>-<Branch>-image"
+  - echo "Container name is <Repository>-<Branch>"
+  - echo "Repository = ${CI_PROJECT_NAME}"
+  - echo "Branch     = ${CI_COMMIT_REF_SLUG}"
+
 
 build:
   stage: build
+  tags:
+    - podman-runner
   script:
-    - ./gradlew clean build
-    - cp build/libs/*.jar ${JAR_NAME}
-    - podman build -t ${REGISTRY}/${PROJECT_NAME}:latest .
+    - cd ./${SPRING_ARTIFACT_ID}
+    - ./mvnw package
+    - ls -l target
+  artifacts:
+    paths:
+      - ./${SPRING_ARTIFACT_ID}/target/*.jar
+
+
+# ----- TODO -----
+# このジョブだと新しいブランチを切ってcommitしたときに古いコンテナが起動したままとなるので、同一ポートを利用してエラーとなってしまう
+# 例えば、mainブランチは8081ポート、devブランチは8082ポートなど、新たなジョブを定義する必要がある？
+
 
 deploy:
   stage: deploy
+  tags:
+    - shell-runner
   script:
-    - podman push ${REGISTRY}/${PROJECT_NAME}:latest
-    - podman stop ${CONTAINER_NAME} || true
-    - podman rm ${CONTAINER_NAME} || true
-    - podman run -d --name ${CONTAINER_NAME} -p 8080:8080 ${REGISTRY}/${PROJECT_NAME}:latest
+    # 同一名のコンテナが存在する場合は削除
+    - |
+      if podman ps -a --format '{{.Names}}' | grep -w ${CONTAINER_NAME}; then
+        echo "${CONTAINER_NAME} 削除します"
+        podman stop ${CONTAINER_NAME}
+        podman rm ${CONTAINER_NAME} 
+      fi
+    # 同一名のコンテナイメージが存在する場合は削除
+    - |
+      if podman images --format '{{.Repository}}:{{.Tag}}' | grep -w ${CONTAINER_IMAGE_NAME}:latest; then
+        echo "${CONTAINER_IMAGE_NAME} 削除します"
+        podman rmi ${CONTAINER_IMAGE_NAME}
+      fi
+    # 新しいイメージをビルド
+    - podman build -t ${CONTAINER_IMAGE_NAME} .
+    # コンテナ起動
+    - podman run -d -p ${BIND_PORT}:${CONTAINER_PORT} --name ${CONTAINER_NAME} ${CONTAINER_IMAGE_NAME}
 
 ```
 
