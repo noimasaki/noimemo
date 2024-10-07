@@ -9,6 +9,7 @@
 .. toctree::
    :maxdepth: 2
 
+   ./Keycloak/index.rst
    ./Spring/index_Spring.rst
    ./Docker/index_Docker.rst
    ./CloudFlare/index_CloudFlare.rst
