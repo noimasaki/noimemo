@@ -68,3 +68,8 @@ Keycloak にはデフォルトでいくつかのビルトイン認証フロー�
 以上より、「Browser flow」を図示すると以下のようになります。
 
 ![3](./4_Authentication/3.drawio.svg)
+
+## WebAuthn
+
+設定はここを参考にできた。
+https://zenn.dev/kg0r0/articles/972c915c55327f
