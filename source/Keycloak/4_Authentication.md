@@ -66,4 +66,5 @@ Keycloak にはデフォルトでいくつかのビルトイン認証フロー�
 | Disabled    | 無効     | 選択された「認証タイプ」が無効になります。                               | 実行されません。                                                                                                                                     |
 
 以上より、「Browser flow」を図示すると以下のようになります。
+
 ![3](./4_Authentication/3.drawio.svg)
