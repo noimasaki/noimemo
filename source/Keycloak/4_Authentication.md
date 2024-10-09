@@ -69,7 +69,29 @@ Keycloak にはデフォルトでいくつかのビルトイン認証フロー�
 
 ![3](./4_Authentication/3.drawio.svg)
 
-## WebAuthn
+## 設定例： WebAuthn
 
-設定はここを参考にできた。
-https://zenn.dev/kg0r0/articles/972c915c55327f
+以下のドキュメントを参照し、WebAuthn に関する設定を行なっていきます。
+
+[https://www.keycloak.org/docs/latest/server_admin/#webauthn_server_administration_guide](https://www.keycloak.org/docs/latest/server_admin/#webauthn_server_administration_guide)
+
+[こちらも参考になります](https://zenn.dev/kg0r0/articles/972c915c55327f)
+
+`Configure > Authentication`は以下の通り
+
+![4](./4_Authentication/4.png)
+
+- Cookie はひとまず無効
+- Kerberos は利用しないので無効
+- 外部 ID も利用しないので無効
+- Forms は利用する
+  - Username Form は必須
+  - WebAuthnPasswordless Authenticator も必須
+
+ユーザ自身に登録を行わせたいため、`User registration` を On にしておきます。
+
+![5](./4_Authentication/5.png)
+
+また、ユーザー登録時に認証器の設定も行わせたいため `Webauthn Register Passwordless` を default action に設定します。
+
+![6](./4_Authentication/6.png)
