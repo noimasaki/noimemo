@@ -22,6 +22,7 @@
    Keycloak.md
    MySQL_Docker.md
    PostgreSQL_Docker.md
+   ./MEMO/index.rst
 
 
    
