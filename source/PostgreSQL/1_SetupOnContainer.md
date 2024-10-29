@@ -1,6 +1,8 @@
 # コンテナで PostgreSQL を起動する
 
-## 1. docker-compose による起動
+docker-compose を利用して、PostgreSQL を起動し、データベースとテーブルを作成する。
+
+## 1. docker-compose.yml の作成
 
 任意のディレクトリで`docker-compose.yml`を作成する。
 
@@ -8,7 +10,8 @@
 ├── docker
 │   └── postgres
 │       ├── docker-compose.yml  # コンテナ起動用
-│       └── init.sql            # DB作成用スクリプト
+│       ├── init.sql            # DB作成用スクリプト（必要であれば）
+│       └── schema.sql          # テーブル作成用スクリプト（必要であれば）
 ```
 
 ```docker
@@ -17,99 +20,39 @@ version: '3.9'
 services:
   db:
     image: docker.io/library/postgres:latest
-    container_name: springtodo-postgres
+    container_name: my-postgres
     restart: always
     shm_size: 128mb
     ports:
       - 5432:5432
     volumes:
-      - db-store:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - my-db-store:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # DB作成用スクリプト（必要であれば）
     environment:
       POSTGRES_USER: 'user'                # データベースユーザー
       POSTGRES_PASSWORD: 'postgres'        # データベースパスワード
 
 volumes:
-  db-store:
+  my-db-store:
 ````
 
-docker デーモンを起動してから、`docker-compose.yml`のあるディレクトリで下記を実行してコンテナを起動する。
+## 2. DB 作成スクリプト
 
-```
-docker compose up -d
-```
+必要であれば、DB 作成用スクリプト作成する。
 
-## 4. DB 作成
-
-`postgres-db-compose.yml`を gitlab-runner ユーザにて、podman-compose up する
-
-```bash
-# ユーザスイッチ
-sudo -u gitlab-runner -i
-
-# PostgreSQLコンテナ起動
-podman-compose -f postgres-db-compose.yml up -d
-
-# コンテナ起動確認
-podman ps -a
-
-# コンテナログイン
-podman exec -it springtodo-postgres bash
-
-# コンテナ内でPostgreSQLにログイン
-psql -U user
-```
-
-PostgreSQL にログインできたら、データベース作成する
-
-- データベース設計
-
-| 項目             | 設定          | 備考                                                                                     |
-| ---------------- | ------------- | ---------------------------------------------------------------------------------------- |
-| DB 名            | springtodo_db |                                                                                          |
-| 所有ユーザ       | user          | コンテナ作成時に作成したユーザ                                                           |
-| エンコーディング | UTF-8         |                                                                                          |
-| 表領域           | pg_default    | 表領域（データベース内のオブジェクトの物理的な保存場所）はデフォルトのディレクトリを利用 |
-| 接続数制限       | -1 (無制限)   |                                                                                          |
-
-```bash
-# データベース作成
-CREATE DATABASE springtodo_db
+```sql
+CREATE DATABASE my_app_db
     WITH OWNER = "user"
-         ENCODING = 'UTF8'
-         TABLESPACE = pg_default
-         CONNECTION LIMIT = -1;
-
-# データベースの一覧を表示 →'q'で終了
-\l
-
-# psqlの終了
-\q
-
-# 【Ctrl+D】でコンテナから抜ける
-```
-
-データベースへの接続情報を`application.properties`および`application-debug.properties`に記載する。
-
-```bash
-# DB接続情報
-spring.jpa.database=POSTGRESQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/springtodo_db
-spring.datasource.username=user
-spring.datasource.password=postgres
-```
-
-ここまでで、SpringBoot を実行してエラーが出なければ DB への接続はできていることが確認できる。（DB 操作はこれから実装していく）
-
-## 5. テーブル作成
-
-SpringBoot 起動時に、クラスパス直下の`schema.sql`を実行するように、`application.properties`に以下を記載
+        ENCODING = 'UTF8'
+        TABLESPACE = pg_default
+        CONNECTION LIMIT = -1;
 
 ```
-spring.sql.init.mode=always
-```
 
-`src/main/resources/schema.sql`の内容は
+## 3. テーブル作成スクリプト
+
+DB の中のテーブル作成スクリプトを作成する。
+SpringBoot においては、application.properties などで指定すれば、DB 接続して自動で実行したりもできるが、ここではスクリプトだけを記載し、実行方法については言及しない。
 
 ```sql
 DROP TABLE IF EXISTS tasks CASCADE ;
@@ -124,28 +67,70 @@ CREATE TABLE IF NOT EXISTS tasks (
     PRIMARY KEY (id)
 ) ;
 
--- テストデータ投入 -> 不要になったら削除
+-- テストデータ投入
 INSERT INTO tasks (title, description, status, created_at, updated_at)
 VALUES
 ('Task 1', 'First task description', 'pendingg', '2024-09-01', '2024-09-01'),
 ('Task 2', 'Second task description', 'in progress', '2024-09-02', '2024-09-03');
 ```
 
-SpringBoot を起動して、`schema.sql`が想定通りに動いているか確認
+## 4. コンテナ起動
+
+docker デーモンを起動してから、`docker-compose.yml`のあるディレクトリで下記を実行してコンテナを起動する。
+
+```
+docker compose up -d
+```
+
+もしくは、ファイル指定する場合には`-f` オプションを利用する。
+
+```
+docker-compose -f ./docker/postgres/docker-compose.yml up -d
+```
+
+コンテナ起動から、実際にデータベースが作成されているかなどを確認するコマンドの流れ。
 
 ```bash
+# ----- コンテナ起動・DB作成確認 ------
+# PostgreSQLコンテナ起動
+docker-compose -f ./docker/postgres/docker-compose.yml up -d
+
+# コンテナ起動確認
+docker ps -a
+
 # コンテナログイン
-podman exec -it springtodo-postgres bash
+docker exec -it my-postgres bash
 
 # コンテナ内でPostgreSQLにログイン
 psql -U user
 
-# springtodo_db データベースに接続
-\c springtodo_db
+# データベースの一覧を表示 -> my_app_dbが作成されていることを確認
+\l
 
-# テーブル一覧を表示
+# 'q'で終了
+
+# psqlの終了
+\q
+
+# 【Ctrl+D】でコンテナから抜ける
+
+# ----- テーブル作成・テーブル確認 ------
+# スキーマ実行
+docker exec -i my-postgres psql -U user -d my_app_db < ./docker/postgres/schema.sql
+
+# コンテナログイン
+docker exec -it my-postgres bash
+
+# コンテナ内でPostgreSQLにログイン
+psql -U user
+
+# my_app_db データベースに接続
+\c my_app_db
+
+# テーブル一覧を表示 -> スキーマで定義したテーブルが表示されること
 \dt
 
-# 全てのカラムを表示
+# 全てのカラムを表示 -> 投入したテストデータが表示されること
 select * from tasks;
+
 ```
