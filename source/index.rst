@@ -20,6 +20,7 @@
    ./Microservice/index_Microservice.rst
    ./Sphinx/index_Sphinx.rst
    ./VSCode/index_VSCode.rst
+   ./SystemDesign/index.rst
    MySQL.md
    Keycloak.md
    MySQL_Docker.md
