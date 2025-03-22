@@ -12,7 +12,6 @@
    ./Keycloak/index.rst
    ./Spring/index_Spring.rst
    ./PostgreSQL/index.rst
-   ./Docker/index_Docker.rst
    ./HTML/index.rst
    ./CloudFlare/index_CloudFlare.rst
    ./GitLab/index_GitLab.rst
